@@ -14,9 +14,9 @@ public class Frame extends JFrame implements ActionListener{
 
     JPanel canva;
     Timer t;
-    public int FramesPerSecond = 60; // 60 FPS sind gerade Standart, soll dann aber einstellbar sein
-    public int ScreenHeight = 1080; // Wird je nach Setting überschrieben, Momentan auf HD Fullscreen gehardcoded
-    public int ScreenWidth = 1920;
+    public static int FramesPerSecond = 60; // 60 FPS sind gerade Standart, soll dann aber einstellbar sein
+    public static int ScreenHeight = 1080; // Wird je nach Setting überschrieben, Momentan auf HD Fullscreen gehardcoded
+    public static int ScreenWidth = 1920;
             
     public Frame(String title) throws HeadlessException {
         super(title);

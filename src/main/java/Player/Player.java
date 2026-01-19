@@ -6,13 +6,17 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends GameAsset {
+public class Player {
+    public static int LocPosX = GUI.Frame.ScreenWidth / 2;
+    public static int LocPosY = GUI.Frame.ScreenHeight / 2;
+    
+    public static int PlayerSizeX = 50;
+    public static int PlayerSizeY = 50;
     
     List<Item> inventory = new ArrayList<Item>();
     int hp;
     
-    public Player(int x, int y, Image img, String name, int hp) {
-        super(x, y, img, name);
+    public Player(Image img, String name, int hp) {
         this.hp = hp;
     }
 

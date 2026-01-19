@@ -1,6 +1,7 @@
 package GUI;
 
 //import frame.Room;
+import Player.Player;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -33,9 +34,11 @@ public class Canva extends JPanel {
         //r.draw(g);
         
         g.setColor(Color.yellow);
-        g.fillOval(x++, y++, 20, 20);
+        g.fillOval(x + Camera.PosX, y + Camera.PosY, 20, 20);
         
-        x = x % 500;
-        y = y % 500;
+        // Render Player
+        
+        g.setColor(Color.blue);
+        g.fillOval(Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2, Player.PlayerSizeX, Player.PlayerSizeY);
     }
 }
