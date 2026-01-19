@@ -1,4 +1,4 @@
-package assets.actors;
+package Player;
 
 import assets.GameAsset;
 import assets.objects.Item;

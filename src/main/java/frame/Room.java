@@ -1,4 +1,4 @@
-package frame;
+/* package frame;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -34,4 +34,4 @@ public class Room {
             }
         }
     }
-}
+} */

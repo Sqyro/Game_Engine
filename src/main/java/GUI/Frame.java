@@ -1,6 +1,6 @@
+package GUI;
 
-package frame;
-
+import GUI.Canva;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
@@ -14,14 +14,17 @@ public class Frame extends JFrame implements ActionListener{
 
     JPanel canva;
     Timer t;
+    public int FramesPerSecond = 60; // 60 FPS sind gerade Standart, soll dann aber einstellbar sein
+    public int ScreenHeight = 1080; // Wird je nach Setting überschrieben, Momentan auf HD Fullscreen gehardcoded
+    public int ScreenWidth = 1920;
             
     public Frame(String title) throws HeadlessException {
         super(title);
         this.setLayout(new FlowLayout());
-        this.setPreferredSize(new Dimension(800,600));
-        this.setSize(new Dimension(800,600));
+        this.setPreferredSize(new Dimension(ScreenWidth, ScreenHeight));
+        this.setSize(new Dimension(ScreenWidth, ScreenHeight));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
+        this.setResizable(true);
         
         canva  = new Canva(this.getWidth(), this.getHeight());
         this.add(canva);
@@ -29,7 +32,7 @@ public class Frame extends JFrame implements ActionListener{
         this.setVisible(true);
         this.pack();
         
-        t = new Timer(30, this);
+        t = new Timer(1/FramesPerSecond * 1000, this); //1/60 sind die Sekunden pro Frame. Mal eintausend für Millisekunden pro Frame
         t.start();
     }
 

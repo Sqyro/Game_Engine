@@ -1,5 +1,6 @@
-package frame;
+package GUI;
 
+//import frame.Room;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -9,7 +10,7 @@ public class Canva extends JPanel {
 
     int x = 0;
     int y = 0;
-    Room r;
+    //Room r;
     
     public Canva(int w, int h) {
         super();
@@ -20,7 +21,7 @@ public class Canva extends JPanel {
         
         this.setVisible(true);
         
-        r = new Room();
+        //r = new Room();
     }
     
     @Override
@@ -29,7 +30,7 @@ public class Canva extends JPanel {
         g.setColor(Color.white);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         
-        r.draw(g);
+        //r.draw(g);
         
         g.setColor(Color.yellow);
         g.fillOval(x++, y++, 20, 20);
