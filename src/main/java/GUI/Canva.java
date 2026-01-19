@@ -34,11 +34,11 @@ public class Canva extends JPanel {
         //r.draw(g);
         
         g.setColor(Color.yellow);
-        g.fillOval(x + Camera.PosX, y + Camera.PosY, 20, 20);
+        g.fillOval(x + Camera.PosX, y + Camera.PosY, 20, 20); // Game Objects werden abhängig zur Camera gerendered
         
         // Render Player
         
         g.setColor(Color.blue);
-        g.fillOval(Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2, Player.PlayerSizeX, Player.PlayerSizeY);
+        g.fillOval(Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2, Player.PlayerSizeX, Player.PlayerSizeY); // Spieler befindet sich immer in der Mitte vom Screen, nur die Camera bewegt sich
     }
 }
