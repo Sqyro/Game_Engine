@@ -1,6 +1,6 @@
 package Player;
 
-import assets.GameAsset;
+import GUI.Camera;
 import assets.objects.Item;
 import java.awt.Image;
 import java.util.ArrayList;
@@ -19,10 +19,6 @@ public class Player {
     public Player(Image img, String name, int hp) {
         this.hp = hp;
     }
-
-    public void walk(int direction) {}
-    
-    public void jump(int direction) {}
     
     public void addItem (Item item) {}
     
@@ -37,6 +33,4 @@ public class Player {
     public void setHp(int hp) {
         this.hp = hp;
     }
-    
-    
 }
