@@ -1,12 +1,12 @@
 package Player;
 
-import GUI.Camera;
+import Physics2D.PhysicsObject2D;
 import assets.objects.Item;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+public class Player extends PhysicsObject2D {
     public static int LocPosX = GUI.Frame.ScreenWidth / 2;
     public static int LocPosY = GUI.Frame.ScreenHeight / 2;
     

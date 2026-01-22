@@ -35,7 +35,6 @@ public class InputManager {
     
     public static boolean isWPressed() {
         synchronized (InputManager.class) {
-            System.out.println("Methode funktioniert");
             return wPressed;
         }
     }
