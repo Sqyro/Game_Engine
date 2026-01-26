@@ -1,6 +1,5 @@
 package GUI;
 
-import GUI.Canva;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
