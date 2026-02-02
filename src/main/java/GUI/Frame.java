@@ -1,5 +1,6 @@
 package GUI;
 
+import Physics2D.VelocityHandler;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
@@ -37,6 +38,8 @@ public class Frame extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        VelocityHandler.calculatePosition(Player.Player.Player);
+        Camera.UpdateCamera();
         canva.repaint();
     }
     

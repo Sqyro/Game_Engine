@@ -18,28 +18,35 @@ public class InputManager {
                         if (Key.getKeyCode() == KeyEvent.VK_W) {
                             //wPressed = true;
                             System.out.println("W Pressed");
-                            InputHandler.MoveY(1); // Direction bei Y = 1, also in Positive Richtung bei Y laufen
+                            Player.setDirectionY(1); // Direction bei Y = 1, also in Positive Richtung bei Y laufen
+                            InputHandler.Move();
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_S) {
                             System.out.println("S Pressed");
-                            InputHandler.MoveY(-1); // Direction bei Y = -1, also in Negative Richtung bei Y laufen
+                            Player.setDirectionY(-1); // Direction bei Y = -1, also in Negative Richtung bei Y laufen
+                            InputHandler.Move();
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_A) {
                             System.out.println("A Pressed");
-                            InputHandler.MoveX(1); // Direction bei X = 1, also in Positive Richtung bei X laufen
+                            Player.setDirectionX(1); // Direction bei X = 1, also in Positive Richtung bei X laufen
+                            InputHandler.Move();
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_D) {
                             System.out.println("D Pressed");
-                            InputHandler.MoveX(-1); // Direction bei X = -1, also in Negative Richtung bei X laufen
+                            Player.setDirectionX(-1); // Direction bei X = -1, also in Negative Richtung bei X laufen
+                            InputHandler.Move();
                         }
                         break;
 
-                    /*
+                    
                     case KeyEvent.KEY_RELEASED:
-                        if (Key.getKeyCode() == KeyEvent.VK_W) {
-                            wPressed = false;
+                        if (Key.getKeyCode() == KeyEvent.VK_W || Key.getKeyCode() == KeyEvent.VK_S) {
+                            Player.setDirectionY(0);
                         }
-                        break; */
+                        if (Key.getKeyCode() == KeyEvent.VK_A || Key.getKeyCode() == KeyEvent.VK_D) {
+                            Player.setDirectionX(0);
+                        }
+                        break;
                     }
                     return false;
                        

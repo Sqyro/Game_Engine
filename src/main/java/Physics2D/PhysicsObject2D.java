@@ -41,4 +41,12 @@ public class PhysicsObject2D {
        Direction[0] = newX;
        Direction[1] = newY;
    }
+   
+   public static void setDirectionX(int newX) {
+       Direction[0] = newX;
+   }
+   
+   public static void setDirectionY(int newY) {
+       Direction[1] = newY;
+   }
 }

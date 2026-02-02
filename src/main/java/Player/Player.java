@@ -1,7 +1,6 @@
 package Player;
 
 import Physics2D.PhysicsObject2D;
-import Physics2D.VelocityHandler;
 //import assets.objects.Item;
 import java.awt.Image;
 //import java.util.ArrayList;
@@ -13,6 +12,8 @@ public class Player extends PhysicsObject2D {
     
     public static int PlayerSizeX = 50;
     public static int PlayerSizeY = 50;
+    
+    public static PhysicsObject2D Player;
     
     //List<Item> inventory = new ArrayList<Item>();
     int hp;

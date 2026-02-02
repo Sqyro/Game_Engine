@@ -5,6 +5,7 @@ import Player.Player;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import javax.swing.JPanel;
 
 public class Canva extends JPanel {
@@ -40,5 +41,7 @@ public class Canva extends JPanel {
         
         g.setColor(Color.blue);
         g.fillOval(Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2, Player.PlayerSizeX, Player.PlayerSizeY); // Spieler befindet sich immer in der Mitte vom Screen, nur die Camera bewegt sich
+    
+        Toolkit.getDefaultToolkit().sync();
     }
 }
