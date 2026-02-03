@@ -14,6 +14,7 @@ public class Main {
         java.awt.EventQueue.invokeLater(() -> new Frame("Sigma Ligma Game")); // Der Name war Niklas Idee
         System.out.println("Debug:");
         InputManager.KeyEvent(args);
+        Enemy.Enemy.Spawn(40, 40, 1);
         //Update();
     }
     /*

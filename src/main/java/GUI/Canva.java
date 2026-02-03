@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import javax.swing.JPanel;
+import Enemy.Enemy;
 
 public class Canva extends JPanel {
 
@@ -32,16 +33,21 @@ public class Canva extends JPanel {
         g.setColor(Color.white);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         
-        //r.draw(g);
-        
-        g.setColor(Color.yellow);
-        g.fillOval(x + Camera.PosX, y + Camera.PosY, 20, 20); // Game Objects werden abhängig zur Camera gerendered
-        
         // Render Player
         
         g.setColor(Color.blue);
         g.fillOval(Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2, Player.PlayerSizeX, Player.PlayerSizeY); // Spieler befindet sich immer in der Mitte vom Screen, nur die Camera bewegt sich
     
+        //Render Enemies;
+        
+        for(int i = 1; i <= Enemy.EnemyID; i++) {
+            int EnemieX = Enemy.PositionData[i*2-1];
+            int EnemieY = Enemy.PositionData[i*2];
+        
+            g.setColor(Color.yellow);
+            g.fillOval(EnemieX + Camera.PosX, EnemieY + Camera.PosY, 20, 20); // Game Objects werden abhängig zur Camera gerendered
+        }
+        
         Toolkit.getDefaultToolkit().sync();
     }
 }
