@@ -36,6 +36,14 @@ public class InputManager {
                             Player.setDirectionX(-1); // Direction bei X = -1, also in Negative Richtung bei X laufen
                             InputHandler.Move();
                         }
+                        if (Key.getKeyCode() == KeyEvent.VK_C) {
+                            System.out.println("C Pressed");
+                            Enemy.Enemy.Spawn(40, 40, new Enemy.Enemy());
+                        }
+                        if (Key.getKeyCode() == KeyEvent.VK_V) {
+                            System.out.println("V Pressed");
+                            Enemy.Enemy.Spawn(40, -50, new Enemy.Enemy());
+                        }
                         break;
 
                     

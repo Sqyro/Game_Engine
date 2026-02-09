@@ -10,9 +10,7 @@ import javax.swing.JPanel;
 import Enemy.Enemy;
 
 public class Canva extends JPanel {
-
-    int x = 0;
-    int y = 0;
+    
     //Room r;
     
     public Canva(int w, int h) {
@@ -39,13 +37,13 @@ public class Canva extends JPanel {
         g.fillOval(Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2, Player.PlayerSizeX, Player.PlayerSizeY); // Spieler befindet sich immer in der Mitte vom Screen, nur die Camera bewegt sich
     
         //Render Enemies;
-        
-        for(int i = 1; i <= Enemy.EnemyID; i++) {
-            int EnemieX = Enemy.PositionData[i*2-1];
-            int EnemieY = Enemy.PositionData[i*2];
+        for(int i = 0; i < Enemy.Enemies.size(); i++) {
+            Enemy currentEnemy = Enemy.Enemies.get(i);
+            int EnemyX = currentEnemy.getPosX();
+            int EnemyY = currentEnemy.getPosY();
         
             g.setColor(Color.yellow);
-            g.fillOval(EnemieX + Camera.PosX, EnemieY + Camera.PosY, 20, 20); // Game Objects werden abhängig zur Camera gerendered
+            g.fillOval(EnemyX + Camera.PosX, EnemyY + Camera.PosY, 20, 20); // Game Objects werden abhängig zur Camera gerendered
         }
         
         Toolkit.getDefaultToolkit().sync();

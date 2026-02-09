@@ -16,10 +16,10 @@ public class Player extends PhysicsObject2D {
     public static PhysicsObject2D Player;
     
     //List<Item> inventory = new ArrayList<Item>();
-    int hp;
+    public static int HP;
     
-    public Player(Image img, String name, int hp) {
-        this.hp = hp;
+    public Player(/*Image img, String name, int hp*/) {
+        //this.hp = hp;
     }
     
     /*
@@ -31,10 +31,10 @@ public class Player extends PhysicsObject2D {
     */
     
     public int getHp() {
-        return hp;
+        return HP;
     }
     
-    public void setHp(int hp) {
-        this.hp = hp;
+    public void setHp(int newHP) {
+        HP = newHP;
     }
 }

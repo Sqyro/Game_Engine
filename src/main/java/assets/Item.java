@@ -1,7 +1,6 @@
 
-package assets.objects;
+package assets;
 
-import assets.GameAsset;
 import java.awt.Image;
 
 public class Item extends GameAsset{
