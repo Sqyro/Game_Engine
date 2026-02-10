@@ -11,13 +11,13 @@ public class Enemy extends PhysicsObject2D {
     
     public static int HP;
     
-    public Enemy() {
-        
+    public Enemy(int PosX, int PosY, float Velocity, int[] Direction) {
+        super(PosX, PosY, Velocity, Direction);
     }
     
-    public static void Spawn(int posX, int posY, Enemy newEnemy) {
-        newEnemy.setPosX(posX + Camera.PosX);
-        newEnemy.setPosY(posY + Camera.PosY);
+    public static void Spawn(Enemy newEnemy) {
+        newEnemy.setPosX(newEnemy.getPosX() + Camera.PosX);
+        newEnemy.setPosY(newEnemy.getPosY() + Camera.PosY);
         
         Enemies.add(newEnemy);
         

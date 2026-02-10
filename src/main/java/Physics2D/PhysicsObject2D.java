@@ -1,52 +1,58 @@
 package Physics2D;
 
 public class PhysicsObject2D {
-    public static int PosX = 0;
-    public static int PosY = 0;
+    public int PosX = 0;
+    public int PosY = 0;
     
-    public static float Velocity = 0;
+    public float Velocity = 0;
     
-    public static int[] Direction = {0, 0};
+    public int[] Direction = {0, 0};
     
+    public PhysicsObject2D(int PosX, int PosY, float Velocity, int[] Direction) {
+        this.PosX = PosX;
+        this.PosY = PosY;
+        this.Velocity = Velocity;
+        this.Direction = Direction;
+    }
     
-   public static int getPosX() {
+   public int getPosX() {
        return PosX;
    }
    
-   public static void setPosX(int newPosX) {
+   public void setPosX(int newPosX) {
        PosX = newPosX;
    }
    
-   public static int getPosY() {
+   public int getPosY() {
        return PosY;
    }
    
-   public static void setPosY(int newPosY) {
+   public void setPosY(int newPosY) {
        PosY = newPosY;
    }
    
-   public static float getVelocity() {
+   public float getVelocity() {
        return Velocity;
    }
    
-   public static void setVelocity(float newVelocity) {
+   public void setVelocity(float newVelocity) {
        Velocity = newVelocity;
    }
    
-   public static int[] getDirection() {
+   public int[] getDirection() {
        return Direction;
    }
    
-   public static void setDirection(int newX, int newY) {
+   public void setDirection(int newX, int newY) {
        Direction[0] = newX;
        Direction[1] = newY;
    }
    
-   public static void setDirectionX(int newX) {
+   public void setDirectionX(int newX) {
        Direction[0] = newX;
    }
    
-   public static void setDirectionY(int newY) {
+   public void setDirectionY(int newY) {
        Direction[1] = newY;
    }
 }

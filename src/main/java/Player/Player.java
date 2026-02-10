@@ -18,7 +18,8 @@ public class Player extends PhysicsObject2D {
     //List<Item> inventory = new ArrayList<Item>();
     public static int HP;
     
-    public Player(/*Image img, String name, int hp*/) {
+    public Player(int PosX, int PosY, float Velocity, int[] Direction /*Image img, String name, int hp*/) {
+        super(PosX, PosY, Velocity, Direction);
         //this.hp = hp;
     }
     
