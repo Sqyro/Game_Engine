@@ -10,16 +10,16 @@ public class Player extends PhysicsObject2D {
     public static int LocPosX = GUI.Frame.ScreenWidth / 2;
     public static int LocPosY = GUI.Frame.ScreenHeight / 2;
     
-    public static int PlayerSizeX = 50;
-    public static int PlayerSizeY = 50;
+    public static int PlayerSizeX = 100;
+    public static int PlayerSizeY = 100;
     
     public static PhysicsObject2D Player;
     
     //List<Item> inventory = new ArrayList<Item>();
     public static int HP;
     
-    public Player(int PosX, int PosY, float Velocity, int[] Direction /*Image img, String name, int hp*/) {
-        super(PosX, PosY, Velocity, Direction);
+    public Player(int PosX, int PosY, float Velocity, int[] Direction, Image img /*, String name, int hp*/) {
+        super(PosX, PosY, Velocity, Direction, img);
         //this.hp = hp;
     }
     

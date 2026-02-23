@@ -1,5 +1,7 @@
 package Physics2D;
 
+import java.awt.Image;
+
 public class PhysicsObject2D {
     public int PosX = 0;
     public int PosY = 0;
@@ -8,11 +10,14 @@ public class PhysicsObject2D {
     
     public int[] Direction = {0, 0};
     
-    public PhysicsObject2D(int PosX, int PosY, float Velocity, int[] Direction) {
+    public Image img;
+    
+    public PhysicsObject2D(int PosX, int PosY, float Velocity, int[] Direction, Image img) {
         this.PosX = PosX;
         this.PosY = PosY;
         this.Velocity = Velocity;
         this.Direction = Direction;
+        this.img = img;
     }
     
    public int getPosX() {
@@ -54,5 +59,13 @@ public class PhysicsObject2D {
    
    public void setDirectionY(int newY) {
        Direction[1] = newY;
+   }
+   
+   public Image getImage() {
+       return img;
+   }
+   
+   public void setImage(Image newimg) {
+       img = newimg;
    }
 }

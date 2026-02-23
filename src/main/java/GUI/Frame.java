@@ -38,7 +38,7 @@ public class Frame extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        VelocityHandler.calculatePosition(Player.Player.Player);
+        VelocityHandler.calculatePosition(Player.InputManager.Player);
         Camera.UpdateCamera(Player.InputManager.Player);
         canva.repaint();
     }

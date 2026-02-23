@@ -3,6 +3,7 @@ package Enemy;
 import Physics2D.PhysicsObject2D;
 import java.util.ArrayList;
 import GUI.Camera;
+import java.awt.Image;
 
 public class Enemy extends PhysicsObject2D {
     public static PhysicsObject2D Enemy;
@@ -11,13 +12,13 @@ public class Enemy extends PhysicsObject2D {
     
     public static int HP;
     
-    public Enemy(int PosX, int PosY, float Velocity, int[] Direction) {
-        super(PosX, PosY, Velocity, Direction);
+    public Enemy(int PosX, int PosY, float Velocity, int[] Direction, Image img) {
+        super(PosX, PosY, Velocity, Direction, img);
     }
     
     public static void Spawn(Enemy newEnemy) {
-        newEnemy.setPosX(newEnemy.getPosX() + Camera.PosX);
-        newEnemy.setPosY(newEnemy.getPosY() + Camera.PosY);
+        newEnemy.setPosX(newEnemy.getPosX() - Camera.PosX);
+        newEnemy.setPosY(newEnemy.getPosY() - Camera.PosY);
         
         Enemies.add(newEnemy);
         
