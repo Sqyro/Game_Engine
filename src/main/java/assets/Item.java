@@ -1,5 +1,4 @@
-
-package Assets;
+package assets;
 
 import java.awt.Image;
 

@@ -11,14 +11,4 @@ public class ImageHandler {
     public static void draw(Graphics g ,Image img, int PosX, int PosY) {
         g.drawImage(img, PosX, PosY, null);
     }
-    
-    public static Image AnimatedImage(String imgLoc, String FileType, int Animlenght) {
-        if (Animlenght >= PosinAnim) {
-            currentFrame = Toolkit.getDefaultToolkit().getImage(imgLoc + PosinAnim + FileType);
-            PosinAnim += 1;
-        } else {
-            PosinAnim = 0;
-        }
-        return currentFrame;
-    }
 }

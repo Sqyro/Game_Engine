@@ -11,11 +11,11 @@ import java.awt.Toolkit;
 public class InputManager {
     //private static volatile boolean wPressed = false;
 
-    private static final Image PlayerorigImg = Toolkit.getDefaultToolkit().getImage("src/main/resources/Player.png");
-    private static final Image PlayerImg = PlayerorigImg.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+    private static final Image PlayerorigImg = Toolkit.getDefaultToolkit().getImage("src/main/resources/assets/textures/player/Player.png");
+    public static Image PlayerImg = PlayerorigImg.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
     
-    private static final Image EnemyorigImg = Toolkit.getDefaultToolkit().getImage("src/main/resources/Enemy.png");
-    private static final Image EnemyImg = EnemyorigImg.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+    private static final Image EnemyorigImg = Toolkit.getDefaultToolkit().getImage("src/main/resources/assets/textures/enemy/Enemy.png");
+    public static Image EnemyImg = EnemyorigImg.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
     
     private static final int[] Direction = {0, 0};
     public static Player Player = new Player(0, 0, 0, Direction, PlayerImg);
@@ -33,21 +33,25 @@ public class InputManager {
                             System.out.println("W Pressed");
                             Player.setDirectionY(1); // Direction bei Y = 1, also in Positive Richtung bei Y laufen
                             InputHandler.Move(Player);
+                            PlayerAnimationHandler.PlayWalkingAnimation();
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_S) {
                             System.out.println("S Pressed");
                             Player.setDirectionY(-1); // Direction bei Y = -1, also in Negative Richtung bei Y laufen
                             InputHandler.Move(Player);
+                            PlayerAnimationHandler.PlayWalkingAnimation();
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_A) {
                             System.out.println("A Pressed");
                             Player.setDirectionX(1); // Direction bei X = 1, also in Positive Richtung bei X laufen
                             InputHandler.Move(Player);
+                            PlayerAnimationHandler.PlayWalkingAnimation();
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_D) {
                             System.out.println("D Pressed");
                             Player.setDirectionX(-1); // Direction bei X = -1, also in Negative Richtung bei X laufen
                             InputHandler.Move(Player);
+                            PlayerAnimationHandler.PlayWalkingAnimation();
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_C) {
                             System.out.println("C Pressed");
@@ -63,9 +67,13 @@ public class InputManager {
                     case KeyEvent.KEY_RELEASED:
                         if (Key.getKeyCode() == KeyEvent.VK_W || Key.getKeyCode() == KeyEvent.VK_S) {
                             Player.setDirectionY(0);
+                            InputHandler.Stop(Player);
+                            PlayerAnimationHandler.StopAnimation();
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_A || Key.getKeyCode() == KeyEvent.VK_D) {
                             Player.setDirectionX(0);
+                            InputHandler.Stop(Player);
+                            PlayerAnimationHandler.StopAnimation();
                         }
                         break;
                     }

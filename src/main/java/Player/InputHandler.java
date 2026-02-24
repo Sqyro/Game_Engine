@@ -8,4 +8,8 @@ public class InputHandler {
         //Camera.PosY = Camera.PosY + MovementSpeed * Direction; //Ich ersetze das Später mit dem Velocity Handler, mache das nur weil es erstmal einfacher ist
         Player.setVelocity(MovementSpeed);
     }
+    
+    public static void Stop(Player Player) {
+        Player.setVelocity(0);
+    }
 }
