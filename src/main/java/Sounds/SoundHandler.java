@@ -1,17 +1,22 @@
+package Sounds;
+
 import javax.sound.sampled.*;
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 public class SoundHandler {
-   public static synchronized void playSound(final String SoundName) {
+   public static synchronized void playSound(final String SoundName, long TimeInSeconds) {
     new Thread(new Runnable() {
-    // The wrapper thread is unnecessary, unless it blocks on the
-    // Clip finishing; see comments.
+    @Override
     public void run() {
       try {
         Clip clip = AudioSystem.getClip();
         AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File("src/main/resources/assets/sounds" + SoundName).getAbsoluteFile());
         clip.open(inputStream);
-        clip.start(); 
+        clip.start();
+        TimeUnit.SECONDS.sleep(TimeInSeconds);
+        clip.stop();
+        clip.close();
       } catch (Exception e) {
         System.err.println(e.getMessage());
       }

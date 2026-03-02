@@ -6,6 +6,8 @@ public class PhysicsObject2D {
     public int PosX = 0;
     public int PosY = 0;
     
+    public int test;
+    
     public float Velocity = 0;
     
     public int[] Direction = {0, 0};
