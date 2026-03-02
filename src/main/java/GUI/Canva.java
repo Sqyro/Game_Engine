@@ -38,7 +38,13 @@ public class Canva extends JPanel {
         
         //r.draw(g);
         
-        Map.draw(g, 0 + + Camera.PosX, 0 + Camera.PosY);
+        int screenLeft   = (int) -Camera.PosX;
+        int screenRight  = screenLeft + getWidth();
+        int screenTop    = (int) -Camera.PosY;
+        int screenBottom = screenTop + getHeight();
+
+        
+        Map.draw(g, 0 + (int)Camera.PosX, 0 + (int)Camera.PosY);
         
         // Render Player
         
@@ -47,10 +53,14 @@ public class Canva extends JPanel {
         //Render Enemies;
         for(int i = 0; i < Enemy.Enemies.size(); i++) {
             Enemy currentEnemy = Enemy.Enemies.get(i);
-            int EnemyX = currentEnemy.getPosX();
-            int EnemyY = currentEnemy.getPosY();
+            float EnemyX = currentEnemy.getPosX();
+            float EnemyY = currentEnemy.getPosY();
             
-            GUI.ImageHandler.draw(g, currentEnemy.getImage(), EnemyX + Camera.PosX, EnemyY + Camera.PosY);
+            if (EnemyX < screenLeft - 100 || EnemyX > screenRight + 100 ||EnemyY < screenTop - 100 || EnemyY > screenBottom + 100) { //Wenn dieser Enemie nicht auf dem Screen ist (Plus Minus 100, damit man es nicht merkt)
+                continue; // Skippt diesen Enemy und macht mit dem nächsten weiter
+            }
+            
+            GUI.ImageHandler.draw(g, currentEnemy.getImage(), (int)(EnemyX + Camera.PosX), (int)(EnemyY + Camera.PosY));
         }
         
         Toolkit.getDefaultToolkit().sync();

@@ -14,6 +14,9 @@ public class Frame extends JFrame implements ActionListener{
 
     JPanel canva;
     Timer t;
+    
+    long lastTime = System.nanoTime();
+    
     public static int FramesPerSecond = 60; // 60 FPS sind gerade Standart, soll dann aber einstellbar sein
     public static int ScreenHeight = 1080; // Wird je nach Setting überschrieben, Momentan auf HD Fullscreen gehardcoded
     public static int ScreenWidth = 1920;
@@ -32,13 +35,18 @@ public class Frame extends JFrame implements ActionListener{
         this.setVisible(true);
         this.pack();
         
-        t = new Timer(1/FramesPerSecond * 1000, this); //1/60 sind die Sekunden pro Frame. Mal eintausend für Millisekunden pro Frame
+        t = new Timer(1000 / FramesPerSecond, this); //1000/60 sind die Millisekunden pro Frame.
         t.start();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        VelocityHandler.calculatePosition(Player.InputManager.Player);
+        long now = System.nanoTime(); //liest die Frame unabhängige "System Zeit"
+        float deltaTime = (now - lastTime) / 1_000_000_000f; //Differenz aus jetzige Zeit und vorherige Zeit ist die Zeit Pro Frame. Diese Zahl benutze ich, damit Geschwindigkeiten auf 30 FPS gleichstark wie auf 60 sind
+        lastTime = now; //Das jetzt ist jetzt vorbeit und ist vergangenheit, weil delta Time gesetzt wurde
+        
+        Player.InputManager.updatePlayerDirection();
+        VelocityHandler.calculatePosition(Player.InputManager.Player, deltaTime);
         Camera.UpdateCamera(Player.InputManager.Player);
         canva.repaint();
     }

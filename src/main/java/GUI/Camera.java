@@ -3,8 +3,8 @@ package GUI;
 import Player.Player;
 
 public class Camera {
-    public static int PosX;
-    public static int PosY;
+    public static float PosX;
+    public static float PosY;
     
     public Camera() {
         

@@ -22,8 +22,18 @@ public class MapHandler {
     public MapHandler() {}
     
     public void draw(Graphics g, int PosX, int PosY) {
-        for (int i = 0; i < MAP[0].length; i++) {
-            for (int j = 0; j < MAP.length; j++) {
+        int screenWidth = GUI.Frame.ScreenWidth;
+        int screenHeight = GUI.Frame.ScreenHeight;
+
+        int startTileX = Math.max(0, -PosX / TileSize); //die ersten Tiles die gerendert werden
+        int startTileY = Math.max(0, -PosY / TileSize);
+
+        //Die letzten Tiles die gerendert werden, eine Seite
+        int endTileX = Math.min(MAP[0].length, startTileX + (screenWidth / TileSize) + 2);  //Bildschirm wird in tiles unterteilt durch Width/TileSize. Plus StartTile, sonst würde man ja nur die ersten paar tiles in der Liste dsehen können. +2 damit man es nicht merkt
+        int endTileY = Math.min(MAP.length, startTileY + (screenHeight / TileSize) + 2);
+        
+        for (int j = startTileY; j < endTileY; j++) {
+            for (int i = startTileX; i < endTileX; i++) {
                 switch (MAP[j][i]) {
                     case 0:
                         g.drawImage(Tile1Img, i*TileSize + PosX, j*TileSize + PosY, null);
@@ -37,7 +47,6 @@ public class MapHandler {
                     default:
                         g.drawImage(Player.InputManager.PlayerImg, i*TileSize + PosX, j*TileSize + PosY, null);
                 }
-                //g.fillRect(i*64+16, j*64, 64, 64);
             }
         }
     }

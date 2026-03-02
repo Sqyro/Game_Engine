@@ -1,20 +1,21 @@
 package Physics2D;
 
 import java.awt.Image;
+import java.io.Serializable;
 
-public class PhysicsObject2D {
-    public int PosX = 0;
-    public int PosY = 0;
+public class PhysicsObject2D implements Serializable {
+    private static final long serialVersionUID = 1L;
     
-    public int test;
+    public float PosX = 0;
+    public float PosY = 0;
     
-    public float Velocity = 0;
+    public transient float Velocity = 0;
     
-    public int[] Direction = {0, 0};
+    public transient int[] Direction = {0, 0};
     
-    public Image img;
+    public transient Image img;
     
-    public PhysicsObject2D(int PosX, int PosY, float Velocity, int[] Direction, Image img) {
+    public PhysicsObject2D(float PosX, float PosY, float Velocity, int[] Direction, Image img) {
         this.PosX = PosX;
         this.PosY = PosY;
         this.Velocity = Velocity;
@@ -22,19 +23,19 @@ public class PhysicsObject2D {
         this.img = img;
     }
     
-   public int getPosX() {
+   public float getPosX() {
        return PosX;
    }
    
-   public void setPosX(int newPosX) {
+   public void setPosX(float newPosX) {
        PosX = newPosX;
    }
    
-   public int getPosY() {
+   public float getPosY() {
        return PosY;
    }
    
-   public void setPosY(int newPosY) {
+   public void setPosY(float newPosY) {
        PosY = newPosY;
    }
    
@@ -48,6 +49,14 @@ public class PhysicsObject2D {
    
    public int[] getDirection() {
        return Direction;
+   }
+   
+   public int getDirectionX() {
+       return Direction[1];
+   }
+   
+   public int getDirectionY() {
+       return Direction[1];
    }
    
    public void setDirection(int newX, int newY) {
