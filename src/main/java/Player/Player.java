@@ -5,8 +5,12 @@ import Physics2D.PhysicsObject2D;
 import java.awt.Image;
 //import java.util.ArrayList;
 //import java.util.List;
+import java.io.Serializable;
 
-public class Player extends PhysicsObject2D {
+
+public class Player extends PhysicsObject2D implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     public static int LocPosX = GUI.Frame.ScreenWidth / 2;
     public static int LocPosY = GUI.Frame.ScreenHeight / 2;
     
