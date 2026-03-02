@@ -1,4 +1,4 @@
-package Assets;
+package Map;
 
 import Physics2D.PhysicsObject2D;
 import java.awt.Image;

@@ -14,6 +14,8 @@ public class Canva extends JPanel {
     
     //frame.Room r;
     
+    Map.MapHandler Map;
+    
     public Canva(int w, int h) {
         super();
         this.setPreferredSize(new Dimension(w,h));
@@ -24,6 +26,8 @@ public class Canva extends JPanel {
         this.setVisible(true);
         
         //r = new frame.Room();
+        
+        Map = new Map.MapHandler();
     }
     
     @Override
@@ -32,9 +36,13 @@ public class Canva extends JPanel {
         g.setColor(Color.white);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         
+        //r.draw(g);
+        
+        Map.draw(g, 0 + + Camera.PosX, 0 + Camera.PosY);
+        
         // Render Player
         
-        assets.ImageHandler.draw(g, InputManager.Player.getImage(), Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2);
+        GUI.ImageHandler.draw(g, InputManager.Player.getImage(), Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2);
 
         //Render Enemies;
         for(int i = 0; i < Enemy.Enemies.size(); i++) {
@@ -42,7 +50,7 @@ public class Canva extends JPanel {
             int EnemyX = currentEnemy.getPosX();
             int EnemyY = currentEnemy.getPosY();
             
-            assets.ImageHandler.draw(g, currentEnemy.getImage(), EnemyX + Camera.PosX, EnemyY + Camera.PosY);
+            GUI.ImageHandler.draw(g, currentEnemy.getImage(), EnemyX + Camera.PosX, EnemyY + Camera.PosY);
         }
         
         Toolkit.getDefaultToolkit().sync();

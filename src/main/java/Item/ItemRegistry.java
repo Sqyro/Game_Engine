@@ -1,4 +1,4 @@
-package assets;
+package Item;
 
 
 public class ItemRegistry {
