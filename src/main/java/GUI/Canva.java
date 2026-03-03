@@ -14,6 +14,8 @@ public class Canva extends JPanel {
     
     //frame.Room r;
     
+    Map.MapHandler Map;
+    
     public Canva(int w, int h) {
         super();
         this.setPreferredSize(new Dimension(w,h));
@@ -24,6 +26,8 @@ public class Canva extends JPanel {
         this.setVisible(true);
         
         //r = new frame.Room();
+        
+        Map = new Map.MapHandler();
     }
     
     @Override
@@ -32,17 +36,31 @@ public class Canva extends JPanel {
         g.setColor(Color.white);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         
+        //r.draw(g);
+        
+        int screenLeft   = (int) -Camera.PosX;
+        int screenRight  = screenLeft + getWidth();
+        int screenTop    = (int) -Camera.PosY;
+        int screenBottom = screenTop + getHeight();
+
+        
+        Map.draw(g, 0 + (int)Camera.PosX, 0 + (int)Camera.PosY);
+        
         // Render Player
         
-        assets.ImageHandler.draw(g, InputManager.Player.getImage(), Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2);
+        GUI.ImageHandler.draw(g, InputManager.Player.getImage(), Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2);
 
         //Render Enemies;
         for(int i = 0; i < Enemy.Enemies.size(); i++) {
             Enemy currentEnemy = Enemy.Enemies.get(i);
-            int EnemyX = currentEnemy.getPosX();
-            int EnemyY = currentEnemy.getPosY();
+            float EnemyX = currentEnemy.getPosX();
+            float EnemyY = currentEnemy.getPosY();
             
-            assets.ImageHandler.draw(g, currentEnemy.getImage(), EnemyX + Camera.PosX, EnemyY + Camera.PosY);
+            if (EnemyX < screenLeft - 100 || EnemyX > screenRight + 100 ||EnemyY < screenTop - 100 || EnemyY > screenBottom + 100) { //Wenn dieser Enemie nicht auf dem Screen ist (Plus Minus 100, damit man es nicht merkt)
+                continue; // Skippt diesen Enemy und macht mit dem nächsten weiter
+            }
+            
+            GUI.ImageHandler.draw(g, currentEnemy.getImage(), (int)(EnemyX + Camera.PosX), (int)(EnemyY + Camera.PosY));
         }
         
         Toolkit.getDefaultToolkit().sync();

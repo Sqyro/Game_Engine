@@ -1,5 +1,6 @@
-package assets;
+package Item;
 
+import Physics2D.GameAsset;
 import java.awt.Image;
 
 public class Item extends GameAsset{

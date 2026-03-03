@@ -1,4 +1,4 @@
-package assets;
+package Physics2D;
 
 import java.awt.Graphics;
 import java.awt.Image;
