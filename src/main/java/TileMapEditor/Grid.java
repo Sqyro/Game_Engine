@@ -101,7 +101,7 @@ public class Grid extends JPanel {
         tiles = new Image[numTiles];
 
         for (int i = 0; i < numTiles; i++) {
-            tiles[i] = Toolkit.getDefaultToolkit().getImage("src/main/resources/Tile_" + i + ".png").getScaledInstance(TileSelector.tileSize, TileSelector.tileSize, Image.SCALE_DEFAULT);
+            tiles[i] = Toolkit.getDefaultToolkit().getImage("src/main/resources/assets/textures/tiles/Tile" + i + ".png").getScaledInstance(TileSelector.tileSize, TileSelector.tileSize, Image.SCALE_DEFAULT);
         }
     }
 

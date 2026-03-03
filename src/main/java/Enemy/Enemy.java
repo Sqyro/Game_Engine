@@ -1,19 +1,19 @@
 package Enemy;
 
-import Physics2D.PhysicsObject2D;
+import Physics2D.LivingObject;
 import java.util.ArrayList;
 import GUI.Camera;
 import java.awt.Image;
 
-public class Enemy extends PhysicsObject2D {
-    public static PhysicsObject2D Enemy;
+public class Enemy extends LivingObject {
+    public static LivingObject Enemy;
     
     public static ArrayList<Enemy> Enemies = new ArrayList<>();
     
     public static int HP;
     
-    public Enemy(int PosX, int PosY, float Velocity, int[] Direction, Image img) {
-        super(PosX, PosY, Velocity, Direction, img);
+    public Enemy(int PosX, int PosY, Image img, float Velocity, int[] Direction) {
+        super(PosX, PosY, img, Velocity, Direction);
     }
     
     public static void Spawn(Enemy newEnemy) {

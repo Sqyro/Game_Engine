@@ -1,7 +1,7 @@
 package Physics2D;
 
 public class VelocityHandler {
-    public static void calculatePosition(PhysicsObject2D Object, float deltaTime) {
+    public static void calculatePosition(LivingObject Object, float deltaTime) {
         float Velocity = Object.getVelocity();
         
         //System.out.println("Alte Position X: " + Object.getPosX() + " Alte Position Y: " + Object.getPosY());

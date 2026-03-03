@@ -5,6 +5,6 @@ import java.awt.Image;
 
 public class Wall extends PhysicsObject2D {
     public Wall(int PosX, int PosY, float Velocity, int[] Direction, Image img) {
-        super(PosX, PosY, Velocity, Direction, img);
+        super(PosX, PosY, img);
     }
 }

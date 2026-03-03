@@ -1,6 +1,6 @@
 package Player;
 
-import Physics2D.PhysicsObject2D;
+import Physics2D.LivingObject;
 //import assets.objects.Item;
 import java.awt.Image;
 //import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.awt.Image;
 import java.io.Serializable;
 
 
-public class Player extends PhysicsObject2D implements Serializable {
+public class Player extends LivingObject implements Serializable {
     private static final long serialVersionUID = 1L;
     
     public static int LocPosX = GUI.Frame.ScreenWidth / 2;
@@ -17,13 +17,13 @@ public class Player extends PhysicsObject2D implements Serializable {
     public static int PlayerSizeX = 100;
     public static int PlayerSizeY = 100;
     
-    public static PhysicsObject2D Player;
+    public static LivingObject Player;
     
     //List<Item> inventory = new ArrayList<Item>();
     public static int HP;
     
-    public Player(int PosX, int PosY, float Velocity, int[] Direction, Image img /*, String name, int hp*/) {
-        super(PosX, PosY, Velocity, Direction, img);
+    public Player(int PosX, int PosY, Image img, float Velocity, int[] Direction /*, String name, int hp*/) {
+        super(PosX, PosY, img ,Velocity, Direction);
         //this.hp = hp;
     }
     

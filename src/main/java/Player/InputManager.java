@@ -21,7 +21,7 @@ public class InputManager {
     public static Image EnemyImg = EnemyorigImg.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
     
     private static final int[] Direction = {0, 0};
-    public static Player Player = new Player(0, 0, 0, Direction, PlayerImg);
+    public static Player Player = new Player(0, 0, PlayerImg, 0,Direction);
     
     public static void KeyEvent(String[] args) {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
@@ -61,7 +61,7 @@ public class InputManager {
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_C) {
                             System.out.println("C Pressed");
-                            Enemy.Enemy.Spawn(new Enemy.Enemy(40, 40, 0, Direction, EnemyImg));
+                            Enemy.Enemy.Spawn(new Enemy.Enemy(40, 40, EnemyImg, 0, Direction));
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_V) {
                             System.out.println("V Pressed");
