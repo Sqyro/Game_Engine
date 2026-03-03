@@ -71,6 +71,10 @@ public class InputManager {
                                 InputManager.Player.setPosY(loaded.getPosY());
                             }
                         }
+                        if (Key.getKeyCode() == KeyEvent.VK_X) {
+                            System.out.println("X Pressed");
+                            Save.Save.SaveData(Player);
+                        }
                         break;
 
                     
