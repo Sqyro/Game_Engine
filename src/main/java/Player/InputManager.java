@@ -61,7 +61,7 @@ public class InputManager {
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_C) {
                             System.out.println("C Pressed");
-                            Enemy.Enemy.Spawn(new Enemy.Enemy(40, 40, EnemyImg, 0, Direction));
+                            Enemy.Enemy.Spawn(40, 40, EnemyImg, 0, Direction);
                         }
                         if (Key.getKeyCode() == KeyEvent.VK_V) {
                             System.out.println("V Pressed");

@@ -34,9 +34,8 @@ public class LivingObject extends PhysicsObject2D {
        return Direction[1];
    }
    
-   public void setDirection(int newX, int newY) {
-       Direction[0] = newX;
-       Direction[1] = newY;
+   public void setDirection(int[] newDirection) {
+       Direction = newDirection;
    }
    
    public void setDirectionX(int newX) {
