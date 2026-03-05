@@ -46,7 +46,7 @@ public class Canva extends JPanel {
         
         Map.draw(g, 0 + (int)Camera.PosX, 0 + (int)Camera.PosY);
         
-        // Render Player
+        //Render Player
         
         GUI.ImageHandler.draw(g, InputManager.Player.getImage(), Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2);
 
@@ -61,6 +61,16 @@ public class Canva extends JPanel {
             }
             
             GUI.ImageHandler.draw(g, currentEnemy.getImage(), (int)(EnemyX + Camera.PosX), (int)(EnemyY + Camera.PosY));
+        }
+        
+        //Render HUD
+        
+        for(int i = 0; i < GUIHandler.HudElements.size(); i++) {
+            HudElement currentHud = GUIHandler.HudElements.get(i);
+            int HudX = currentHud.getPosX();
+            int HudY = currentHud.getPosY();
+            
+            GUI.ImageHandler.draw(g, currentHud.getImage(), HudX, HudY);
         }
         
         Toolkit.getDefaultToolkit().sync();
