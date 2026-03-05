@@ -70,6 +70,14 @@ public class Canva extends JPanel {
             int HudX = currentHud.getPosX();
             int HudY = currentHud.getPosY();
             
+            if(currentHud instanceof BarElement) { // Wenn es ein BarElement ist, dann zeichnet er die Farbe ("Bar darunter") mit dazu
+
+                BarElement bar = (BarElement) currentHud;
+
+                g.setColor(bar.getColor());
+                g.fillRect(HudX, HudY, bar.getBarLength() - bar.getBarDamage(), bar.getBarHeight());
+            }
+            
             GUI.ImageHandler.draw(g, currentHud.getImage(), HudX, HudY);
         }
         
