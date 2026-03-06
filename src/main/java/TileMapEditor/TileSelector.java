@@ -16,7 +16,7 @@ public class TileSelector extends JPanel {
     public TileSelector(Grid grid) {
         this.grid = grid;
 
-        int rows = (int)Math.ceil((double)tileCount / columns);
+        int rows = (int)Math.ceil((double)tileCount - 1 / columns);
         setPreferredSize(new Dimension(columns * tileSize, rows * tileSize));
 
         addMouseListener(new MouseAdapter() {
@@ -25,7 +25,7 @@ public class TileSelector extends JPanel {
 
                 int col = e.getX() / tileSize;
                 int row = e.getY() / tileSize;
-                int index = row * columns + col;
+                int index = row * columns + col + 1;
 
                 if (index < tileCount) {
                     grid.setSelectedTile(index);
@@ -39,10 +39,9 @@ public class TileSelector extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        for (int i = 0; i < tileCount; i++) {
-
-            int col = i % columns;
-            int row = i / columns;
+        for (int i = 1; i < tileCount; i++) { 
+            int col = (i - 1) % columns;
+            int row = (i - 1) / columns;
 
             int x = col * tileSize;
             int y = row * tileSize;
@@ -53,10 +52,11 @@ public class TileSelector extends JPanel {
                 g.setColor(Color.GRAY);
                 g.fillRect(x, y, tileSize, tileSize);
             }
-            
+
             g.setColor(Color.BLACK);
             g.drawRect(x, y, tileSize, tileSize);
 
+            g.setColor(Color.BLACK);
             g.drawString("" + i, x + 8, y + 20);
         }
     }

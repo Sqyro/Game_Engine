@@ -4,6 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 
 public class Grid extends JPanel {
@@ -39,7 +44,7 @@ public class Grid extends JPanel {
         Yg = Y;
         
         mapData = new int[mapRows][mapCols];
-        TestMap();
+        //TestMap();
         
         loadTiles();
         
@@ -61,50 +66,43 @@ public class Grid extends JPanel {
         addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
-
-                int tileSizeG = festeGridSize / visibleCols;
-
-                int mcols = (e.getX() - Xg) / tileSizeG;
-                int mrows = (e.getY() - Yg) / tileSizeG;
-
-                if (mcols >= 0 && mcols < visibleCols && mrows >= 0 && mrows < visibleRows) {
-
-                    int worldCol = cameraCols + mcols;
-                    int worldRow = cameraRows + mrows;
-
-                    if (worldCol >= 0 && worldCol < mapCols && worldRow >= 0 && worldRow < mapRows) {
-
-                        mapData[worldRow][worldCol] = thisTile;
-                        repaint();
-                    }
+        
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    placeTile(e.getX(), e.getY(), 0);
+                } else {
+                    placeTile(e.getX(), e.getY(), thisTile);
                 }
             }
         });
-    }
 
-    private void TestMap() {
-        for (int r = 0; r < mapRows; r++) {
-            for (int c = 0; c < mapCols; c++) {
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(java.awt.event.MouseEvent e) {
 
-                if (c < mapCols / 2) {
-                    mapData[r][c] = 0;
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    placeTile(e.getX(), e.getY(), 0);
                 } else {
-                    mapData[r][c] = 1;
+                    placeTile(e.getX(), e.getY(), thisTile);
                 }
-
             }
-        }
-    }
-    
-    private void loadTiles() {
-        int numTiles = 200;
-        tiles = new Image[numTiles];
+        });
+        
+        addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
 
-        for (int i = 0; i < numTiles; i++) {
-            tiles[i] = Toolkit.getDefaultToolkit().getImage("src/main/resources/assets/textures/tiles/Tile" + i + ".png").getScaledInstance(TileSelector.tileSize, TileSelector.tileSize, Image.SCALE_DEFAULT);
-        }
-    }
+                int rotation = e.getWheelRotation();
 
+                if(rotation < 0) {
+                    visibleTiles(visibleRows / zoom, visibleCols / zoom);
+                }
+                else {
+                    visibleTiles(visibleRows * zoom, visibleCols * zoom);
+                }
+            }
+        });
+        
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -130,8 +128,15 @@ public class Grid extends JPanel {
                     g.setColor(Color.GRAY);
                     g.fillRect(x, y, tileSizeG, tileSizeG);
                 }
+                
+                g.setColor(Color.BLACK);
+                g.drawRect(x, y, tileSizeG, tileSizeG);
+                
             }
         }
+        
+        g.setColor(Color.BLACK);
+        g.drawRect(Xg, Yg, festeGridSize, festeGridSize);
         
         //Mini Grid
         int miniBreite = 400;
@@ -155,7 +160,10 @@ public class Grid extends JPanel {
                 }
             }
         }
-
+        
+        g.setColor(Color.BLACK);
+        g.drawRect(miniX, miniY, miniBreite, miniHoehe);
+        
         //Rahmen auf Mini Grid
         g.setColor(Color.BLUE);
         g.drawRect(
@@ -226,7 +234,134 @@ public class Grid extends JPanel {
             System.out.println();
         }
     }
+   
+   private void TestMap() {
+        for (int r = 0; r < mapRows; r++) {
+            for (int c = 0; c < mapCols; c++) {
+
+                if (c < mapCols / 2) {
+                    mapData[r][c] = 0;
+                } else {
+                    mapData[r][c] = 1;
+                }
+
+            }
+        }
+    } 
+   
+   private void loadTiles() {
+
+            int numTiles = 100;     
+            int numRotations = 4;   
+
+            tiles = new Image[numTiles * numRotations];
+
+            int counter = 0;
+
+            for (int i = 0; i < numTiles; i++) {
+
+                for (int r = 0; r < numRotations; r++) {
+
+                    String path = "src/main/resources/assets/textures/tiles/Tile" + i + "_Rotated/Tile" + r + ".png";
+
+                    tiles[counter] = Toolkit.getDefaultToolkit().getImage(path).getScaledInstance(TileSelector.tileSize, TileSelector.tileSize, Image.SCALE_DEFAULT);
+
+                    counter++;
+                }
+            }
+        }
+   
+    private void placeTile(int mouseX, int mouseY, int tilenum) {
+
+        int tileSizeG = festeGridSize / visibleCols;
+
+        int mcols = (mouseX - Xg) / tileSizeG;
+        int mrows = (mouseY - Yg) / tileSizeG;
+
+        if (mcols >= 0 && mcols < visibleCols && mrows >= 0 && mrows < visibleRows) {
+
+            int worldCol = cameraCols + mcols;
+            int worldRow = cameraRows + mrows;
+
+            if (worldCol >= 0 && worldCol < mapCols && worldRow >= 0 && worldRow < mapRows) {
+
+                if(mapData[worldRow][worldCol] != tilenum) {
+                    mapData[worldRow][worldCol] = tilenum;
+                    repaint();
+                }
+            }
+        }
+    }
     
+    public void exportMap() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Speichern unter");
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            try (PrintWriter pw = new PrintWriter(fileToSave)) {
+                for (int r = 0; r < mapRows; r++) {
+                    for (int c = 0; c < mapCols; c++) {
+                        pw.print(mapData[r][c]);
+                        if (c < mapCols - 1) pw.print(" ");
+                    }
+                    pw.println();
+                }
+                System.out.println("Map gespeichert: " + fileToSave.getAbsolutePath());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    public void importMap() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Datei öffnen");
+        int userSelection = fileChooser.showOpenDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToOpen = fileChooser.getSelectedFile();
+            try (Scanner sc = new Scanner(fileToOpen)) {
+                int r = 0;
+                while (sc.hasNextLine() && r < mapRows) {
+                    String line = sc.nextLine();
+                    String[] tokens = line.trim().split("\\s+");
+                    for (int c = 0; c < Math.min(tokens.length, mapCols); c++) {
+                        mapData[r][c] = Integer.parseInt(tokens[c]);
+                    }
+                    r++;
+                }
+                repaint();
+                System.out.println("Map geladen: " + fileToOpen.getAbsolutePath());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    public void resizeMap(int newSize) {
+        int[][] newMap = new int[newSize][newSize];
+
+        for (int r = 0; r < Math.min(mapRows, newSize); r++) {
+            for (int c = 0; c < Math.min(mapCols, newSize); c++) {
+                newMap[r][c] = mapData[r][c];
+            }
+        }
+
+        for (int r = 0; r < newSize; r++) {
+            for (int c = 0; c < newSize; c++) {
+                if (newMap[r][c] == 0) newMap[r][c] = 0;
+            }
+        }
+        
+        mapData = newMap;
+        mapRows = newSize;
+        mapCols = newSize;
+
+        if (cameraCols > mapCols - visibleCols) cameraCols = mapCols - visibleCols;
+        if (cameraRows > mapRows - visibleRows) cameraRows = mapRows - visibleRows;
+
+        repaint();
+    }
 }
-
-
