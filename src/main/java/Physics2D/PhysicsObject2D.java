@@ -1,20 +1,24 @@
 package Physics2D;
 
-import java.awt.Image;
 import java.io.Serializable;
 
 public class PhysicsObject2D implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    public float PosX = 0;
-    public float PosY = 0;
+    private float PosX = 0;
+    private float PosY = 0;
     
-    public transient Image img;
+    private int ObjLength;
+    private int ObjHeight;
     
-    public PhysicsObject2D(float PosX, float PosY, Image img) {
+    public transient int TextureID;
+    
+    public PhysicsObject2D(float PosX, float PosY, int ObjLength, int ObjHeight, int TextureID) {
         this.PosX = PosX;
         this.PosY = PosY;
-        this.img = img;
+        this.ObjLength = ObjLength;
+        this.ObjHeight = ObjHeight;
+        this.TextureID = TextureID;
     }
     
    public float getPosX() {
@@ -33,11 +37,27 @@ public class PhysicsObject2D implements Serializable {
        PosY = newPosY;
    }
    
-   public Image getImage() {
-       return img;
+   public int getObjLength() {
+       return ObjLength;
    }
    
-   public void setImage(Image newimg) {
-       img = newimg;
+   public void setObjLength(int newObjLength) {
+       ObjLength = newObjLength;
+   }
+   
+   public int getObjHeight() {
+       return ObjHeight;
+   }
+   
+   public void setObjHeight(int newObjHeight) {
+       ObjHeight = newObjHeight;
+   }
+   
+   public int getTextureID() {
+       return TextureID;
+   }
+   
+   public void setTextureID(int newTextureID) {
+       this.TextureID = newTextureID;
    }
 }

@@ -1,17 +1,21 @@
 package GUI;
 
-import java.awt.Image;
-
 public class HudElement {
     private int PosX;
     private int PosY;
     
-    private Image img;
+    private int HudLength;
+    private int HudHeight;
     
-    public HudElement(int PosX, int PosY, Image img) {
+    private int TextureID;
+    
+    public HudElement(int PosX, int PosY, int HudLength, int HudHeight, int TextureID) {
         this.PosX = PosX;
         this.PosY = PosY;
-        this.img = img;
+        this.HudLength = HudLength;
+        this.HudHeight = HudHeight;
+        this.TextureID = TextureID;
+        
     }
     
     public int getPosX() {
@@ -30,11 +34,27 @@ public class HudElement {
         PosY = newPosY;
     }
     
-    public Image getImage() {
-        return img;
+    public int getHudLength() {
+        return HudLength;
     }
     
-    public void setImage(Image newimg) {
-        img = newimg;
+    public void setHudLength(int newHudLength) {
+        HudLength = newHudLength;
+    }
+    
+    public int getHudHeight() {
+        return HudHeight;
+    }
+    
+    public void setHudHeight(int newHudHeight) {
+        HudHeight = newHudHeight;
+    }
+    
+    public int getTextureID() {
+        return TextureID;
+    }
+    
+    public void setTextureID(int newTextureID) {
+        TextureID = newTextureID;
     }
 }

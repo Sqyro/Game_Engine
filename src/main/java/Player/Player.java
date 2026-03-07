@@ -1,30 +1,34 @@
 package Player;
 
 import Physics2D.LivingObject;
-//import assets.objects.Item;
-import java.awt.Image;
-//import java.util.ArrayList;
-//import java.util.List;
+import GUI.ImageManager;
+
 import java.io.Serializable;
 
 
 public class Player extends LivingObject implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    public static int LocPosX = GUI.Frame.ScreenWidth / 2;
-    public static int LocPosY = GUI.Frame.ScreenHeight / 2;
+    public int LocPosX = main.Main.ScreenWidth / 2;
+    public int LocPosY = main.Main.ScreenHeight / 2;
     
     public static int PlayerSizeX = 100;
     public static int PlayerSizeY = 100;
     
-    public static LivingObject Player;
+    public static Player Player;
+    
+    private static int[] DefaultDirection = {0, 0};
     
     //List<Item> inventory = new ArrayList<Item>();
     public static int HP;
     
-    public Player(int PosX, int PosY, Image img, float Velocity, int[] Direction /*, String name, int hp*/) {
-        super(PosX, PosY, img ,Velocity, Direction);
+    public Player(int PosX, int PosY, int PlayerLength, int PlayerHeight, int TextureID, float Velocity, int[] Direction /*, String name, int hp*/) {
+        super(PosX, PosY, PlayerLength, PlayerHeight, TextureID, Velocity, Direction);
         //this.hp = hp;
+    }
+    
+    public static void createPlayer() {
+        Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection);
     }
     
     /*

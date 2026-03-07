@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
-import Player.InputManager;
 import Player.Player;
 import Physics2D.PhysicsObject2D;
 
@@ -29,7 +28,7 @@ public class Save {
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
             PhysicsObject2D loadedPlayer = (PhysicsObject2D) in.readObject();
 
-            loadedPlayer.setImage(InputManager.PlayerImg);
+            loadedPlayer.setTextureID(Player.Player.getTextureID());
 
             System.out.println("Player position loaded!");
             return loadedPlayer;

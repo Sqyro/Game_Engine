@@ -1,123 +1,98 @@
 package Player;
 
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
-import java.awt.event.KeyEvent;
+import GUI.BarElement;
+import GUI.ImageManager;
+import java.awt.Color;
 
-import java.awt.Image;
-import java.awt.Toolkit;
-
+import static org.lwjgl.glfw.GLFW.*;
 
 public class InputManager {
     private static volatile boolean wPressed = false;
     private static volatile boolean aPressed = false;
     private static volatile boolean sPressed = false;
     private static volatile boolean dPressed = false;
-
-    private static final Image PlayerorigImg = Toolkit.getDefaultToolkit().getImage("src/main/resources/assets/textures/player/Player.png");
-    public static Image PlayerImg = PlayerorigImg.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
-    
-    private static final Image EnemyorigImg = Toolkit.getDefaultToolkit().getImage("src/main/resources/assets/textures/enemy/Enemy.png");
-    public static Image EnemyImg = EnemyorigImg.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
     
     private static final int[] Direction = {0, 0};
-    public static Player Player = new Player(0, 0, PlayerImg, 0,Direction);
     
-    public static void KeyEvent(String[] args) {
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+    public static void init(long window) {
 
-            @Override
-            public boolean dispatchKeyEvent(KeyEvent Key) {
-                synchronized (InputManager.class) {
-                    switch (Key.getID()) {
-                    case KeyEvent.KEY_PRESSED:
-                        if (Key.getKeyCode() == KeyEvent.VK_W) {
-                            wPressed = true;
-                            System.out.println("W Pressed");
-                            //Player.setDirectionY(1); // Direction bei Y = 1, also in Positive Richtung bei Y laufen
-                            InputHandler.Move(Player);
-                            PlayerAnimationHandler.PlayWalkingAnimation();
-                        }
-                        if (Key.getKeyCode() == KeyEvent.VK_S) {
-                            sPressed = true;
-                            System.out.println("S Pressed");
-                            //Player.setDirectionY(- 1); // Direction bei Y = -1, also in Negative Richtung bei Y laufen
-                            InputHandler.Move(Player);
-                            PlayerAnimationHandler.PlayWalkingAnimation();
-                        }
-                        if (Key.getKeyCode() == KeyEvent.VK_A) {
-                            aPressed = true;
-                            System.out.println("A Pressed");
-                            //Player.setDirectionX(+ 1); // Direction bei X = 1, also in Positive Richtung bei X laufen
-                            InputHandler.Move(Player);
-                            PlayerAnimationHandler.PlayWalkingAnimation();
-                        }
-                        if (Key.getKeyCode() == KeyEvent.VK_D) {
-                            dPressed = true;
-                            System.out.println("D Pressed");
-                            //Player.setDirectionX(- 1); // Direction bei X = -1, also in Negative Richtung bei X laufen
-                            InputHandler.Move(Player);
-                            PlayerAnimationHandler.PlayWalkingAnimation();
-                        }
-                        if (Key.getKeyCode() == KeyEvent.VK_C) {
-                            System.out.println("C Pressed");
-                            Enemy.Enemy.Spawn(40, 40, EnemyImg, 0, Direction);
-                        }
-                        if (Key.getKeyCode() == KeyEvent.VK_V) {
-                            System.out.println("V Pressed");
+        glfwSetKeyCallback(window, (win, key, scancode, action, mods) -> {
+
+            Player player = Player.Player;
+
+            boolean pressed = action != GLFW_RELEASE;
+
+            switch (key) {
+                case GLFW_KEY_W:
+                    System.out.println("W Pressed");
+                    wPressed = pressed;
+                    break;
+                case GLFW_KEY_S:
+                    System.out.println("S Pressed");
+                    sPressed = pressed;
+                    break;
+                case GLFW_KEY_A:
+                    System.out.println("A Pressed");
+                    aPressed = pressed;
+                    break;
+                case GLFW_KEY_D:
+                    System.out.println("D Pressed");
+                    dPressed = pressed;
+                    break;
+                case GLFW_KEY_E:
+                    System.out.println("E Pressed");
+                    GUI.GUIHandler.PlaceNewBar(100, 100, 300, 100, GUI.ImageManager.PLAYER, 0, Color.RED);
+                    break;
+                case GLFW_KEY_Q:
+                    System.out.println("Q Pressed");
+                    GUI.HudElement Hud = GUI.GUIHandler.HudElements.get(0);
+                    BarElement bar = (BarElement) Hud;
+                    bar.setBarDamage(bar.getBarDamage() + 10);
+                    break;
+                case GLFW_KEY_C:
+                    System.out.println("C Pressed");
+                    Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, new int[]{0,0});
+                    break;
+                case GLFW_KEY_V:
+                    System.out.println("V Pressed");
                             Physics2D.PhysicsObject2D loaded = Save.Save.LoadData();
                             if (loaded != null) {
-                                InputManager.Player.setPosX(loaded.getPosX());
-                                InputManager.Player.setPosY(loaded.getPosY());
+                                Player.Player.setPosX(loaded.getPosX());
+                                Player.Player.setPosY(loaded.getPosY());
                             }
-                        }
-                        if (Key.getKeyCode() == KeyEvent.VK_X) {
-                            System.out.println("X Pressed");
-                            Save.Save.SaveData(Player);
-                        }
-                        break;
-
+                    break;
+                case GLFW_KEY_X:
+                    System.out.println("X Pressed");
+                            Save.Save.SaveData(Player.Player);
+                    break;
                     
-                    case KeyEvent.KEY_RELEASED:
-                        if(Key.getKeyCode() == KeyEvent.VK_W) {
-                            wPressed = false;
-                        } else if(Key.getKeyCode() == KeyEvent.VK_S) {
-                            sPressed = false;
-                        } else if(Key.getKeyCode() == KeyEvent.VK_A) {
-                            aPressed = false;
-                        } else if(Key.getKeyCode() == KeyEvent.VK_D) {
-                            dPressed = false;
-                        }
-                        if(!wPressed && !sPressed && !aPressed && !dPressed) {
-                            InputHandler.Stop(Player);
-                            PlayerAnimationHandler.StopAnimation();
-                        }
-                        break;
-                    }
-                    return false;
-                       
-                }
+            }
+
+            // Klasse unten callen, damit der Spieler Richtig ausgerichtet ist nach eingabe einer Taste
+            updatePlayerDirection();
+
+            // Wir callen Move jedes mal wenn irgendeiner von den Movement Keys jetzt gerade gedrückt wird und wenn nicht, dann stoppen wir
+            if (wPressed || aPressed || sPressed || dPressed) {
+                InputHandler.Move(player);
+            } else {
+                InputHandler.Stop(player);
             }
         });
     }
     
-    /* public static boolean isWPressed() {
-        synchronized (InputManager.class) {
-            return wPressed;
-        }
-    }
-    */
     
     public static void updatePlayerDirection() { // Hab den Direction Skript von oben hier runter gemoved und ihn flüssig gemacht, vorher hat der so gestottert, weil Direction für eine Frame 0 war (nach W-S oder A-D)
         int x = 0;
         int y = 0;
-
+        
+        Player player = Player.Player;
+        
         if (wPressed) y += 1; 
         if (sPressed) y -= 1;
         if (aPressed) x += 1;
         if (dPressed) x -= 1;
-
-        Player.setDirectionX(x);
-        Player.setDirectionY(y);
+        
+        player.setDirectionX(x);
+        player.setDirectionY(y);
     }
 }

@@ -1,55 +1,36 @@
 package GUI;
 
-//import frame.Room;
 import Player.Player;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Toolkit;
-import javax.swing.JPanel;
 import Enemy.Enemy;
-import Player.InputManager;
+import static org.lwjgl.opengl.GL11.*;
 
-public class Canva extends JPanel {
-    
-    //frame.Room r;
+public class Canva {
     
     Map.MapHandler Map;
     
-    public Canva(int w, int h) {
-        super();
-        this.setPreferredSize(new Dimension(w,h));
-        this.setSize(new Dimension(w,h));
-        this.setOpaque(false);
-        this.setBounds(0, 0, w, h);
-        
-        this.setVisible(true);
-        
-        //r = new frame.Room();
+    private int ScreenWidth;
+    private int ScreenHeight;
+    
+    public Canva(int Width, int Height) {
+        this.ScreenWidth = Width;
+        this.ScreenHeight = Height;
         
         Map = new Map.MapHandler();
     }
     
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(Color.white);
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        
-        //r.draw(g);
+    protected void drawNewFrame() {
+        glClearColor(1f, 1f, 1f, 1f);
+        glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Weiß setzen
         
         int screenLeft   = (int) -Camera.PosX;
-        int screenRight  = screenLeft + getWidth();
+        int screenRight  = screenLeft + ScreenWidth;
         int screenTop    = (int) -Camera.PosY;
-        int screenBottom = screenTop + getHeight();
+        int screenBottom = screenTop + ScreenHeight;
 
+        glPushMatrix();
+        glTranslatef((float) Camera.PosX, (float) Camera.PosY, 0f);
+        Map.draw();
         
-        Map.draw(g, 0 + (int)Camera.PosX, 0 + (int)Camera.PosY);
-        
-        //Render Player
-        
-        GUI.ImageHandler.draw(g, InputManager.Player.getImage(), Player.LocPosX - Player.PlayerSizeX / 2, Player.LocPosY - Player.PlayerSizeY / 2);
-
         //Render Enemies;
         for(int i = 0; i < Enemy.Enemies.size(); i++) {
             Enemy currentEnemy = Enemy.Enemies.get(i);
@@ -60,8 +41,16 @@ public class Canva extends JPanel {
                 continue; // Skippt diesen Enemy und macht mit dem nächsten weiter
             }
             
-            GUI.ImageHandler.draw(g, currentEnemy.getImage(), (int)(EnemyX + Camera.PosX), (int)(EnemyY + Camera.PosY));
+            GUI.ImageHandler.draw(currentEnemy.getTextureID(), (int)EnemyX, (int)EnemyY, currentEnemy.getObjLength(), currentEnemy.getObjHeight());
         }
+        
+        glPopMatrix();
+        
+        //Render Player
+        
+        Player player = Player.Player;
+        GUI.ImageHandler.draw(player.getTextureID(), player.LocPosX - player.PlayerSizeX / 2, player.LocPosY - player.PlayerSizeY / 2, player.getObjLength(), player.getObjHeight());
+
         
         //Render HUD
         
@@ -71,16 +60,27 @@ public class Canva extends JPanel {
             int HudY = currentHud.getPosY();
             
             if(currentHud instanceof BarElement) { // Wenn es ein BarElement ist, dann zeichnet er die Farbe ("Bar darunter") mit dazu
-
                 BarElement bar = (BarElement) currentHud;
-
-                g.setColor(bar.getColor());
-                g.fillRect(HudX, HudY, bar.getBarLength() - bar.getBarDamage(), bar.getBarHeight());
+                
+                glColor4f(bar.getColor().getRed() / 255f,
+                          bar.getColor().getGreen() / 255f,
+                          bar.getColor().getBlue() / 255f,
+                          BarElement.BarAlpha);
+                drawQuad(HudX, HudY, bar.getHudLength() - bar.getBarDamage(), bar.getHudHeight());
+                
+                glColor4f(1f, 1f, 1f, 1f);
             }
-            
-            GUI.ImageHandler.draw(g, currentHud.getImage(), HudX, HudY);
+                GUI.ImageHandler.draw(currentHud.getTextureID(), HudX, HudY, currentHud.getHudLength(), currentHud.getHudHeight());
         }
-        
-        Toolkit.getDefaultToolkit().sync();
+    }
+    
+    //Helfer Methode für Farben als quadrat
+    private void drawQuad(float X, float Y, float Width, float Height) {
+        glBegin(GL_QUADS); //Viereck
+        glVertex2f(X, Y); //Links Oben
+        glVertex2f(X + Width, Y); //Rechts Oben
+        glVertex2f(X + Width, Y + Height); //Rechts Unten
+        glVertex2f(X, Y + Height); //Links Unten
+        glEnd();
     }
 }

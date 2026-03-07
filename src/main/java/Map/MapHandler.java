@@ -1,32 +1,40 @@
 package Map;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
+import GUI.ImageHandler;
+import GUI.Camera;
+import Player.Player;
 
 public class MapHandler {
     private final int TileSize = 48;
     
-    public Image Tile1Img = Toolkit.getDefaultToolkit().getImage("src/main/resources/assets/textures/tiles/Tile1.png").getScaledInstance(TileSize, TileSize, Image.SCALE_DEFAULT);
-    public Image Tile2Img = Toolkit.getDefaultToolkit().getImage("src/main/resources/assets/textures/tiles/Tile2.png").getScaledInstance(TileSize, TileSize, Image.SCALE_DEFAULT);
-    public Image Tile3Img = Toolkit.getDefaultToolkit().getImage("src/main/resources/assets/textures/tiles/Tile3.png").getScaledInstance(TileSize, TileSize, Image.SCALE_DEFAULT);
+    public int Tile1TextureID;
+    public int Tile2TextureID;
+    public int Tile3TextureID;
     
+    public MapHandler() {
+        try {
+            Tile1TextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile1.png", TileSize, TileSize);
+            Tile2TextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile2.png", TileSize, TileSize);
+            Tile3TextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile3.png", TileSize, TileSize);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     int[][] MAP = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},};
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    };
     
-    public MapHandler() {}
-    
-    public void draw(Graphics g, int PosX, int PosY) {
-        int screenWidth = GUI.Frame.ScreenWidth;
-        int screenHeight = GUI.Frame.ScreenHeight;
+    public void draw() {
+        int screenWidth = main.Main.ScreenWidth;
+        int screenHeight = main.Main.ScreenHeight;
 
-        int startTileX = Math.max(0, -PosX / TileSize); //die ersten Tiles die gerendert werden
-        int startTileY = Math.max(0, -PosY / TileSize);
+        int startTileX = Math.max(0, (int)-Camera.PosX / TileSize); //die ersten Tiles die gerendert werden
+        int startTileY = Math.max(0, (int)-Camera.PosY / TileSize);
 
         //Die letzten Tiles die gerendert werden, eine Seite
         int endTileX = Math.min(MAP[0].length, startTileX + (screenWidth / TileSize) + 2);  //Bildschirm wird in tiles unterteilt durch Width/TileSize. Plus StartTile, sonst würde man ja nur die ersten paar tiles in der Liste dsehen können. +2 damit man es nicht merkt
@@ -34,18 +42,21 @@ public class MapHandler {
         
         for (int j = startTileY; j < endTileY; j++) {
             for (int i = startTileX; i < endTileX; i++) {
+                int PosX = i * TileSize;
+                int PosY = j * TileSize;
+                
                 switch (MAP[j][i]) {
                     case 0:
-                        g.drawImage(Tile1Img, i*TileSize + PosX, j*TileSize + PosY, null);
+                        ImageHandler.draw(Tile1TextureID, PosX, PosY, TileSize, TileSize);
                         break;
                     case 1:
-                        g.drawImage(Tile2Img, i*TileSize + PosX, j*TileSize + PosY, null);
+                        ImageHandler.draw(Tile2TextureID, PosX, PosY, TileSize, TileSize);
                         break;
                     case 2:
-                        g.drawImage(Tile3Img, i*TileSize + PosX, j*TileSize + PosY, null);
+                        ImageHandler.draw(Tile3TextureID, PosX, PosY, TileSize, TileSize);
                         break;
                     default:
-                        g.drawImage(Player.InputManager.PlayerImg, i*TileSize + PosX, j*TileSize + PosY, null);
+                        ImageHandler.draw(Player.Player.getTextureID(), PosX, PosY, TileSize, TileSize);
                 }
             }
         }

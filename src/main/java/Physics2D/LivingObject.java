@@ -1,15 +1,13 @@
 package Physics2D;
 
-import java.awt.Image;
-
 public class LivingObject extends PhysicsObject2D {
     
     public transient float Velocity = 0;
     
     public transient int[] Direction = {0, 0};
     
-    public LivingObject(float PosX, float PosY, Image img, float Velocity, int[] Direction) {
-        super(PosX, PosY, img);
+    public LivingObject(float PosX, float PosY, int ObjLength, int ObjHeight, int TextureID, float Velocity, int[] Direction) {
+        super(PosX, PosY, ObjLength, ObjHeight, TextureID);
         this.Velocity = Velocity;
         this.Direction = Direction;
     }
@@ -27,7 +25,7 @@ public class LivingObject extends PhysicsObject2D {
    }
    
    public int getDirectionX() {
-       return Direction[1];
+       return Direction[0];
    }
    
    public int getDirectionY() {

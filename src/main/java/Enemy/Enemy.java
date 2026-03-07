@@ -3,7 +3,6 @@ package Enemy;
 import Physics2D.LivingObject;
 import java.util.ArrayList;
 import GUI.Camera;
-import java.awt.Image;
 
 public class Enemy extends LivingObject {
     public static LivingObject Enemy;
@@ -16,29 +15,27 @@ public class Enemy extends LivingObject {
     
     public int HP;
     
-    public Enemy(int PosX, int PosY, Image img, float Velocity, int[] Direction) {
-        super(PosX, PosY, img, Velocity, Direction);
+    public Enemy(int PosX, int PosY, int EnemyLength, int EnemyHeight, int TextureID, float Velocity, int[] Direction) {
+        super(PosX, PosY, EnemyLength, EnemyHeight, TextureID, Velocity, Direction);
     }
     
-    public static void Spawn(int PosX, int PosY, Image img, float Velocity, int[] Direction) {
+    public static void Spawn(int PosX, int PosY, int EnemyLength, int EnemyHeight,int TextureID, float Velocity, int[] Direction) {
         Enemy newEnemy;
 
         if (!EnemyPool.isEmpty()) { //neuen Gegner erstellen, wenn keiner recycled werden kann, alten verwenden wenn noch einer da ist
             newEnemy = EnemyPool.remove(EnemyPool.size() - 1);
 
-            newEnemy.setPosX(PosX);
-            newEnemy.setPosY(PosY);
-            newEnemy.setImage(img);
+            newEnemy.setPosX(PosX - Camera.PosX);
+            newEnemy.setPosY(PosY - Camera.PosY);
+            newEnemy.setObjLength(EnemyLength);
+            newEnemy.setObjHeight(EnemyHeight);
+            newEnemy.setTextureID(TextureID);
             newEnemy.setVelocity(Velocity);
             newEnemy.setDirection(Direction);
-            newEnemy.setHP(100);
 
         } else {
-            newEnemy = new Enemy(PosX, PosY, img, Velocity, Direction);
+            newEnemy = new Enemy(PosX - (int)Camera.PosX, PosY - (int)Camera.PosY, EnemyLength, EnemyHeight, TextureID, Velocity, Direction);
         }
-        
-        newEnemy.setPosX(newEnemy.getPosX() - Camera.PosX);
-        newEnemy.setPosY(newEnemy.getPosY() - Camera.PosY);
         
         Enemies.add(newEnemy);
         
