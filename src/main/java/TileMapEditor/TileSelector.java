@@ -7,29 +7,29 @@ import java.awt.event.MouseEvent;
 
 public class TileSelector extends JPanel {
 
-    public static int tileSize = 64;
-    private int columns = 8;
-    public static int tileCount = 200;
+    public static int tileSize = 64; //größe eines tiles in der Tileselection
+    private int columns = 8; //anzahl der spalten pro reihe
+    public static int tileCount = 200; //wie viele tiles angezeigt werden
 
-    private Grid grid;
+    private Grid grid; //Referrenz zum vergleich
 
     public TileSelector(Grid grid) {
-        this.grid = grid;
+        this.grid = grid; //speichert das grid
 
-        int rows = (int)Math.ceil((double)tileCount - 1 / columns);
-        setPreferredSize(new Dimension(columns * tileSize, rows * tileSize));
+        int rows = (int)Math.ceil((double)(tileCount - 1) / columns); // brechnet die anzahl Reihen der Tileselection und math.ceil rundet einfach auf
+        setPreferredSize(new Dimension(columns * tileSize, rows * tileSize)); // setzt die größe des panels abhängig von Spalten und Reihen
 
-        addMouseListener(new MouseAdapter() {
+        addMouseListener(new MouseAdapter() { //Maus Listener / schaut an welches tile ich auf der tileselection gedrückt habe
             @Override
             public void mousePressed(MouseEvent e) {
 
-                int col = e.getX() / tileSize;
-                int row = e.getY() / tileSize;
-                int index = row * columns + col + 1;
+                int col = e.getX() / tileSize; //spalte in der tileselection
+                int row = e.getY() / tileSize; //reihe in der tileselection
+                int index = row * columns + col + 1; //berechnet tile id
 
                 if (index < tileCount) {
-                    grid.setSelectedTile(index);
-                    repaint();
+                    grid.setSelectedTile(index); //setzt das ausgewählte tile auf dem grid
+                    repaint(); //repaint um neu zu zeichnen
                 }
             }
         });
@@ -40,24 +40,24 @@ public class TileSelector extends JPanel {
         super.paintComponent(g);
 
         for (int i = 1; i < tileCount; i++) { 
-            int col = (i - 1) % columns;
-            int row = (i - 1) / columns;
+            int col = (i - 1) % columns; //berechnet spalte des tiles in der tileselection
+            int row = (i - 1) / columns; //berechnet reihe des tiles in der tileselection
 
-            int x = col * tileSize;
-            int y = row * tileSize;
+            int x = col * tileSize; //x position auf der tileselection
+            int y = row * tileSize; //y position auf der tileselection
 
-            if (Grid.tiles[i] != null) {
+            if (Grid.tiles[i] != null) { //wenn ein bild vorhanden ist zeichne es
                 g.drawImage(Grid.tiles[i], x, y, tileSize, tileSize, null);
-            } else {
+            } else { //sonst ist das feld grau
                 g.setColor(Color.GRAY);
                 g.fillRect(x, y, tileSize, tileSize);
             }
 
-            g.setColor(Color.BLACK);
-            g.drawRect(x, y, tileSize, tileSize);
+            g.setColor(Color.BLACK); //farbe des rahmens ist schwarz
+            g.drawRect(x, y, tileSize, tileSize); //rahmen um jedes tile
 
-            g.setColor(Color.BLACK);
-            g.drawString("" + i, x + 8, y + 20);
+            g.setColor(Color.BLACK); //farbe des rahmens ist schwarz
+            g.drawString("" + i, x + 8, y + 20); //Tile id links oben anzeigen
         }
     }
 }
