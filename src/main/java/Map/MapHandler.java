@@ -59,16 +59,16 @@ public class MapHandler {
                 //Switch um für die entsprechende Tile ID an diesem Punkt das Richtige Tile zu zeichnen (Oder erstmal das zeichnen in den que hinzu zu fügen)
                 switch (MAP[j][i]) {
                     case 0:
-                        renderer.draw(ImageManager.Tile1TextureID, PosX, PosY, TileSize, TileSize);
+                        renderer.drawFull(ImageManager.Tile1TextureID, PosX, PosY, TileSize, TileSize);
                         break;
                     case 1:
-                        renderer.draw(ImageManager.Tile2TextureID, PosX, PosY, TileSize, TileSize);
+                        renderer.drawFull(ImageManager.Tile2TextureID, PosX, PosY, TileSize, TileSize);
                         break;
                     case 2:
-                        renderer.draw(ImageManager.Tile3TextureID, PosX, PosY, TileSize, TileSize);
+                        renderer.drawFull(ImageManager.Tile3TextureID, PosX, PosY, TileSize, TileSize);
                         break;
                     default:
-                        renderer.draw(Player.Player.getTextureID(), PosX, PosY, TileSize, TileSize);
+                        renderer.drawFull(Player.Player.getTextureID(), PosX, PosY, TileSize, TileSize);
                 }
             }
         }

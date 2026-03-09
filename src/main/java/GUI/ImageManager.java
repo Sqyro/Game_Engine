@@ -1,6 +1,5 @@
 package GUI;
 
-import Player.Player;
 import Map.MapHandler;
 
 public class ImageManager {
@@ -16,7 +15,7 @@ public class ImageManager {
     public static void loadAllTextures() {
         try {
         //Hier einfach alle Texturen mit .loadTextures reinschreiben die man will. Gibt den Integer für die Texture ID in OpenGL zurück
-        PLAYER = ImageHandler.loadTexture("src/main/resources/assets/textures/player/Player.png", (int) Player.PlayerSizeX, (int) Player.PlayerSizeY);
+        PLAYER = ImageHandler.loadTexture("src/main/resources/assets/textures/player/Player.png", 32, 196);
 
         ENEMY = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png", 50, 50);
 

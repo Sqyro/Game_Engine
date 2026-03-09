@@ -1,6 +1,7 @@
 package GUI;
 
 import Player.Player;
+import Player.AnimationManager;
 import Enemy.Enemy;
 import Shader.Shader;
 import Shader.LightManager;
@@ -19,6 +20,7 @@ public class Canva {
     private Shader shader;
     private Shader hudshader;
     private ImageHandler renderer;
+    private AnimationManager animationManager;
     
     public Canva(int Width, int Height) {
         this.ScreenWidth = Width; //Canva Größe gleich Screengröße
@@ -35,14 +37,20 @@ public class Canva {
                               "src/main/resources/shaders/hudshader.frag");
         
         renderer = new ImageHandler(); //Ja, ich benutze gerade den Image Handler als Renderer. Ich sollte dafür ne eingene Renderer Klasse machen, hab aber das eben von meinem alten Code geported und war zu faul
+    
+        animationManager = new AnimationManager();
+        animationManager.createAllAnimations();
     }
     
-    protected void drawNewFrame() { // Zeichnet ein neues Frame
+    protected void drawNewFrame(float deltaTime) { // Zeichnet ein neues Frame
         
         //Der Background ist beeinflusst von dem Global light (Aber keinen Point Lights...)
         float GlobalLight = LightManager.getGlobalLight();
         glClearColor(1f * GlobalLight, 1f * GlobalLight, 1f * GlobalLight, 1f * GlobalLight);
         glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Weiß setzen
+        
+        //Animation Updaten
+        animationManager.walkAnimation.UpdateAnimation(deltaTime);
         
         //Benutzt die drawMap Methode aus dem Map Handler, die die einzelnen Tiles zeichnet
         Map.drawMap(shader, renderer, ScreenWidth, ScreenHeight);
@@ -68,15 +76,17 @@ public class Canva {
             }
             
             //Sonst fügt er den Enemy in den draw que hinzu
-            renderer.draw(currentEnemy.getTextureID(), EnemyX, EnemyY, currentEnemy.getObjLength(), currentEnemy.getObjHeight());
+            renderer.drawFull(currentEnemy.getTextureID(), EnemyX, EnemyY, currentEnemy.getObjLength(), currentEnemy.getObjHeight());
         }
         
         //Render Player
         
         //Macht eine Lokale Variable für den Spieler
         Player player = Player.Player;
+        
+        float[] PosOnTexture = animationManager.walkAnimation.getPosOnTextureAsArray();
         //Fügt den Spieler in den draw que hinzu. Liest die Werte aus der Variable
-        renderer.draw(player.getTextureID(), player.LocPosX - player.PlayerSizeX / 2 - Camera.PosX, player.LocPosY - player.PlayerSizeY / 2 - Camera.PosY, player.getObjLength(), player.getObjHeight());
+        renderer.draw(player.getTextureID(), player.LocPosX - player.PlayerSizeX / 2 - Camera.PosX, player.LocPosY - player.PlayerSizeY / 2 - Camera.PosY, player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
 
         //Flushed alle Objekte im draw que hierdrüber. Diese Objekte werden gashaded mit dem Global Shader und gezeichnet
         renderer.flush(shader, ScreenWidth, ScreenHeight);
@@ -110,7 +120,7 @@ public class Canva {
             }
             
             //Fügt die Hud Elemente in den neuen draw que hinzu
-            renderer.draw(currentHud.getTextureID(), HudX - Camera.PosX, HudY - Camera.PosY, currentHud.getHudLength(), currentHud.getHudHeight());
+            renderer.drawFull(currentHud.getTextureID(), HudX - Camera.PosX, HudY - Camera.PosY, currentHud.getHudLength(), currentHud.getHudHeight());
         }
         
         //Flushed alle neuen Elemente im draw que (Nur GUI). Objekte werden mit dem HudShader geshaded und gezeichnet

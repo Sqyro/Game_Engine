@@ -11,7 +11,7 @@ public class LightManager {
     public static float GlobalLight = 0.5f;
     
     //Maximale Anzahl an Lichtern die da sein dürfen
-    public static final int MAX_LIGHTS = 10; // OpenGL mag keine Dynamischen Arrays, musste das im Shader machen, desswegen mache ich das auch hier...
+    public static final int MAX_LIGHTS = 1; // OpenGL mag keine Dynamischen Arrays (Es muss ja beim compilen wissen, wie viel Platz da sein soll)
     //Liste wo alle Point Lights drin gespeichert werden
     public static final List<PointLight> PointLights = new ArrayList<>();
     

@@ -9,7 +9,7 @@ uniform vec4 color; //Ein Multiplikator für die Textur, damit wir sie färben k
 uniform float globalLight; //Die Globale Beleuchtung aus dem LightManager
 uniform vec2 screenSize; //Bildschirmgröße
 
-#define MAX_LIGHTS 10 //Maximalanzahl an Lichtern, weil OpenGl keine Dynamischen Arrays mag
+#define MAX_LIGHTS 1 //Maximalanzahl an Lichtern, weil OpenGl keine Dynamischen Arrays mag (Es muss ja beim compilen wissen, wie viel Platz da sein soll)
 
 uniform int activeLights; //Aktives Licht
 uniform vec2 lightPositions[MAX_LIGHTS]; //Positionen der Lichter in einem Vector2
@@ -23,20 +23,20 @@ void main() {
     //Normale farbe mit globaler Beleuchtung berechnen
     vec3 finalColor = tex.rgb * color.rgb * globalLight;
 
+    // Aktuelle Pixel-Koordinaten (bei OpenGL ist y=0 unten, daher spiegeln wir y)
+    vec2 frag = vec2(gl_FragCoord.x, screenSize.y - gl_FragCoord.y);
+
     //Lichtberechnung für jedes Licht
     for (int i = 0; i < activeLights; i++) {
         vec2 lightPos = lightPositions[i]; // Position des aktuellen Lichts
         vec3 lightCol = lightColors[i]; // Farbe des aktuellen Lichts
         float intensity = lightIntensities[i]; // Intensität/Reichweite des Lichts
 
-        // Aktuelle Pixel-Koordinaten (bei OpenGL ist y=0 unten, daher spiegeln wir y)
-        vec2 frag = vec2(gl_FragCoord.x, screenSize.y - gl_FragCoord.y);
-
         // Abstand vom Licht zum Pixel
         float dist = length(frag - lightPos);
 
         //Helligkeit Berechnen je nach Abstand zum Licht und der Stärke
-        float factor = clamp(1.0 - dist / intensity, 0.0, 1.0);
+        float factor = 1.0 - smoothstep(0.0, 1.0, dist / intensity);
 
         //Lichtfarbe und Helligkeit an die finale Farbe hinzufügen
         finalColor += tex.rgb * lightCol * factor;

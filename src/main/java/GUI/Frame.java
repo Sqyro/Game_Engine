@@ -16,7 +16,7 @@ public class Frame {
     private long Window;
     public Canva Canva;
     long lastTime;
-    
+   
     public static int FramesPerSecond = 60; // 60 FPS sind gerade Standart, soll dann aber einstellbar sein
             
     public Frame(int ScreenWidth, int ScreenHeight, String title) { //Constructor, wird in Main gecalled. Von hier aus wird alles andere gestatet
@@ -79,7 +79,7 @@ public class Frame {
             Camera.UpdateCamera(Player.Player);
             
             //Grafik Updates
-            Canva.drawNewFrame();
+            Canva.drawNewFrame(deltaTime);
             
             if (deltaTime < targetDeltaTime) { //capped FPS bei den oben gesetzten
                 try {

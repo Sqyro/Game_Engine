@@ -76,7 +76,7 @@ public class ImageHandler {
         for (int y = 0; y < ImgHeight; y++) { // für y (Höhe)
             for (int x = 0; x < ImgWidth; x++) { //für x (Breite)
                 int Pixel = PixelRaw[y * ImgWidth + x]; //Nimmt den richtigen Pixel
-                //Liest für die Bytes des Pixels
+                //Liest für den Pixels und speichert seine Daten in dem Byte Buffer
                 Pixels.put((byte) ((Pixel >> 16) & 0xFF)); // R(ed)
                 Pixels.put((byte) ((Pixel >> 8) & 0xFF));  // G(reen)
                 Pixels.put((byte) (Pixel & 0xFF));         // B(lue)
@@ -101,9 +101,13 @@ public class ImageHandler {
         return TextureID;
     }
 
-    public void draw(int TextureID, float TextureX, float TextureY, float TextureWidth, float TextureHeight) { //fügt Texturen in den draw que hinzu für da Frame
+    public void drawFull(int TextureID, float TextureX, float TextureY, float TextureWidth, float TextureHeight) { //Wenn man die Textur komplett zeichnen will, setzt einfach Position auf 0 und größe auf 1
+        draw(TextureID, TextureX, TextureY, TextureWidth, TextureHeight, 0f, 0f, 1f, 1f);
+    }
+    
+    public void draw(int TextureID, float TextureX, float TextureY, float TextureWidth, float TextureHeight, float onTextureX, float onTextureY, float onTextureWidth, float onTextureHeight) { //fügt Texturen in den draw que hinzu für da Frame
         renderQueue.computeIfAbsent(TextureID, k -> new ArrayList<>()) //wenn es noch keine Liste für diese Textur gibt mach eine, heißt wenn wir die gleiche textur 1000 mal haben wird sie nicht 1000 mal neu gemacht
-                   .add(new RenderCommand(TextureX, TextureY, TextureWidth, TextureHeight)); //Render Command für diese Textur in die Liste hinzufügen
+                   .add(new RenderCommand(TextureX, TextureY, TextureWidth, TextureHeight, onTextureX, onTextureY, onTextureWidth, onTextureHeight)); //Render Command für diese Textur in die Liste hinzufügen
     }
     
     public void flush(Shader Shader, int ScreenWidth, int ScreenHeight) { //Führt jetzt für jede Textur das zeichnen aus
@@ -131,14 +135,18 @@ public class ImageHandler {
             for (RenderCommand renderCommand : renderQueue.get(TextureID)) { // Für jeden Render Command
                 
                 //Position der Textur mit Kamera Offset
-                float fixedX = renderCommand.PosX + Camera.PosX;
-                float fixedY = renderCommand.PosY + Camera.PosY;
+                float fixedX = Math.round(renderCommand.PosX + Camera.PosX);
+                float fixedY = Math.round(renderCommand.PosY + Camera.PosY);
 
+                //Positionen von Frames der Spritesheets auf der Textur
+                glUniform2f(Shader.onTextureOffsetLocation, renderCommand.onTextureX, renderCommand.onTextureY);
+                glUniform2f(Shader.onTextureScaleLocation, renderCommand.onTextureWidth, renderCommand.onTextureHeight);
+                
                 //Variablen für den Vertex Shader zum rechnen Setzen
                 glUniform2f(Shader.OffsetLocation, fixedX, fixedY);
                 glUniform2f(Shader.ScaleLocation, renderCommand.TextureWidth, renderCommand.TextureHeight);
                 glUniform4f(Shader.ColorLocation, 1f, 1f, 1f, 1f);
-
+                
                 glDrawArrays(GL_TRIANGLE_FAN, 0, 4); // Quadrat mit der momentanen Textur zeichnen
             }
         }
@@ -153,11 +161,21 @@ public class ImageHandler {
         float TextureWidth;
         float TextureHeight;
         
-        public RenderCommand(float PosX, float PosY, float TextureWidth, float TextureHeight) {
+        float onTextureX;
+        float onTextureY;
+        float onTextureWidth;
+        float onTextureHeight;
+        
+        public RenderCommand(float PosX, float PosY, float TextureWidth, float TextureHeight, float onTextureX, float onTextureY,float onTextureWidth, float onTextureHeight) {
             this.PosX = PosX;
             this.PosY = PosY;
             this.TextureWidth = TextureWidth;
             this.TextureHeight = TextureHeight;
+            
+            this.onTextureX = onTextureX;
+            this.onTextureY = onTextureY;
+            this.onTextureWidth = onTextureWidth;
+            this.onTextureHeight = onTextureHeight;
         }
     }
 }

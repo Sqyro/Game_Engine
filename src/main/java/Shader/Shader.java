@@ -12,6 +12,10 @@ public class Shader {
     //Shader Programm ID
     private int ShaderID;
 
+    //Locations für Offsets und Scale auf einer textur für den Shader, kann benutzt werden, um nur bestimmte Pixel zu rendern
+    public int onTextureOffsetLocation;
+    public int onTextureScaleLocation;
+    
     //Location von Variabeln für den Shader, wird in den Renderer (ImageHandler) gebraucht
     public int OffsetLocation;
     public int ScaleLocation;
@@ -66,6 +70,9 @@ public class Shader {
             ScaleLocation = glGetUniformLocation(ShaderID, "scale");
             ScreenSizeLocation = glGetUniformLocation(ShaderID, "screenSize");
             ColorLocation = glGetUniformLocation(ShaderID, "color");
+            
+            onTextureOffsetLocation = glGetUniformLocation(ShaderID, "ontextureOffset");
+            onTextureScaleLocation = glGetUniformLocation(ShaderID, "ontextureScale");
 
         } catch (Exception e) {
             throw new RuntimeException("Shader load failed", e); //Nachricht für den Debug
