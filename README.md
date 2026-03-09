@@ -14,10 +14,10 @@ This Program Depends on OpenGL 3.3 and it's Linux natives as of the latest versi
 
 ## How to use
 
-
+Read the Comments, too lazy to tell you. Writing the Comments already took hours and hours
 
 ## License
 
 This project is licensed under my favourite license: <br /> 
 Hiring a Hitman © <br /> 
-The code is fully open source and can be used in any way or form, I don't really care. I'm just trying to pass Computer Science
+Just kidding this code is fully open source under MIT and can be used in any way or form, I don't really care. I'm just trying to pass Computer Science class
