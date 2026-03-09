@@ -2,18 +2,25 @@ package Physics2D;
 
 import java.io.Serializable;
 
-public class PhysicsObject2D implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class PhysicsObject2D implements Serializable { // Klasse für alle Objekte die Physik haben, Serialization für Sava Data vom Spieler
+    private static final long serialVersionUID = 1L; //Version von Serialisation
     
+    //Variablen deklarieren
+    
+    //Position
     private float PosX = 0;
     private float PosY = 0;
     
-    private int ObjLength;
-    private int ObjHeight;
+    //Größe
+    //Transient, weil größe nicht gespeichert werden muss
+    private transient float ObjLength;
+    private transient float ObjHeight;
     
-    public transient int TextureID;
+    //TexturID für OpenGL
+    public transient int TextureID; //Transient, weil Textur nicht gespeichert werden muss
     
-    public PhysicsObject2D(float PosX, float PosY, int ObjLength, int ObjHeight, int TextureID) {
+    public PhysicsObject2D(float PosX, float PosY, float ObjLength, float ObjHeight, int TextureID) { //Constructor
+        //Setzt die ganzen Variablen pro Objekt
         this.PosX = PosX;
         this.PosY = PosY;
         this.ObjLength = ObjLength;
@@ -21,43 +28,44 @@ public class PhysicsObject2D implements Serializable {
         this.TextureID = TextureID;
     }
     
-   public float getPosX() {
-       return PosX;
-   }
+    //Methoden um an die Variablen von jedem Objekt zu kommen
+    public float getPosX() {
+        return PosX;
+    }
    
-   public void setPosX(float newPosX) {
-       PosX = newPosX;
-   }
+    public void setPosX(float newPosX) {
+        PosX = newPosX;
+    }
    
-   public float getPosY() {
-       return PosY;
-   }
+    public float getPosY() {
+        return PosY;
+    }
    
-   public void setPosY(float newPosY) {
-       PosY = newPosY;
-   }
+    public void setPosY(float newPosY) {
+        PosY = newPosY;
+    }
    
-   public int getObjLength() {
-       return ObjLength;
-   }
+    public float getObjLength() {
+        return ObjLength;
+    }
    
-   public void setObjLength(int newObjLength) {
-       ObjLength = newObjLength;
-   }
+    public void setObjLength(float newObjLength) {
+        ObjLength = newObjLength;
+    }
    
-   public int getObjHeight() {
-       return ObjHeight;
-   }
+    public float getObjHeight() {
+        return ObjHeight;
+    }
    
-   public void setObjHeight(int newObjHeight) {
-       ObjHeight = newObjHeight;
-   }
+    public void setObjHeight(float newObjHeight) {
+        ObjHeight = newObjHeight;
+    }
    
-   public int getTextureID() {
-       return TextureID;
-   }
+    public int getTextureID() {
+        return TextureID;
+    }
    
-   public void setTextureID(int newTextureID) {
-       this.TextureID = newTextureID;
-   }
+    public void setTextureID(int newTextureID) {
+        this.TextureID = newTextureID;
+    }
 }

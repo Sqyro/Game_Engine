@@ -1,28 +1,16 @@
 package main;
 
 import GUI.Frame;
-import Player.InputManager;
 
 public class Main {
-    public static boolean running;
     
     public static int ScreenWidth = 1920;
     public static int ScreenHeight = 1080; // Wird je nach Setting überschrieben, Momentan auf HD Fullscreen gehardcoded
     
+    //Wenn das Programm startet
     public static void main(String[] args) {
-        running = true;
-        Frame frame = new Frame(ScreenWidth, ScreenHeight, "Sigma Ligma Game"); // Der Name war Niklas Idee
-        System.out.println("Debug:");
-        //Update();
+        System.out.println("Debug:"); //Debug: (Alles was folgt ist teil vom Debug)
+        //Alle anderen Dinge die bei Start passieren sind in Frame
+        Frame frame = new Frame(ScreenWidth, ScreenHeight, "Sigma Ligma Game"); // Erstellt nen Frame mit Titel auf Bildschirmgröße. Der Name war Niklas Idee
     }
-    /*
-    public static void Update() {
-        new Thread(new Runnable() {
-        @Override
-        public void run() {
-            // Game Tick Methode
-        }
-        }).start(); 
-    }
-    */
 }

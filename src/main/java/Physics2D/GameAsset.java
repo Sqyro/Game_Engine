@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 
-public abstract class GameAsset {
+public class GameAsset {
     int x, y;
     Image img;
     String name;

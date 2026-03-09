@@ -2,11 +2,15 @@ package Player;
 
 import GUI.BarElement;
 import GUI.ImageManager;
+import Shader.PointLight;
+import Shader.LightManager;
+
 import java.awt.Color;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class InputManager {
+    //Variablen Deklarieren
     private static volatile boolean wPressed = false;
     private static volatile boolean aPressed = false;
     private static volatile boolean sPressed = false;
@@ -14,56 +18,62 @@ public class InputManager {
     
     private static final int[] Direction = {0, 0};
     
-    public static void init(long window) {
+    //Eine Methode die ein Event Benutzt um zu hören ob vom Keyboard Inputs gemacht wurden
+    public static void ListenforKeys(long window) {
 
-        glfwSetKeyCallback(window, (win, key, scancode, action, mods) -> {
-
+        glfwSetKeyCallback(window, (win, key, scancode, action, mods) -> { //Event
+            //Spieler Objekt aus der Spieler Klasse. Ich weiß die Namen von den Methoden und klassen könnten besser sein (Nicht alle Player)
             Player player = Player.Player;
 
-            boolean pressed = action != GLFW_RELEASE;
+            boolean Pressed = action != GLFW_RELEASE; //ist was gedrückt worden?
 
             switch (key) {
-                case GLFW_KEY_W:
-                    System.out.println("W Pressed");
-                    wPressed = pressed;
-                    break;
+                case GLFW_KEY_W: // W wurde gedrückt
+                    System.out.println("W Pressed"); //Nachricht für den Debug
+                    wPressed = Pressed; //Wurde gerückt, also ja es wurde was gerückt hier rein schreiben für später
+                    break; //Schau nicht weiter (Wenn das nicht hier ist, dann wartet er bis ein Key gedrückt wurde und führt dann alles aus)
                 case GLFW_KEY_S:
                     System.out.println("S Pressed");
-                    sPressed = pressed;
+                    sPressed = Pressed;
                     break;
                 case GLFW_KEY_A:
                     System.out.println("A Pressed");
-                    aPressed = pressed;
+                    aPressed = Pressed;
                     break;
                 case GLFW_KEY_D:
                     System.out.println("D Pressed");
-                    dPressed = pressed;
+                    dPressed = Pressed;
                     break;
                 case GLFW_KEY_E:
                     System.out.println("E Pressed");
-                    GUI.GUIHandler.PlaceNewBar(100, 100, 300, 100, GUI.ImageManager.PLAYER, 0, Color.RED);
+                    GUI.GUIHandler.PlaceNewBar(100, 100, 300, 100, GUI.ImageManager.PLAYER, 0, Color.RED); //Erstellt eine Bar auf der GUI
                     break;
                 case GLFW_KEY_Q:
                     System.out.println("Q Pressed");
-                    GUI.HudElement Hud = GUI.GUIHandler.HudElements.get(0);
-                    BarElement bar = (BarElement) Hud;
-                    bar.setBarDamage(bar.getBarDamage() + 10);
+                    GUI.HudElement Hud = GUI.GUIHandler.HudElements.get(0); //Nimmt das Hud Element was auf Position 0 ist
+                    BarElement bar = (BarElement) Hud; //Konvertiert das Hud Element in ne Bar, geht gerade weil ich nur ein Objekt in der GUI hab, daher ist die Bar immer auf 0
+                    bar.setBarDamage(bar.getBarDamage() + 10); //Damaged die Bar etwas ums zu testen
                     break;
                 case GLFW_KEY_C:
                     System.out.println("C Pressed");
-                    Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, new int[]{0,0});
+                    Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, Direction); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
+                    break;
+                case GLFW_KEY_I:
+                    System.out.println("I Pressed");
+                    PointLight pointLight = new PointLight(670, 670, 1f, 1f, 1f, 300f); //Erstellt ein neues Point Light bei 670, 670 mit den RGB Werten von 1, 1, 1 und der Reichweite von 300
+                    LightManager.addLight(pointLight); //Frügt das Light in die Liste für Lights hinzu
                     break;
                 case GLFW_KEY_V:
                     System.out.println("V Pressed");
-                            Physics2D.PhysicsObject2D loaded = Save.Save.LoadData();
-                            if (loaded != null) {
-                                Player.Player.setPosX(loaded.getPosX());
-                                Player.Player.setPosY(loaded.getPosY());
+                            Physics2D.PhysicsObject2D LoadedData = Save.Save.LoadData(); //Läd Spieldateinen aus dem Speicher
+                            if (LoadedData != null) { //Darf nicht leer sein
+                                Player.Player.setPosX(LoadedData.getPosX()); //Holt sich die Positonen aus den Daten
+                                Player.Player.setPosY(LoadedData.getPosY());
                             }
                     break;
                 case GLFW_KEY_X:
                     System.out.println("X Pressed");
-                            Save.Save.SaveData(Player.Player);
+                    Save.Save.SaveData(Player.Player); //Speichert Daten vom Spieler
                     break;
                     
             }
@@ -82,17 +92,20 @@ public class InputManager {
     
     
     public static void updatePlayerDirection() { // Hab den Direction Skript von oben hier runter gemoved und ihn flüssig gemacht, vorher hat der so gestottert, weil Direction für eine Frame 0 war (nach W-S oder A-D)
-        int x = 0;
-        int y = 0;
+        //Immer vorher auf 0 setzen
+        int DirX = 0;
+        int DirY = 0;
         
         Player player = Player.Player;
         
-        if (wPressed) y += 1; 
-        if (sPressed) y -= 1;
-        if (aPressed) x += 1;
-        if (dPressed) x -= 1;
+        //Wenn die Keys gedrückt wurden dann addieren/Subtrahieren (nicht setzen, sonst buggt das wenn man zwei Keys gleichzeitig drückt)
+        if (wPressed) DirY += 1; 
+        if (sPressed) DirY -= 1;
+        if (aPressed) DirX += 1;
+        if (dPressed) DirX -= 1;
         
-        player.setDirectionX(x);
-        player.setDirectionY(y);
+        //Richtung setzen
+        player.setDirectionX(DirX);
+        player.setDirectionY(DirY);
     }
 }
