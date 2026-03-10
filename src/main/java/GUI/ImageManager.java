@@ -6,6 +6,8 @@ public class ImageManager {
     //Variablen Deklarieren
     public static int PLAYER;
     public static int ENEMY;
+    
+    public static int TESTITEM;
 
     public static int Tile1TextureID;
     public static int Tile2TextureID;
@@ -15,10 +17,12 @@ public class ImageManager {
     public static void loadAllTextures() {
         try {
         //Hier einfach alle Texturen mit .loadTextures reinschreiben die man will. Gibt den Integer für die Texture ID in OpenGL zurück
-        PLAYER = ImageHandler.loadTexture("src/main/resources/assets/textures/player/Player.png", 32, 196);
+        PLAYER = ImageHandler.loadTexture("src/main/resources/assets/textures/player/Player.png", 32, 128);
 
         ENEMY = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png", 50, 50);
 
+        TESTITEM = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png", 100, 100);
+        
         Tile1TextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile1.png", (int)MapHandler.TileSize, (int)MapHandler.TileSize);
         Tile2TextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile2.png", (int)MapHandler.TileSize, (int)MapHandler.TileSize);
         Tile3TextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile3.png", (int)MapHandler.TileSize, (int)MapHandler.TileSize);

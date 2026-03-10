@@ -2,9 +2,11 @@ package Player;
 
 import Physics2D.LivingObject;
 import GUI.ImageManager;
+import Item.Item;
 
 import java.io.Serializable;
-
+import java.util.List;
+import java.util.ArrayList;
 
 public class Player extends LivingObject implements Serializable { // Serialization, weil wir später HP und Inventar Inhalt Speichern müssen
     private static final long serialVersionUID = 1L;
@@ -24,8 +26,9 @@ public class Player extends LivingObject implements Serializable { // Serializat
     //Ausrichtung, wenn der Spieler gespawned wird
     private static int[] DefaultDirection = {0, 0};
     
-    //List<Item> inventory = new ArrayList<Item>();
     public static int HP;
+    List<Item> PlayerInventory = new ArrayList<Item>();
+    
     
     public Player(float PosX, float PosY, float PlayerLength, float PlayerHeight, int TextureID, float Velocity, int[] Direction /*, String name, int hp*/) { //Constructor
         super(PosX, PosY, PlayerLength, PlayerHeight, TextureID, Velocity, Direction); //Passed alle Werte an LivingObject weiter
@@ -36,14 +39,15 @@ public class Player extends LivingObject implements Serializable { // Serializat
         Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
     }
     
-    /*
-    public void addItem (Item item) {}
+    
+    public void addItem (Item addedItem) {
+        PlayerInventory.add(addedItem);
+    }
     
     public Item getIteam (int pos) {
-        return inventory.get(pos);
+        return PlayerInventory.get(pos);
     }
-    */
-    
+       
     public int getHp() {
         return HP;
     }

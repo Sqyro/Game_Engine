@@ -55,6 +55,22 @@
       <version>3.3.3</version>
     </dependency>
     
+    <!-- ImGUI 
+    
+    <dependency>
+        <groupId>io.github.spair</groupId>
+        <artifactId>imgui-java-binding</artifactId>
+        <version>1.90.0</version>
+    </dependency>
+
+    <dependency>
+        <groupId>io.github.spair</groupId>
+        <artifactId>imgui-java-natives-linux</artifactId>
+        <version>1.90.0</version>
+    </dependency>
+    
+    -->
+
     <!-- Natives für OS -->
     <dependency>
         <groupId>org.lwjgl</groupId>
@@ -74,8 +90,6 @@
         <version>3.3.3</version>
         <classifier>natives-linux</classifier>
     </dependency>
-    
-    
   </dependencies>
   <properties>
     <jdk.version>1.8</jdk.version>
