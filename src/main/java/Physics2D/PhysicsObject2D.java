@@ -2,7 +2,7 @@ package Physics2D;
 
 import java.io.Serializable;
 
-public class PhysicsObject2D implements Serializable { // Klasse für alle Objekte die Physik haben, Serialization für Sava Data vom Spieler
+public abstract class PhysicsObject2D implements Serializable { // Klasse für alle Objekte die Physik haben, Serialization für Sava Data vom Spieler
     private static final long serialVersionUID = 1L; //Version von Serialisation
     
     //Variablen deklarieren

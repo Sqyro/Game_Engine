@@ -1,6 +1,9 @@
-package GUI;
+package Rendering;
 
 import Map.MapHandler;
+
+import java.util.List;
+import java.util.ArrayList;
 
 public class ImageManager {
     //Variablen Deklarieren
@@ -8,10 +11,9 @@ public class ImageManager {
     public static int ENEMY;
     
     public static int TESTITEM;
-
-    public static int Tile1TextureID;
-    public static int Tile2TextureID;
-    public static int Tile3TextureID;
+    
+    public static List<Integer> TileTextures = new ArrayList<>();
+    public static int TileAmount = 3;
     
     //Methode um alle texturen zu laden beim Game start
     public static void loadAllTextures() {
@@ -23,9 +25,10 @@ public class ImageManager {
 
         TESTITEM = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png", 100, 100);
         
-        Tile1TextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile1.png", (int)MapHandler.TileSize, (int)MapHandler.TileSize);
-        Tile2TextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile2.png", (int)MapHandler.TileSize, (int)MapHandler.TileSize);
-        Tile3TextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile3.png", (int)MapHandler.TileSize, (int)MapHandler.TileSize);
+        for(int i = 0; i <= TileAmount-1; i++) {
+            int TempTileTextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile" + i + ".png", (int)MapHandler.TileSize, (int)MapHandler.TileSize);
+            TileTextures.add(TempTileTextureID);
+        }
         
         System.out.println("Textures loaded"); //Nachricht für den Dabug
         } catch (Exception e) { //Falls es nicht geht

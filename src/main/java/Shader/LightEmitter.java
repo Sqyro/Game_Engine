@@ -1,6 +1,6 @@
 package Shader;
 
-public class LightEmitter { // Objekt für alles was Licht abgibt
+public abstract class LightEmitter { // Objekt für alles was Licht abgibt
     
     //Variabeln deklarieren
     

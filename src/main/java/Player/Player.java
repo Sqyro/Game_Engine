@@ -1,7 +1,7 @@
 package Player;
 
 import Physics2D.LivingObject;
-import GUI.ImageManager;
+import Rendering.ImageManager;
 import Item.Item;
 
 import java.io.Serializable;

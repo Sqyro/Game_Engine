@@ -1,9 +1,9 @@
-package GUI;
+package Rendering;
 
 import java.awt.Color;
 import java.util.ArrayList;
 
-public class GUIHandler {
+public class HudHandler {
     
     public static ArrayList<HudElement> HudElements = new ArrayList<>(); //Speicherort für alle HudElemente
     

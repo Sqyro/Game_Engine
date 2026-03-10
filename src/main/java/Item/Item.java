@@ -1,7 +1,5 @@
 package Item;
 
-
-
 public class Item{
     private int TextureID;
     

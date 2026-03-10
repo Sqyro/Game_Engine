@@ -1,10 +1,11 @@
-package GUI;
+package Rendering;
 
 import Player.Player;
 import Player.AnimationManager;
 import Enemy.Enemy;
 import Shader.Shader;
 import Shader.LightManager;
+import GUI.GUIManager;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -84,7 +85,7 @@ public class Canva {
         //Macht eine Lokale Variable für den Spieler
         Player player = Player.Player;
         
-        float[] PosOnTexture = animationManager.walkAnimation.getPosOnTextureAsArray();
+        float[] PosOnTexture = animationManager.walkAnimation.getPosOnTextureAsArray(player.isFLipped());
         //Fügt den Spieler in den draw que hinzu. Liest die Werte aus der Variable
         renderer.draw(player.getTextureID(), player.LocPosX - player.PlayerSizeX / 2 - Camera.PosX, player.LocPosY - player.PlayerSizeY / 2 - Camera.PosY, player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
 
@@ -93,9 +94,9 @@ public class Canva {
         
         //Render HUD
         
-        for(int i = 0; i < GUIHandler.HudElements.size(); i++) { //Ähnlich wie bei den Enemies, geht die Hud Elemente durch
+        for(int i = 0; i < HudHandler.HudElements.size(); i++) { //Ähnlich wie bei den Enemies, geht die Hud Elemente durch
             //Moved das Momentane Hud Element in eine Lokale Variable
-            HudElement currentHud = GUIHandler.HudElements.get(i);
+            HudElement currentHud = HudHandler.HudElements.get(i);
             //Sneaked sich die Werte für Position für bessere Lesbarkeit
             int HudX = currentHud.getPosX();
             int HudY = currentHud.getPosY();
@@ -123,7 +124,17 @@ public class Canva {
             renderer.drawFull(currentHud.getTextureID(), HudX - Camera.PosX, HudY - Camera.PosY, currentHud.getHudLength(), currentHud.getHudHeight());
         }
         
-        //Flushed alle neuen Elemente im draw que (Nur GUI). Objekte werden mit dem HudShader geshaded und gezeichnet
+        //Flushed alle neuen Elemente im draw que (Nur HUD). Objekte werden mit dem HudShader geshaded und gezeichnet
+        renderer.flush(hudshader, ScreenWidth, ScreenHeight);
+        
+        //Render GUI
+        
+        if(GUIManager.isScreenOpen()) {
+            //Enqued den momentan offenen Screen in draw
+            GUIManager.currentScreen.renderScreen(renderer, ScreenWidth, ScreenHeight);
+        }
+        
+        //Flushed den Screen Render durch mit dem Hud Shader
         renderer.flush(hudshader, ScreenWidth, ScreenHeight);
     }
 }

@@ -54,22 +54,6 @@
       <artifactId>lwjgl-opengl</artifactId>
       <version>3.3.3</version>
     </dependency>
-    
-    <!-- ImGUI 
-    
-    <dependency>
-        <groupId>io.github.spair</groupId>
-        <artifactId>imgui-java-binding</artifactId>
-        <version>1.90.0</version>
-    </dependency>
-
-    <dependency>
-        <groupId>io.github.spair</groupId>
-        <artifactId>imgui-java-natives-linux</artifactId>
-        <version>1.90.0</version>
-    </dependency>
-    
-    -->
 
     <!-- Natives für OS -->
     <dependency>

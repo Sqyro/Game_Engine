@@ -1,4 +1,4 @@
-package GUI;
+package Rendering;
 
 public class AnimationObject {
     private int TextureID;
@@ -45,16 +45,24 @@ public class AnimationObject {
         }
     }
 
-    public float[] getPosOnTextureAsArray() { //Methode um sich das Frame von der richtigen Position auf der Textur zu holen
+    public float[] getPosOnTextureAsArray(boolean FlippedX) { //Methode um sich das Frame von der richtigen Position auf der Textur zu holen
         //Position holen und zu Position auf der Textur in Pixeln umwandeln
         int X = currentFrame % Columns;
-        int Y = currentFrame % Rows;
+        int Y = currentFrame / Columns;
         float onTextureX = X * FrameWidth;
         float onTextureY = Y * FrameHeight;
         
-        //Position ausgeben
-        float[] PosOnTextureArray = {onTextureX, onTextureY, FrameWidth, FrameHeight};
+        float[] PosOnTextureArray;
         
+        if (FlippedX) { //falls der Sprite flipped ist
+            //Frame auf dem Spritesheet umdrehen
+            onTextureX += FrameWidth; //Position verschieben, weil wir sie später subtrahieren für den Flip
+            PosOnTextureArray = new float[] {onTextureX, onTextureY, -FrameWidth, FrameHeight}; //Negative vom FrameWidth nehmen, damit die Textur geflipped wird (ist jetzt subtrahiert)
+        } else {
+            PosOnTextureArray = new float[] {onTextureX, onTextureY, FrameWidth, FrameHeight};
+        }
+        
+        //Position ausgeben
         return PosOnTextureArray;
     }
 

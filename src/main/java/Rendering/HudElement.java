@@ -1,4 +1,4 @@
-package GUI;
+package Rendering;
 
 public class HudElement {
     

@@ -1,6 +1,6 @@
 package Physics2D;
 
-public class LivingObject extends PhysicsObject2D { // Klasse für Alle Objekte die Physik haben und sich bewegen können
+public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle Objekte die Physik haben und sich bewegen können
     
     //Variablen (transient wegen Speichern)
     //Geschwindigkeit von dem Objekt
@@ -8,6 +8,8 @@ public class LivingObject extends PhysicsObject2D { // Klasse für Alle Objekte 
     
     //Ausrichtung von dem Objekt
     public transient int[] Direction = {0, 0};
+    
+    boolean PlayerFlippedX = false;
     
     public LivingObject(float PosX, float PosY, float ObjLength, float ObjHeight, int TextureID, float Velocity, int[] Direction) { //Constructor
         super(PosX, PosY, ObjLength, ObjHeight, TextureID); //Passed alles außer Velocity und Direction an PhysicsObject2D weiter
@@ -48,5 +50,18 @@ public class LivingObject extends PhysicsObject2D { // Klasse für Alle Objekte 
    
     public void setDirectionY(int newY) {
         Direction[1] = newY;
+    }
+    
+    public boolean isFLipped() {
+        switch (this.getDirectionX()) {
+            case -1:
+                PlayerFlippedX = false;
+                break;
+            case 1:
+                PlayerFlippedX = true;
+                break;
+        }
+        
+        return PlayerFlippedX;
     }
 }

@@ -1,7 +1,7 @@
 package Player;
 
-import GUI.AnimationObject;
-import GUI.ImageManager;
+import Rendering.AnimationObject;
+import Rendering.ImageManager;
 
 public class AnimationManager {
     public AnimationObject walkAnimation;

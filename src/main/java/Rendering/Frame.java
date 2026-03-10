@@ -1,4 +1,4 @@
-package GUI;
+package Rendering;
 
 import Physics2D.VelocityHandler;
 import Player.InputManager;
@@ -72,7 +72,10 @@ public class Frame {
             long currentTime = System.nanoTime(); //liest die Frame unabhängige "System Zeit"
             float deltaTime = (currentTime - lastTime) / 1_000_000_000f; //Differenz aus jetzige Zeit und vorherige Zeit ist die Zeit Pro Frame. Diese Zahl benutze ich, damit Geschwindigkeiten auf 30 FPS gleichstark wie auf 60 sind
             lastTime = currentTime; //Das jetzt ist jetzt vorbeit und ist vergangenheit, weil delta Time gesetzt wurde
-
+            
+            //Hört allen Events zu. KeyboardInput Event für den Input Handler
+            glfwPollEvents();
+            
             //Rechen Updates
             InputManager.updatePlayerDirection();
             VelocityHandler.calculatePosition(Player.Player, deltaTime);
@@ -91,8 +94,6 @@ public class Frame {
 
             //OpenGL Buffering, switched einfach das was der User gerade sieht mit dem was er sehen soll, also alles was gerendert wurde
             glfwSwapBuffers(Window);
-            //Hört allen Events zu. KeyboardInput Event für den Input Handler
-            glfwPollEvents();
         }
     }
 

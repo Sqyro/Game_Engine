@@ -1,10 +1,9 @@
 package Map;
 
-import GUI.ImageHandler;
-import GUI.Camera;
-import Player.Player;
+import Rendering.ImageHandler;
+import Rendering.Camera;
 import Shader.Shader;
-import GUI.ImageManager;
+import Rendering.ImageManager;
 
 public class MapHandler {
     
@@ -56,19 +55,9 @@ public class MapHandler {
                 float PosX = i * TileSize;
                 float PosY = j * TileSize;
                 
-                //Switch um für die entsprechende Tile ID an diesem Punkt das Richtige Tile zu zeichnen (Oder erstmal das zeichnen in den que hinzu zu fügen)
-                switch (MAP[j][i]) {
-                    case 0:
-                        renderer.drawFull(ImageManager.Tile1TextureID, PosX, PosY, TileSize, TileSize);
-                        break;
-                    case 1:
-                        renderer.drawFull(ImageManager.Tile2TextureID, PosX, PosY, TileSize, TileSize);
-                        break;
-                    case 2:
-                        renderer.drawFull(ImageManager.Tile3TextureID, PosX, PosY, TileSize, TileSize);
-                        break;
-                    default:
-                        renderer.drawFull(Player.Player.getTextureID(), PosX, PosY, TileSize, TileSize);
+                if(MAP[j][i] < ImageManager.TileTextures.size()) { // Damit falls die Textur nicht existiert das Spiel nicht abstürzt, sondern die Textur einfach nicht angezeigt wird
+                    // Die Tile TextureIDs werden extra vorher in nen Array geschrieben, damit sie clean gelesen werden können
+                    renderer.drawFull(ImageManager.TileTextures.get(MAP[j][i]), PosX, PosY, TileSize, TileSize);
                 }
             }
         }

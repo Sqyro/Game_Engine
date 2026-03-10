@@ -1,9 +1,12 @@
 package Player;
 
-import GUI.BarElement;
-import GUI.ImageManager;
+import Rendering.BarElement;
+import Rendering.ImageManager;
 import Shader.PointLight;
 import Shader.LightManager;
+import GUI.GUIManager;
+import GUI.GUIScreen;
+import GUI.InventoryScreen;
 
 import java.awt.Color;
 
@@ -26,7 +29,7 @@ public class InputManager {
             Player player = Player.Player;
 
             boolean Pressed = action != GLFW_RELEASE; //ist was gedrückt worden?
-
+            
             switch (key) {
                 case GLFW_KEY_W: // W wurde gedrückt
                     System.out.println("W Pressed"); //Nachricht für den Debug
@@ -45,12 +48,22 @@ public class InputManager {
                     dPressed = Pressed;
                     break;
                 case GLFW_KEY_E:
-                    System.out.println("E Pressed");
-                    GUI.GUIHandler.PlaceNewBar(100, 100, 300, 100, GUI.ImageManager.PLAYER, 0, Color.RED); //Erstellt eine Bar auf der GUI
+                    if(action == GLFW_PRESS) { // Nur ausführen wenn der Key gedrückt wird, sonst wird das hier beim loslassen nochmal ausgeführt und der Screen schließt sich
+                        System.out.println("E Pressed");
+                        if(GUIManager.isScreenOpen()) { //Wenn der Bildschirm schon offen ist, dann schließen wir ihn
+                            GUIManager.closeScreen();
+                        } else { //Wenn keiner offen ist, dann machen wir einen neuen aus
+                            GUIManager.openScreen(new InventoryScreen());
+                        }
+                    }
+                    break;
+                case GLFW_KEY_R:
+                    System.out.println("R Pressed");
+                    Rendering.HudHandler.PlaceNewBar(100, 100, 300, 100, Rendering.ImageManager.PLAYER, 0, Color.RED); //Erstellt eine Bar auf der GUI
                     break;
                 case GLFW_KEY_Q:
                     System.out.println("Q Pressed");
-                    GUI.HudElement Hud = GUI.GUIHandler.HudElements.get(0); //Nimmt das Hud Element was auf Position 0 ist
+                    Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0); //Nimmt das Hud Element was auf Position 0 ist
                     BarElement bar = (BarElement) Hud; //Konvertiert das Hud Element in ne Bar, geht gerade weil ich nur ein Objekt in der GUI hab, daher ist die Bar immer auf 0
                     bar.setBarDamage(bar.getBarDamage() + 10); //Damaged die Bar etwas ums zu testen
                     break;
@@ -89,7 +102,6 @@ public class InputManager {
             }
         });
     }
-    
     
     public static void updatePlayerDirection() { // Hab den Direction Skript von oben hier runter gemoved und ihn flüssig gemacht, vorher hat der so gestottert, weil Direction für eine Frame 0 war (nach W-S oder A-D)
         //Immer vorher auf 0 setzen

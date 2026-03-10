@@ -2,7 +2,7 @@ package Enemy;
 
 import Physics2D.LivingObject;
 import java.util.ArrayList;
-import GUI.Camera;
+import Rendering.Camera;
 
 public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ein sich bewegendes
     
