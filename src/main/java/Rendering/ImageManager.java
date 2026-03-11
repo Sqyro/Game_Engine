@@ -15,6 +15,8 @@ public class ImageManager {
     public static List<Integer> TileTextures = new ArrayList<>();
     public static int TileAmount = 3;
     
+    public static int GAMEFONT;
+    
     //Methode um alle texturen zu laden beim Game start
     public static void loadAllTextures() {
         try {
@@ -29,6 +31,8 @@ public class ImageManager {
             int TempTileTextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile" + i + ".png", (int)MapHandler.TileSize, (int)MapHandler.TileSize);
             TileTextures.add(TempTileTextureID);
         }
+        
+        GAMEFONT = ImageHandler.loadTexture("src/main/resources/assets/fonts/font.png", 256, 256);
         
         System.out.println("Textures loaded"); //Nachricht für den Dabug
         } catch (Exception e) { //Falls es nicht geht

@@ -6,6 +6,8 @@ import Enemy.Enemy;
 import Shader.Shader;
 import Shader.LightManager;
 import GUI.GUIManager;
+import GUI.TextHandler;
+import GUI.GUIText;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -132,6 +134,10 @@ public class Canva {
         if(GUIManager.isScreenOpen()) {
             //Enqued den momentan offenen Screen in draw
             GUIManager.currentScreen.renderScreen(renderer, ScreenWidth, ScreenHeight);
+        }
+        
+        for(GUIText guiText : TextHandler.ToBeDisplayedText) { //Für jeden Text im ToBeDisplayed Text
+            GUIManager.renderText(guiText, renderer); //Fügt den Text in den Render Que hinzu
         }
         
         //Flushed den Screen Render durch mit dem Hud Shader

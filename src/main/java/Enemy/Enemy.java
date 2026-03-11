@@ -24,7 +24,7 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
         
         //neuen Gegner erstellen, wenn keiner recycled werden kann, alten verwenden wenn noch einer da ist. 
         //Macht bei Enemies sinn würde ich sagen, weil wir später vielleicht sehr viele spawnen und die sonst nen haufen Memory essen und den garbage Collector beschäftigen, wenn sie immer neu erstellt werden.
-        if (!EnemyPool.isEmpty()) { 
+        if (!EnemyPool.isEmpty()) {
             
             newEnemy = EnemyPool.remove(EnemyPool.size() - 1); //Entefrnt den ersten enemy
 

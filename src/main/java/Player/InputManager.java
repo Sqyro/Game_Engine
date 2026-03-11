@@ -5,7 +5,8 @@ import Rendering.ImageManager;
 import Shader.PointLight;
 import Shader.LightManager;
 import GUI.GUIManager;
-import GUI.GUIScreen;
+import GUI.GUIText;
+import GUI.TextHandler;
 import GUI.InventoryScreen;
 
 import java.awt.Color;
@@ -75,6 +76,11 @@ public class InputManager {
                     System.out.println("I Pressed");
                     PointLight pointLight = new PointLight(670, 670, 1f, 1f, 1f, 300f); //Erstellt ein neues Point Light bei 670, 670 mit den RGB Werten von 1, 1, 1 und der Reichweite von 300
                     LightManager.addLight(pointLight); //Frügt das Light in die Liste für Lights hinzu
+                    break;
+                case GLFW_KEY_Z:
+                    System.out.println("Y Pressed");
+                    GUIText randomText = new GUIText("C00L! 69 :3", 80, 80, 80, 50, ImageManager.GAMEFONT); //Erstellt ein neues Text Element
+                    TextHandler.addDisplayedText(randomText); //Packt das Text Element in den To Be Displayed Text
                     break;
                 case GLFW_KEY_V:
                     System.out.println("V Pressed");
