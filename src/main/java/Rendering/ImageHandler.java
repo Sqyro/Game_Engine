@@ -111,9 +111,12 @@ public class ImageHandler {
     }
     
     public void flush(Shader Shader, int ScreenWidth, int ScreenHeight) { //Führt jetzt für jede Textur das zeichnen aus
-        
         //Aktiviert den Shader
         Shader.bind();
+        
+        //Liste an aktiven Lichtern updaten
+        LightManager.updateVisibleLights(ScreenWidth, ScreenHeight);
+        
         //Gibt die Werte die der Shader zum Rechnen braucht an ihn weiter
         Shader.setUniform1f("globalLight", LightManager.getGlobalLight());
         Shader.setUniform1i("activeLights", LightManager.PointLights.size());

@@ -32,12 +32,12 @@ public class Canva {
         Map = new Map.MapHandler(); //Neues Map Objekt erstellen, gibt gerade nur eine Map, später aber vielleicht mehrere (Räume)
         
         //Erstellt das Shader Objekt für die Globalen Shader, also die, die alle Game Objekte rendern/beeinflussen
-        shader = new Shader("src/main/resources/shaders/shader.vert",
-                            "src/main/resources/shaders/shader.frag");
+        shader = new Shader("src/main/resources/shaders/shader.vsh",
+                            "src/main/resources/shaders/shader.fsh");
 
         //Erstellt das Shader Objekt für Hud, also alles was nicht von Licht beeinflusst werden soll, benutzt sehr einfache Vertex und Fragment Shader, die nur die Textur durchgeben
-        hudshader = new Shader("src/main/resources/shaders/hudshader.vert",
-                              "src/main/resources/shaders/hudshader.frag");
+        hudshader = new Shader("src/main/resources/shaders/hudshader.vsh",
+                              "src/main/resources/shaders/hudshader.fsh");
         
         renderer = new ImageHandler(); //Ja, ich benutze gerade den Image Handler als Renderer. Ich sollte dafür ne eingene Renderer Klasse machen, hab aber das eben von meinem alten Code geported und war zu faul
     
