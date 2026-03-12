@@ -89,7 +89,7 @@ public class Canva {
         
         float[] PosOnTexture = animationManager.walkAnimation.getPosOnTextureAsArray(player.isFLipped());
         //Fügt den Spieler in den draw que hinzu. Liest die Werte aus der Variable
-        renderer.draw(player.getTextureID(), player.LocPosX - player.PlayerSizeX / 2 - Camera.PosX, player.LocPosY - player.PlayerSizeY / 2 - Camera.PosY, player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
+        renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
 
         //Flushed alle Objekte im draw que hierdrüber. Diese Objekte werden gashaded mit dem Global Shader und gezeichnet
         renderer.flush(shader, ScreenWidth, ScreenHeight);

@@ -79,7 +79,7 @@ public class InputManager {
                     break;
                 case GLFW_KEY_Z:
                     System.out.println("Y Pressed");
-                    GUIText randomText = new GUIText("C00L! 69 :3", 80, 80, 80, 50, ImageManager.GAMEFONT); //Erstellt ein neues Text Element
+                    GUIText randomText = new GUIText("Skibidi Tripple T Sigma :3", 80, 80, 80, 50, ImageManager.GAMEFONT); //Erstellt ein neues Text Element
                     TextHandler.addDisplayedText(randomText); //Packt das Text Element in den To Be Displayed Text
                     break;
                 case GLFW_KEY_V:
@@ -94,9 +94,9 @@ public class InputManager {
                     System.out.println("X Pressed");
                     Save.Save.SaveData(Player.Player); //Speichert Daten vom Spieler
                     break;
-                    
+             
             }
-
+            
             // Klasse unten callen, damit der Spieler Richtig ausgerichtet ist nach eingabe einer Taste
             updatePlayerDirection();
 
@@ -106,6 +106,22 @@ public class InputManager {
             } else {
                 InputHandler.Stop(player);
             }
+        });
+        
+        glfwSetMouseButtonCallback(window, (win, button, action, mods) -> {
+            if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+
+                Player player = Player.Player;
+                
+                double[] MousePosX = new double[1];
+                double[] MousePosY = new double[1];
+
+                glfwGetCursorPos(window, MousePosX, MousePosY);
+
+                System.out.println("Mouse clicked at: " + MousePosX[0] + ", " + MousePosY[0]);
+                System.out.println("Player is at: " + player.getPosX() + ", " + player.getPosY());
+            }
+
         });
     }
     
@@ -117,10 +133,10 @@ public class InputManager {
         Player player = Player.Player;
         
         //Wenn die Keys gedrückt wurden dann addieren/Subtrahieren (nicht setzen, sonst buggt das wenn man zwei Keys gleichzeitig drückt)
-        if (wPressed) DirY += 1; 
-        if (sPressed) DirY -= 1;
-        if (aPressed) DirX += 1;
-        if (dPressed) DirX -= 1;
+        if (wPressed) DirY -= 1; 
+        if (sPressed) DirY += 1;
+        if (aPressed) DirX -= 1;
+        if (dPressed) DirX += 1;
         
         //Richtung setzen
         player.setDirectionX(DirX);

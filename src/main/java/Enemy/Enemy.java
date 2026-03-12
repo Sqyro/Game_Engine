@@ -29,8 +29,8 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
             newEnemy = EnemyPool.remove(EnemyPool.size() - 1); //Entefrnt den ersten enemy
 
             //setzt alle Values auf die, die reinkommen, damit nicht einfach der alte Enemy zurück kommt
-            newEnemy.setPosX(PosX - Camera.PosX);
-            newEnemy.setPosY(PosY - Camera.PosY);
+            newEnemy.setPosX(PosX);
+            newEnemy.setPosY(PosY);
             newEnemy.setObjLength(EnemyLength);
             newEnemy.setObjHeight(EnemyHeight);
             newEnemy.setTextureID(TextureID);
@@ -39,7 +39,7 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
 
         } else {
             //Erstellt neues Enemy Object mit den reinkommenden Values, wenn kein alter recycled werden kann
-            newEnemy = new Enemy((int)(PosX - Camera.PosX), (int)(PosY - Camera.PosY), (int)EnemyLength, (int)EnemyHeight, TextureID, Velocity, Direction);
+            newEnemy = new Enemy((int)PosX, (int)PosY, (int)EnemyLength, (int)EnemyHeight, TextureID, Velocity, Direction);
         }
         
         //fügt den eben erstellten Enemy in die Liste hinzu

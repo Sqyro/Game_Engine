@@ -55,10 +55,10 @@ public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle
     public boolean isFLipped() {
         switch (this.getDirectionX()) {
             case -1:
-                ObjectFlippedX = false;
+                ObjectFlippedX = true;
                 break;
             case 1:
-                ObjectFlippedX = true;
+                ObjectFlippedX = false;
                 break;
         }
         
