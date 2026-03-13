@@ -61,21 +61,17 @@ public class ImageHandler {
         glEnableVertexAttribArray(1); //Schaltet es wieder an
     }
     
-    public static int loadTexture(String Path, int ImgWidth, int ImgHeight) throws Exception {
+    public static int loadTexture(String Path) throws Exception {
         BufferedImage img = ImageIO.read(new File(Path)); // Image aus den Files lesen
         
-        //Image Scalen auf die gewünschte Größe
-        BufferedImage ScaledImg = new BufferedImage(ImgWidth, ImgHeight, BufferedImage.TYPE_INT_ARGB);
-        ScaledImg.getGraphics().drawImage(img, 0, 0, ImgWidth, ImgHeight, null);
-
         //Alle Pixel aus dem Bild lesen und in RGB (+ Alpha Wert) Integer umwandeln
-        int[] PixelRaw = new int[ImgWidth * ImgHeight];
-        ScaledImg.getRGB(0, 0, ImgWidth, ImgHeight, PixelRaw, 0, ImgWidth);
+        int[] PixelRaw = new int[img.getWidth() * img.getHeight()];
+        img.getRGB(0, 0, img.getWidth(), img.getHeight(), PixelRaw, 0, img.getWidth());
 
-        ByteBuffer Pixels = BufferUtils.createByteBuffer(ImgWidth * ImgHeight * 4); //Pixel Byte Buffer erstellen
-        for (int y = 0; y < ImgHeight; y++) { // für y (Höhe)
-            for (int x = 0; x < ImgWidth; x++) { //für x (Breite)
-                int Pixel = PixelRaw[y * ImgWidth + x]; //Nimmt den richtigen Pixel
+        ByteBuffer Pixels = BufferUtils.createByteBuffer(img.getWidth() * img.getHeight() * 4); //Pixel Byte Buffer erstellen
+        for (int y = 0; y < img.getHeight(); y++) { // für y (Höhe)
+            for (int x = 0; x < img.getWidth(); x++) { //für x (Breite)
+                int Pixel = PixelRaw[y * img.getWidth() + x]; //Nimmt den richtigen Pixel
                 //Liest für den Pixels und speichert seine Daten in dem Byte Buffer
                 Pixels.put((byte) ((Pixel >> 16) & 0xFF)); // R(ed)
                 Pixels.put((byte) ((Pixel >> 8) & 0xFF));  // G(reen)
@@ -92,9 +88,9 @@ public class ImageHandler {
         //Kein Smoothing, Clamp damit die Textur out of Bounds sich nicht wiederholt
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //Wenn zu klein
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //Wenn zu groß
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP); // Wenn das Bild koordinaten außerhalb x hat
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP); // Wenn das Bild koordinaten außerhalb y hat
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ImgWidth, ImgHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, Pixels);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // Wenn das Bild koordinaten außerhalb x hat
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Wenn das Bild koordinaten außerhalb y hat
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.getWidth(), img.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, Pixels);
         glBindTexture(GL_TEXTURE_2D, 0);
 
         // Gibt die ID der Textur zurück´

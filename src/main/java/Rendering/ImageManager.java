@@ -1,7 +1,5 @@
 package Rendering;
 
-import Map.MapHandler;
-
 import java.util.List;
 import java.util.ArrayList;
 
@@ -21,18 +19,18 @@ public class ImageManager {
     public static void loadAllTextures() {
         try {
         //Hier einfach alle Texturen mit .loadTextures reinschreiben die man will. Gibt den Integer für die Texture ID in OpenGL zurück
-        PLAYER = ImageHandler.loadTexture("src/main/resources/assets/textures/player/Player.png", 32, 128);
+        PLAYER = ImageHandler.loadTexture("src/main/resources/assets/textures/player/Player.png");
 
-        ENEMY = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png", 50, 50);
+        ENEMY = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png");
 
-        TESTITEM = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png", 100, 100);
+        TESTITEM = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png");
         
         for(int i = 0; i <= TileAmount-1; i++) {
-            int TempTileTextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile" + i + ".png", (int)MapHandler.TileSize, (int)MapHandler.TileSize);
+            int TempTileTextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile" + i + ".png");
             TileTextures.add(TempTileTextureID);
         }
         
-        GAMEFONT = ImageHandler.loadTexture("src/main/resources/assets/fonts/font.png", 256, 256);
+        GAMEFONT = ImageHandler.loadTexture("src/main/resources/assets/fonts/font.png");
         
         System.out.println("Textures loaded"); //Nachricht für den Dabug
         } catch (Exception e) { //Falls es nicht geht

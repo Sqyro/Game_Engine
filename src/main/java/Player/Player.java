@@ -2,6 +2,7 @@ package Player;
 
 import Physics2D.LivingObject;
 import Rendering.ImageManager;
+import Rendering.Frame;
 import Item.Item;
 
 import java.io.Serializable;
@@ -13,8 +14,8 @@ public class Player extends LivingObject implements Serializable { // Serializat
     
     //Variablen deklarieren
     //Position auf dem Bildschirm
-    public transient float LocPosX = main.Main.ScreenWidth / 2;
-    public transient float LocPosY = main.Main.ScreenHeight / 2;
+    public transient float LocPosX = Frame.ScreenWidth / 2;
+    public transient float LocPosY = Frame.ScreenHeight / 2;
     
     //Größe
     public transient static float PlayerSizeX = 100;

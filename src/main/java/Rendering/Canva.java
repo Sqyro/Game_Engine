@@ -25,9 +25,9 @@ public class Canva {
     private ImageHandler renderer;
     private AnimationManager animationManager;
     
-    public Canva(int Width, int Height) {
-        this.ScreenWidth = Width; //Canva Größe gleich Screengröße
-        this.ScreenHeight = Height;
+    public Canva() {
+        this.ScreenWidth = Frame.ScreenWidth; //Canva Größe gleich Screengröße
+        this.ScreenHeight = Frame.ScreenHeight;
         
         Map = new Map.MapHandler(); //Neues Map Objekt erstellen, gibt gerade nur eine Map, später aber vielleicht mehrere (Räume)
         
@@ -139,6 +139,9 @@ public class Canva {
         for(GUIText guiText : TextHandler.ToBeDisplayedText) { //Für jeden Text im ToBeDisplayed Text
             GUIManager.renderText(guiText, renderer); //Fügt den Text in den Render Que hinzu
         }
+        
+        //Einen eigenen Cursor zeichnen an der Position vom System Cursor
+        renderer.drawFull(ImageManager.ENEMY, (float)GUI.Mouse.PosX - Camera.PosX, (float)GUI.Mouse.PosY - Camera.PosY, 32, 32);
         
         //Flushed den Screen Render durch mit dem Hud Shader
         renderer.flush(hudshader, ScreenWidth, ScreenHeight);

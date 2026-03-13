@@ -1,5 +1,6 @@
 package Rendering;
 
+import GUI.Mouse;
 import Physics2D.VelocityHandler;
 import Player.InputManager;
 import Player.Player;
@@ -17,11 +18,14 @@ public class Frame {
     public Canva Canva;
     long lastTime;
    
+    public static int ScreenWidth = 1920;
+    public static int ScreenHeight = 1080; // Wird je nach Setting überschrieben, HD FullScreen ist der Standart, wird aber je nach Monitor entsprechend geändert
+    
     public static int FramesPerSecond = 60; // 60 FPS sind gerade Standart, soll dann aber einstellbar sein
             
-    public Frame(int ScreenWidth, int ScreenHeight, String title) { //Constructor, wird in Main gecalled. Von hier aus wird alles andere gestatet
-        Start(ScreenWidth, ScreenHeight, title); // Ruft die Start Methode auf, leitet alles zu starten dahin weiter
-        Canva = new Canva(ScreenWidth, ScreenHeight); //Erstellt nen neuen Canva, mit der größe vom Screen
+    public Frame(String Title) { //Constructor, wird in Main gecalled. Von hier aus wird alles andere gestatet
+        Start(Title); // Ruft die Start Methode auf, leitet alles zu starten dahin weiter
+        Canva = new Canva(); //Erstellt nen neuen Canva, mit der größe vom Screen
 
         //Startet die Update Methode, die für den Loop zuständig ist
         Update();
@@ -30,11 +34,17 @@ public class Frame {
         glfwTerminate();
     }
     
-    private void Start(int ScreenWidth, int ScreenHeight, String Title) { // Start Funktion, um halt alles zu starten
-        glfwInit(); //Fenster Initialisieren
+    private void Start(String Title) { // Start Funktion, um halt alles zu starten
+        glfwInit(); //GLFW Initialisieren
 
+        long Monitor = glfwGetPrimaryMonitor();
+        GLFWVidMode videoMode = glfwGetVideoMode(Monitor);
+
+        ScreenWidth = videoMode.width();
+        ScreenHeight = videoMode.height();
+        
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // Fenster kann vom User scaliert werden
-        Window = glfwCreateWindow(ScreenWidth, ScreenHeight, Title, 0, 0); //Fenster mit richtiger Größe und Titel erstellen
+        Window = glfwCreateWindow(ScreenWidth, ScreenHeight, Title, Monitor, 0); //Fenster mit richtiger Größe und Titel erstellen
         
         if (Window == 0) { // Falls Fenster nicht erstellt wurde Exception werfen
             throw new RuntimeException("Das GLFW Fenster zu erstellen ist fehlgeschlagen");
@@ -50,6 +60,9 @@ public class Frame {
         glfwShowWindow(Window); //Macht das Fenster sichtbar
         GL.createCapabilities(); //Für Funktionen später
 
+        //System Cursor verstecken
+        glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        
         //Texturen die Transparent sind tatsächlich transparent rendern
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -75,6 +88,9 @@ public class Frame {
             
             //Hört allen Events zu. KeyboardInput Event für den Input Handler
             glfwPollEvents();
+            
+            //Cursor Position updaten
+            Mouse.UpdateMousePos(Window);
             
             //Rechen Updates
             InputManager.updatePlayerDirection();

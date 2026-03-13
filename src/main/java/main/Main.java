@@ -3,14 +3,11 @@ package main;
 import Rendering.Frame;
 
 public class Main {
-    
-    public static int ScreenWidth = 1920;
-    public static int ScreenHeight = 1080; // Wird je nach Setting überschrieben, Momentan auf HD Fullscreen gehardcoded
-    
     //Wenn das Programm startet
     public static void main(String[] args) {
         System.out.println("Debug:"); //Debug: (Alles was folgt ist teil vom Debug)
+        
         //Alle anderen Dinge die bei Start passieren sind in Frame
-        Frame frame = new Frame(ScreenWidth, ScreenHeight, "Sigma Ligma Game"); // Erstellt nen Frame mit Titel auf Bildschirmgröße. Der Name war Niklas Idee
+        Frame frame = new Frame("Sigma Ligma Game"); // Erstellt nen Frame mit Titel auf Bildschirmgröße. Der Name war Niklas Idee
     }
 }
