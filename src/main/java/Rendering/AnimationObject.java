@@ -17,7 +17,7 @@ public class AnimationObject {
     private float FrameHeight;
 
     public AnimationObject(int TextureID, int Columns, int Rows, int AnimationColumn, int FrameCountPerAnimation, float TimePerFrame) { //Constructor
-        //Variablen hochgeben
+        //Variablen für das Objekt schreiben
         this.TextureID = TextureID;
 
         this.Columns = Columns;
@@ -49,7 +49,7 @@ public class AnimationObject {
     }
 
     public float[] getPosOnTextureAsArray(boolean FlippedX) { //Methode um sich das Frame von der richtigen Position auf der Textur zu holen
-        //Position holen und zu Position auf der Textur in Pixeln umwandeln
+        //Position holen und in Position auf dem Frame als Verhältniss zum ganzen Frame schreiben
         int X = animationColumn;
         int Y = currentFrame;
         float onTextureX = X * FrameWidth;

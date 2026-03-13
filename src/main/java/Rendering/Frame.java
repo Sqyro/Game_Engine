@@ -37,14 +37,16 @@ public class Frame {
     private void Start(String Title) { // Start Funktion, um halt alles zu starten
         glfwInit(); //GLFW Initialisieren
 
+        //Monitor holen und den in einen Video Mode schreiben von dem ich Variablen lesen kann
         long Monitor = glfwGetPrimaryMonitor();
         GLFWVidMode videoMode = glfwGetVideoMode(Monitor);
 
+        //Bildschirmgröße auf den Monitor anpassen
         ScreenWidth = videoMode.width();
         ScreenHeight = videoMode.height();
         
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // Fenster kann vom User scaliert werden
-        Window = glfwCreateWindow(ScreenWidth, ScreenHeight, Title, Monitor, 0); //Fenster mit richtiger Größe und Titel erstellen
+        //glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // Fenster kann vom User scaliert werden
+        Window = glfwCreateWindow(ScreenWidth, ScreenHeight, Title, Monitor, 0); //Fenster mit richtiger Größe und Titel erstellen. Monitor, weil es Fullscreen ist, 0 würde heißen windowed
         
         if (Window == 0) { // Falls Fenster nicht erstellt wurde Exception werfen
             throw new RuntimeException("Das GLFW Fenster zu erstellen ist fehlgeschlagen");
@@ -60,7 +62,7 @@ public class Frame {
         glfwShowWindow(Window); //Macht das Fenster sichtbar
         GL.createCapabilities(); //Für Funktionen später
 
-        //System Cursor verstecken
+        //System (OS) Cursor verstecken
         glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         
         //Texturen die Transparent sind tatsächlich transparent rendern
