@@ -13,7 +13,15 @@ public class ImageManager {
     public static List<Integer> TileTextures = new ArrayList<>();
     public static int TileAmount = 3;
     
+    public static int BAR;
+    
+    public static int TESTBAR;
+    
+    public static int INVENTORY;
+    
     public static int GAMEFONT;
+    
+    public static int CURSOR;
     
     //Methode um alle texturen zu laden beim Game start
     public static void loadAllTextures() {
@@ -30,7 +38,15 @@ public class ImageManager {
             TileTextures.add(TempTileTextureID);
         }
         
+        BAR = ImageHandler.loadTexture("src/main/resources/assets/textures/hud/bar/bar.png");
+        
+        TESTBAR = ImageHandler.loadTexture("src/main/resources/assets/textures/hud/bar/TestBar/TestBar.png");
+        
+        INVENTORY = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/screens/inventory.png");
+        
         GAMEFONT = ImageHandler.loadTexture("src/main/resources/assets/fonts/font.png");
+        
+        CURSOR = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/cursor/cursor2.png");
         
         System.out.println("Textures loaded"); //Nachricht für den Dabug
         } catch (Exception e) { //Falls es nicht geht

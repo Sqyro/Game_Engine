@@ -52,8 +52,11 @@ public class Canva {
         glClearColor(1f * GlobalLight, 1f * GlobalLight, 1f * GlobalLight, 1f * GlobalLight);
         glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Weiß setzen
         
-        //Animation Updaten
+        //Animationen Updaten
+        animationManager.idleAnimation.UpdateAnimation(deltaTime);
         animationManager.walkAnimation.UpdateAnimation(deltaTime);
+        animationManager.walkUpAnimation.UpdateAnimation(deltaTime);
+        animationManager.walkDownAnimation.UpdateAnimation(deltaTime);
         
         //Benutzt die drawMap Methode aus dem Map Handler, die die einzelnen Tiles zeichnet
         Map.drawMap(shader, renderer, ScreenWidth, ScreenHeight);
@@ -82,16 +85,30 @@ public class Canva {
             renderer.drawFull(currentEnemy.getTextureID(), EnemyX, EnemyY, currentEnemy.getObjLength(), currentEnemy.getObjHeight());
         }
         
+        //Flushed Map und Enemies unter den Spieler. Werden geshaded und gezeichnet mit dem Global Shader
+        renderer.flush(shader, ScreenWidth, ScreenHeight);
+        
         //Render Player
         
         //Macht eine Lokale Variable für den Spieler
         Player player = Player.Player;
-        
-        float[] PosOnTexture = animationManager.walkAnimation.getPosOnTextureAsArray(player.isFLipped());
         //Fügt den Spieler in den draw que hinzu. Liest die Werte aus der Variable
-        renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
-
-        //Flushed alle Objekte im draw que hierdrüber. Diese Objekte werden gashaded mit dem Global Shader und gezeichnet
+        if(player.getVelocity() > 0) {
+            if(player.getDirectionY() == 0) {
+                float[] PosOnTexture = animationManager.walkAnimation.getPosOnTextureAsArray(player.isFLipped());
+                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
+            } else if(player.getDirectionY() == 1) {
+                float[] PosOnTexture = animationManager.walkUpAnimation.getPosOnTextureAsArray(false);
+            renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
+            } else {
+                float[] PosOnTexture = animationManager.walkDownAnimation.getPosOnTextureAsArray(false);
+            renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
+            }
+        } else {
+            float[] PosOnTexture = animationManager.idleAnimation.getPosOnTextureAsArray(player.isFLipped());
+            renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
+        }
+        //Flushed den Spieler später, damit er über allem drüber liegt. Er wird gashaded mit dem Global Shader und gezeichnet
         renderer.flush(shader, ScreenWidth, ScreenHeight);
         
         //Render HUD
@@ -108,18 +125,15 @@ public class Canva {
             if(currentHud instanceof BarElement) { // Wenn es ein BarElement ist, dann zeichnet er die Farbe ("Bar darunter") mit dazu
                 BarElement bar = (BarElement) currentHud;
                 
-                //hat mal die Farbe und Alpha gelesen und damit nen Quadrat gemalt
-                /*
-                glColor4f(bar.getColor().getRed() / 255f,
-                          bar.getColor().getGreen() / 255f,
-                          bar.getColor().getBlue() / 255f,
-                          BarElement.BarAlpha);
-                drawQuad(HudX, HudY, bar.getHudLength() - bar.getBarDamage(), bar.getHudHeight());
+                //Farbe Holen
+                float Red = bar.getColor().getRed() / 255f;
+                float Green = bar.getColor().getGreen() / 255f;
+                float Blue = bar.getColor().getBlue() / 255f;
                 
-                //Farbe wieder auf Weiß setzen für folgende Objekte
-                glColor4f(1f, 1f, 1f, 1f);
-
-                */
+                //Rechteck unter die Textur zeichnen
+                renderer.drawRectangle(ImageManager.BAR, HudX - Camera.PosX + bar.getBarOffset(), HudY - Camera.PosY + 4, bar.getHudLength() - bar.getBarDamage() - bar.getBarOffset(), bar.getHudHeight() - 8, Red, Green, Blue);
+                //Bar Extra flushen, damit es unter der Textur liegt
+                renderer.flush(hudshader, ScreenWidth, ScreenHeight);
             }
             
             //Fügt die Hud Elemente in den neuen draw que hinzu
@@ -141,7 +155,7 @@ public class Canva {
         }
         
         //Einen eigenen Cursor zeichnen an der Position vom System Cursor
-        renderer.drawFull(ImageManager.ENEMY, (float)GUI.Mouse.PosX - Camera.PosX, (float)GUI.Mouse.PosY - Camera.PosY, 32, 32);
+        renderer.drawFull(ImageManager.CURSOR, (float)GUI.Mouse.PosX - Camera.PosX, (float)GUI.Mouse.PosY - Camera.PosY, 32, 32);
         
         //Flushed den Screen Render durch mit dem Hud Shader
         renderer.flush(hudshader, ScreenWidth, ScreenHeight);

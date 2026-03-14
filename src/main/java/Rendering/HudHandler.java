@@ -15,8 +15,8 @@ public class HudHandler {
     }
     
     //Methode um neue Bar zu placen
-    public static void PlaceNewBar(int PosX, int PosY, int BarLength, int BarHeight, int TextureID, int BarDamage, Color BarColor) {
-        BarElement bar = new BarElement(PosX, PosY, BarLength, BarHeight, TextureID, BarDamage, BarColor); //Erstellt nen neues BarElement mit den Reingegebenen Variablen
+    public static void PlaceNewBar(int PosX, int PosY, int BarLength, int BarHeight, int TextureID, int BarDamage, int BarOffset, Color BarColor) {
+        BarElement bar = new BarElement(PosX, PosY, BarLength, BarHeight, TextureID, BarDamage, BarOffset, BarColor); //Erstellt nen neues BarElement mit den Reingegebenen Variablen
         
         HudElements.add(bar); //Fügt die Bar in die Liste mit allen Elementen hinzu
     }

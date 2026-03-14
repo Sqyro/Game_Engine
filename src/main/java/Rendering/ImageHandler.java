@@ -101,9 +101,14 @@ public class ImageHandler {
         draw(TextureID, TextureX, TextureY, TextureWidth, TextureHeight, 0f, 0f, 1f, 1f);
     }
     
+    public void drawRectangle(int TextureID, float TextureX, float TextureY, float TextureWidth, float TextureHeight, float Red, float Green, float Blue) { //Methode um Rechtecke zu zeichnen, nimmt ne 1x1 Weiße Textur, eine Position, Größe und Farbwerte und passt die Textur entsprechend an
+        renderQueue.computeIfAbsent(TextureID, k -> new ArrayList<>()) //wenn es noch keine Liste für diese Textur gibt mach eine, heißt wenn wir die gleiche textur 1000 mal haben wird sie nicht 1000 mal neu gemacht
+                   .add(new RenderCommand(TextureX, TextureY, TextureWidth, TextureHeight, 0f, 0f, 1f, 1f, Red, Green, Blue)); //Render Command mit den Werten machen, onTexture Größe und Position ist 0, 0 und 1, 1, weil die Textur 1x1 ist
+    }
+    
     public void draw(int TextureID, float TextureX, float TextureY, float TextureWidth, float TextureHeight, float onTextureX, float onTextureY, float onTextureWidth, float onTextureHeight) { //fügt Texturen in den draw que hinzu für da Frame
         renderQueue.computeIfAbsent(TextureID, k -> new ArrayList<>()) //wenn es noch keine Liste für diese Textur gibt mach eine, heißt wenn wir die gleiche textur 1000 mal haben wird sie nicht 1000 mal neu gemacht
-                   .add(new RenderCommand(TextureX, TextureY, TextureWidth, TextureHeight, onTextureX, onTextureY, onTextureWidth, onTextureHeight)); //Render Command für diese Textur in die Liste hinzufügen
+                   .add(new RenderCommand(TextureX, TextureY, TextureWidth, TextureHeight, onTextureX, onTextureY, onTextureWidth, onTextureHeight, 1f, 1f, 1f)); //Render Command für diese Textur in die Liste hinzufügen
     }
     
     public void flush(Shader Shader, int ScreenWidth, int ScreenHeight) { //Führt jetzt für jede Textur das zeichnen aus
@@ -144,7 +149,7 @@ public class ImageHandler {
                 //Variablen für den Vertex Shader zum rechnen Setzen
                 glUniform2f(Shader.OffsetLocation, fixedX, fixedY);
                 glUniform2f(Shader.ScaleLocation, renderCommand.TextureWidth, renderCommand.TextureHeight);
-                glUniform4f(Shader.ColorLocation, 1f, 1f, 1f, 1f);
+                glUniform4f(Shader.ColorLocation, renderCommand.Red, renderCommand.Green, renderCommand.Blue, 1f);
                 
                 glDrawArrays(GL_TRIANGLE_FAN, 0, 4); // Quadrat mit der momentanen Textur zeichnen
             }
@@ -165,7 +170,11 @@ public class ImageHandler {
         float onTextureWidth;
         float onTextureHeight;
         
-        public RenderCommand(float PosX, float PosY, float TextureWidth, float TextureHeight, float onTextureX, float onTextureY,float onTextureWidth, float onTextureHeight) {
+        float Red;
+        float Green;
+        float Blue;
+        
+        public RenderCommand(float PosX, float PosY, float TextureWidth, float TextureHeight, float onTextureX, float onTextureY, float onTextureWidth, float onTextureHeight, float Red, float Green, float Blue) {
             this.PosX = PosX;
             this.PosY = PosY;
             this.TextureWidth = TextureWidth;
@@ -175,6 +184,10 @@ public class ImageHandler {
             this.onTextureY = onTextureY;
             this.onTextureWidth = onTextureWidth;
             this.onTextureHeight = onTextureHeight;
+            
+            this.Red = Red;
+            this.Green = Green;
+            this.Blue = Blue;
         }
     }
 }

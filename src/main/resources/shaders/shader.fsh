@@ -9,7 +9,7 @@ uniform vec4 color; //Ein Multiplikator für die Textur, damit wir sie färben k
 uniform float globalLight; //Die Globale Beleuchtung aus dem LightManager
 uniform vec2 screenSize; //Bildschirmgröße
 
-#define MAX_LIGHTS 5 //Maximalanzahl an Lichtern, weil OpenGl keine Dynamischen Arrays mag (Es muss ja beim compilen wissen, wie viel Platz da sein soll)
+#define MAX_LIGHTS 1 //Maximalanzahl an Lichtern, weil OpenGl keine Dynamischen Arrays mag (Es muss ja beim compilen wissen, wie viel Platz da sein soll)
 
 uniform int activeLights; //Aktives Licht
 uniform vec2 lightPositions[MAX_LIGHTS]; //Positionen der Lichter in einem Vector2

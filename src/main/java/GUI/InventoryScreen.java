@@ -5,7 +5,7 @@ import Rendering.ImageManager;
 import Rendering.Camera;
 
 public class InventoryScreen extends GUIScreen {
-    private int TextureID = ImageManager.ENEMY; // TexturID von einem Inventory Screen
+    private int TextureID = ImageManager.INVENTORY; // TexturID von einem Inventory Screen
     
     private int TextureWidth = 800;
     private int TextureHeight = 800;

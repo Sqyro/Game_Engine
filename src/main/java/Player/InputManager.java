@@ -60,7 +60,9 @@ public class InputManager {
                     break;
                 case GLFW_KEY_R:
                     System.out.println("R Pressed");
-                    Rendering.HudHandler.PlaceNewBar(100, 100, 300, 100, Rendering.ImageManager.PLAYER, 0, Color.RED); //Erstellt eine Bar auf der GUI
+                    if(Rendering.HudHandler.HudElements.isEmpty()) {
+                        Rendering.HudHandler.PlaceNewBar(100, 100, 400, 50, Rendering.ImageManager.TESTBAR, 0, 60, Color.RED); //Erstellt eine Bar auf der GUI
+                    }
                     break;
                 case GLFW_KEY_Q:
                     System.out.println("Q Pressed");
