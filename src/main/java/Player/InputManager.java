@@ -51,24 +51,30 @@ public class InputManager {
                 case GLFW_KEY_E:
                     if(action == GLFW_PRESS) { // Nur ausführen wenn der Key gedrückt wird, sonst wird das hier beim loslassen nochmal ausgeführt und der Screen schließt sich
                         System.out.println("E Pressed");
-                        if(GUIManager.isScreenOpen()) { //Wenn der Bildschirm schon offen ist, dann schließen wir ihn
-                            GUIManager.closeScreen();
+                        if(GUIManager.isScreenOpen()) { //Wenn der Bildschirm schon offen ist
+                            if(GUIManager.currentScreen instanceof InventoryScreen) { //Wenn der Momentane Screen ein Inventar ist
+                                InventoryScreen Inventory = (InventoryScreen) GUIManager.currentScreen; //Screen holen
+                                Inventory.returnHeldItem(); //Die Methode callen, um das festgeahltene Item in seinen vorherigen Slot zu legen
+                            }
+                            GUIManager.closeScreen(); //Bildschirm schließen
                         } else { //Wenn keiner offen ist, dann machen wir einen neuen aus
-                            GUIManager.openScreen(new InventoryScreen());
+                            GUIManager.openScreen(new InventoryScreen(48, 2, 2, 13, 5, 625, 502));
                         }
                     }
                     break;
                 case GLFW_KEY_R:
                     System.out.println("R Pressed");
                     if(Rendering.HudHandler.HudElements.isEmpty()) {
-                        Rendering.HudHandler.PlaceNewBar(100, 100, 400, 50, Rendering.ImageManager.TESTBAR, 0, 60, Color.RED); //Erstellt eine Bar auf der GUI
+                        Rendering.HudHandler.PlaceNewBar(100, 100, 400, 50, Rendering.ImageManager.TESTBAR, 0, 60, 4, Color.RED); //Erstellt eine Bar auf der GUI
                     }
                     break;
                 case GLFW_KEY_Q:
                     System.out.println("Q Pressed");
                     Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0); //Nimmt das Hud Element was auf Position 0 ist
                     BarElement bar = (BarElement) Hud; //Konvertiert das Hud Element in ne Bar, geht gerade weil ich nur ein Objekt in der GUI hab, daher ist die Bar immer auf 0
-                    bar.setBarDamage(bar.getBarDamage() + 10); //Damaged die Bar etwas ums zu testen
+                    if(bar.getBarDamage() < bar.getHudLength() - bar.getBarOffsetX()) { //Wenn noch was von der Bar übrig ist, damit sie nicht ins Minus gerät
+                        bar.setBarDamage(bar.getBarDamage() + 2); //Damaged die Bar etwas ums zu testen
+                    }
                     break;
                 case GLFW_KEY_C:
                     System.out.println("C Pressed");
@@ -86,10 +92,11 @@ public class InputManager {
                     break;
                 case GLFW_KEY_V:
                     System.out.println("V Pressed");
-                            Physics2D.PhysicsObject2D LoadedData = Save.Save.LoadData(); //Läd Spieldateinen aus dem Speicher
+                            Player LoadedData = (Player) Save.Save.LoadData(); //Läd Spieldateinen aus dem Speicher
                             if (LoadedData != null) { //Darf nicht leer sein
                                 Player.Player.setPosX(LoadedData.getPosX()); //Holt sich die Positonen aus den Daten
                                 Player.Player.setPosY(LoadedData.getPosY());
+                                Player.Player.inventory = LoadedData.inventory; //Holt sich das Inventar aus dem Speicher
                             }
                     break;
                 case GLFW_KEY_X:
@@ -110,18 +117,25 @@ public class InputManager {
             }
         });
         
+        //Mouse Event, für Mouse related Dinge
         glfwSetMouseButtonCallback(window, (win, button, action, mods) -> {
-            if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-
-                Player player = Player.Player;
+            if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) { //Wenn der Linke Mouse Button gedrückt wird
+                Player player = Player.Player; // Spieler holen
                 
+                //Variablen für die Position von der Maus erstellen
                 double[] MousePosX = new double[1];
                 double[] MousePosY = new double[1];
 
+                //Position von der Maus holen und in die Variablen schreiben
                 glfwGetCursorPos(window, MousePosX, MousePosY);
 
+                if(GUIManager.currentScreen instanceof InventoryScreen) { //Wenn der Momentane Bildschirm nen Inventar ist, dann die Handle Click Methode ausführen, um zu schauen ob wir mit nem Slot interagieren können
+                    InventoryScreen Inventory = (InventoryScreen) GUIManager.currentScreen; //Inventar holen
+                    Inventory.handleClick(MousePosX[0], MousePosY[0]); //handle Click ausführen mit der Maus Position
+                }
+                
+                //Position von der Maus ausgeben
                 System.out.println("Mouse clicked at: " + MousePosX[0] + ", " + MousePosY[0]);
-                System.out.println("Player is at: " + player.getPosX() + ", " + player.getPosY());
             }
 
         });
@@ -135,13 +149,21 @@ public class InputManager {
         Player player = Player.Player;
         
         //Wenn die Keys gedrückt wurden dann addieren/Subtrahieren (nicht setzen, sonst buggt das wenn man zwei Keys gleichzeitig drückt)
-        if (wPressed) DirY -= 1; 
-        if (sPressed) DirY += 1;
         if (aPressed) DirX -= 1;
         if (dPressed) DirX += 1;
+        if (wPressed) DirY -= 1;
+        if (sPressed) DirY += 1;
         
         //Richtung setzen
         player.setDirectionX(DirX);
         player.setDirectionY(DirY);
+        
+        if(DirY != 0){ //Letzte Y Richtung speichern
+            player.setLastDirectionY(DirY);
+        }
+        
+        if (DirY == 0 && DirX != 0) { //Falls wir uns nochmal auf der X Achse bewegt haben zurücksetzen
+            player.setLastDirectionY(0);
+        }
     }
 }

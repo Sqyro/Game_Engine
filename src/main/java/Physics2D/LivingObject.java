@@ -10,6 +10,7 @@ public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle
     public transient int[] Direction = {0, 0};
     
     boolean ObjectFlippedX = false;
+    private int lastDirectionY = 0;
     
     public LivingObject(float PosX, float PosY, float ObjLength, float ObjHeight, int TextureID, float Velocity, int[] Direction) { //Constructor
         super(PosX, PosY, ObjLength, ObjHeight, TextureID); //Passed alles außer Velocity und Direction an PhysicsObject2D weiter
@@ -50,6 +51,14 @@ public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle
    
     public void setDirectionY(int newY) {
         Direction[1] = newY;
+    }
+    
+    public int getLastDirectionY() {
+        return lastDirectionY;
+    }
+
+    public void setLastDirectionY(int dir) {
+        lastDirectionY = dir;
     }
     
     public boolean isFLipped() {

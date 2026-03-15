@@ -5,15 +5,18 @@ import java.awt.Color;
 public class BarElement extends HudElement { // Ne bar ist nen Spezielles Hud Element, weil da halt noch nen Rechteck in ner Farbe drunter liegt
     private int BarDamage; //Wie viel von der Länge abgezogen wird, beim Rendern
     
-    private int BarOffset; // Offset X von der Bar im Vergleich zur Textur
+    private int BarOffsetX; // Offset von der Bar im Vergleich zur Textur
+    private int BarOffsetY;
     
     private Color BarColor; //Farbe von der Bar
     
-    public BarElement(int PosX, int PosY, int BarLength, int BarHeight, int TextureID, int BarDamage, int BarOffset, Color BarColor) { //Constructor
+    public BarElement(int PosX, int PosY, int BarLength, int BarHeight, int TextureID, int BarDamage, int BarOffsetX, int BarOffsetY, Color BarColor) { //Constructor
         super(PosX, PosY, BarLength, BarHeight, TextureID); //Passed die Values an Hud Element
-        this.BarDamage = BarDamage; //Eigener Wert pro Objekt
-        this.BarOffset = BarOffset;
-        this.BarColor = BarColor; //Eigener Wert pro Objekt
+         //Eigene Werte pro Objekt
+         this.BarDamage = BarDamage;
+        this.BarOffsetX = BarOffsetX;
+        this.BarOffsetY = BarOffsetY;
+        this.BarColor = BarColor;
     }
     
     //Hilf Methoden um die Variablen zu setzen von den Objekten
@@ -25,12 +28,20 @@ public class BarElement extends HudElement { // Ne bar ist nen Spezielles Hud El
         BarDamage = newBarDamage;
     }
     
-    public int getBarOffset() {
-        return BarOffset;
+    public int getBarOffsetX() {
+        return BarOffsetX;
     }
     
-    public void setBarOffset(int newBarOffset) {
-        BarOffset = newBarOffset;
+    public void setBarOffsetX(int newBarOffsetX) {
+        BarOffsetX = newBarOffsetX;
+    }
+    
+    public int getBarOffsetY() {
+        return BarOffsetY;
+    }
+    
+    public void setBarOffsetY(int newBarOffsetY) {
+        BarOffsetY = newBarOffsetY;
     }
     
     public Color getColor() {

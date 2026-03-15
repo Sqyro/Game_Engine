@@ -53,10 +53,7 @@ public class Canva {
         glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Weiß setzen
         
         //Animationen Updaten
-        animationManager.idleAnimation.UpdateAnimation(deltaTime);
-        animationManager.walkAnimation.UpdateAnimation(deltaTime);
-        animationManager.walkUpAnimation.UpdateAnimation(deltaTime);
-        animationManager.walkDownAnimation.UpdateAnimation(deltaTime);
+        animationManager.updateAllAnimations(deltaTime);
         
         //Benutzt die drawMap Methode aus dem Map Handler, die die einzelnen Tiles zeichnet
         Map.drawMap(shader, renderer, ScreenWidth, ScreenHeight);
@@ -98,15 +95,23 @@ public class Canva {
                 float[] PosOnTexture = animationManager.walkAnimation.getPosOnTextureAsArray(player.isFLipped());
                 renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
             } else if(player.getDirectionY() == 1) {
-                float[] PosOnTexture = animationManager.walkUpAnimation.getPosOnTextureAsArray(false);
-            renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
-            } else {
                 float[] PosOnTexture = animationManager.walkDownAnimation.getPosOnTextureAsArray(false);
-            renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
+                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
+            } else {
+                float[] PosOnTexture = animationManager.walkUpAnimation.getPosOnTextureAsArray(false);
+                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
             }
         } else {
-            float[] PosOnTexture = animationManager.idleAnimation.getPosOnTextureAsArray(player.isFLipped());
-            renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
+            if(player.getLastDirectionY() == 0) {
+                float[] PosOnTexture = animationManager.idleAnimation.getPosOnTextureAsArray(player.isFLipped());
+                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
+            } else if(player.getLastDirectionY() == 1) {
+                float[] PosOnTexture = animationManager.idleDownAnimation.getPosOnTextureAsArray(false);
+                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
+            } else {
+                float[] PosOnTexture = animationManager.idleUpAnimation.getPosOnTextureAsArray(false);
+                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3]);
+            }
         }
         //Flushed den Spieler später, damit er über allem drüber liegt. Er wird gashaded mit dem Global Shader und gezeichnet
         renderer.flush(shader, ScreenWidth, ScreenHeight);
@@ -131,7 +136,7 @@ public class Canva {
                 float Blue = bar.getColor().getBlue() / 255f;
                 
                 //Rechteck unter die Textur zeichnen
-                renderer.drawRectangle(ImageManager.BAR, HudX - Camera.PosX + bar.getBarOffset(), HudY - Camera.PosY + 4, bar.getHudLength() - bar.getBarDamage() - bar.getBarOffset(), bar.getHudHeight() - 8, Red, Green, Blue);
+                renderer.drawRectangle(ImageManager.BAR, HudX - Camera.PosX + bar.getBarOffsetX(), HudY - Camera.PosY + bar.getBarOffsetY(), bar.getHudLength() - bar.getBarDamage() - bar.getBarOffsetX(), bar.getHudHeight() - bar.getBarOffsetY() * 2, Red, Green, Blue);
                 //Bar Extra flushen, damit es unter der Textur liegt
                 renderer.flush(hudshader, ScreenWidth, ScreenHeight);
             }

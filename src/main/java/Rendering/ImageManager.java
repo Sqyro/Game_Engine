@@ -8,8 +8,6 @@ public class ImageManager {
     public static int PLAYER;
     public static int ENEMY;
     
-    public static int TESTITEM;
-    
     public static List<Integer> TileTextures = new ArrayList<>();
     public static int TileAmount = 3;
     
@@ -18,6 +16,8 @@ public class ImageManager {
     public static int TESTBAR;
     
     public static int INVENTORY;
+    
+    public static int SWORD;
     
     public static int GAMEFONT;
     
@@ -30,8 +30,6 @@ public class ImageManager {
         PLAYER = ImageHandler.loadTexture("src/main/resources/assets/textures/player/Player.png");
 
         ENEMY = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png");
-
-        TESTITEM = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png");
         
         for(int i = 0; i <= TileAmount-1; i++) {
             int TempTileTextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/Tile" + i + ".png");
@@ -44,9 +42,11 @@ public class ImageManager {
         
         INVENTORY = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/screens/inventory.png");
         
+        SWORD = ImageHandler.loadTexture("src/main/resources/assets/textures/item/sword.png");
+        
         GAMEFONT = ImageHandler.loadTexture("src/main/resources/assets/fonts/font.png");
         
-        CURSOR = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/cursor/cursor2.png");
+        CURSOR = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/cursor/cursor3.png");
         
         System.out.println("Textures loaded"); //Nachricht für den Dabug
         } catch (Exception e) { //Falls es nicht geht
