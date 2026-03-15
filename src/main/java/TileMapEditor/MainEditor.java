@@ -41,13 +41,38 @@ public class MainEditor {
 
         frame.add(buttonPanel, BorderLayout.SOUTH); //position der gesamten buttons und labels
 
-
-        TileSelector palette = new TileSelector(grid); //erstellt die Tileauswahlliste rechts vom fenster
-        JScrollPane scrollPane = new JScrollPane(palette); //diese ist auch scrollbar
-        scrollPane.setPreferredSize(new Dimension(530, 1250)); //und das ist die größe
+        //tabs für die verschiedenen sachen
+        JTabbedPane tabs = new JTabbedPane();
+            
+        //tile selctor tab
+        TileSelector tileSelector = new TileSelector(grid); //erstellt die Tileauswahlliste rechts vom fenster
+        JScrollPane tileScroll = new JScrollPane(tileSelector); //diese ist auch scrollbar
+        tileScroll.setPreferredSize(new Dimension(530, 1250)); //und das ist die größe
+        tabs.addTab("tiles", tileScroll); //addet es auch zum tab
         
-        frame.add(scrollPane, BorderLayout.EAST); //postion im osten
+        //physiscsObject2D selctor tab
+        PhysicsObject2DSelector objectSelector = new PhysicsObject2DSelector(grid); //erstellt die Tileauswahlliste rechts vom fenster
+        JScrollPane objectScroll = new JScrollPane(objectSelector); //diese ist auch scrollbar
+        objectScroll.setPreferredSize(new Dimension(530, 1250)); //und das ist die größe
+        tabs.addTab("objects", objectScroll); //addet es auch zum tab
+        
+        //licht und hitboxen tab
+        JPanel lighthitboxenPanel = new JPanel();
+        tabs.addTab("light/hitboxen", lighthitboxenPanel); //addet es auch zum tab
+        
+        //tab wechsel
+        tabs.addChangeListener(e -> {
 
+        int index = tabs.getSelectedIndex();
+
+        if(index == 0) grid.currentMode = 0; //tiles
+        if(index == 1) grid.currentMode = 1; //physicsobjects2D
+        if(index == 2) grid.currentMode = 2; //licht und hitboxen
+
+    });
+        
+        frame.add(tabs, BorderLayout.EAST); //tab rechts machen
+        
         //ActionListener:
         //alles besitzen ein grid.requestFocusInWindow(); ,weil nachdem ich buttons drücke konnte man nicht mehr tiles platzieren
         //sonst an sich sind hier alle buttons was sie machen wenn man sie drückt
@@ -55,51 +80,52 @@ public class MainEditor {
         // Zoom in
         zoomIn.addActionListener((ActionEvent e) -> {
             grid.visibleTiles(grid.visibleRows * grid.zoom, grid.visibleCols * grid.zoom);
-            grid.requestFocusInWindow();
+            grid.requestFocusInWindow(); //fenster fokussieren
         });
 
         // Zoom out
         zoomOut.addActionListener((ActionEvent e) -> {
             grid.visibleTiles(grid.visibleRows / grid.zoom, grid.visibleCols / grid.zoom);
-            grid.requestFocusInWindow();
+            grid.requestFocusInWindow(); //fenster fokussieren
         });
 
         //printed die map
         print.addActionListener((ActionEvent e) -> {
             grid.printMap();
-            grid.requestFocusInWindow();
+            grid.requestFocusInWindow(); //fenster fokussieren
         });
 
         //imported map
         importm.addActionListener((ActionEvent e) -> {
             grid.importMap();
-            grid.requestFocusInWindow();
+            grid.requestFocusInWindow(); //fenster fokussieren
         });
 
         //exported map
         exportm.addActionListener((ActionEvent e) -> {
             grid.exportMap();
-            grid.requestFocusInWindow();
+            grid.requestFocusInWindow(); //fenster fokussieren
         });
 
         //resize map
         resizeMap.addActionListener((ActionEvent e) -> {
             try {
                 int newSize = Integer.parseInt(sizeInput.getText());
-                if (newSize >= 32 && newSize <= 512) {
+                if (newSize >= 32 && newSize <= 670) {
                     grid.resizeMap(newSize);
+                    grid.updateMinimap();
                 } else { //fehlermeldung wenn man was falsches eingetippt hat
                     JOptionPane.showMessageDialog(frame, "Zahl zwischen 32 bis 512");
                 }
             } catch (NumberFormatException ex) { //fehlermeldung wenn man was falsches eingetippt hat
                 JOptionPane.showMessageDialog(frame, "Wie kann man so reinkacken");
             }
-            grid.requestFocusInWindow();
+            grid.requestFocusInWindow(); //fenster fokussieren
         });
 
         frame.setLocationRelativeTo(null); //fenster zentrieren
         frame.setVisible(true); //fenster anzeigen
 
-        grid.requestFocusInWindow();
+        grid.requestFocusInWindow(); //fenster fokussieren
     }
 }

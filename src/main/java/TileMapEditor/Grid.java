@@ -9,7 +9,8 @@ import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
-
+import java.awt.image.BufferedImage;
+import Physics2D.PhysicsObject2D;
 
 public class Grid extends JPanel {
 
@@ -21,8 +22,8 @@ public class Grid extends JPanel {
     private int festeGridSize = 800; //feste Größe für den sichtbaren großen GRid
     public int zoom = 2; //Zoom Faktor
 
-    private int Xg; //X Position des rechten Grids
-    private int Yg; //Y Position des rechten GRids
+    private int Xg = 0; //X Position des rechten Grids
+    private int Yg = 0; //Y Position des rechten GRids
     
     private int cameraCols = 0; //sagt welche Spalte gerade links angezeigt wird
     private int cameraRows = 0; //sagt welche Reihe gerade links angezeigt wird
@@ -30,29 +31,66 @@ public class Grid extends JPanel {
     private int[][] mapData; //2D Array, es speichert auf welcher Position der Tile ist
     public static Image[] tiles; //Array, es speichert alle Bilder von den Tiles als bestimmten Wert
     
-    private int thisTile = 0; //aktuell ausgewählte Tile
+    private int[][] physicsObject2D; //2D Array, es speichert auf welcher Position der Object ist
+    public static Image[] physicsObject2DTextures; //Array, es speichert alle Bilder von den Objects als bestimmten Wert
+    
+    private int currentTileType = 0; //welches tile ausgewählt ist
+    private int currentRotation = 0; //aktuelle rotation (0-3)
+    
+    public int currentPhysicsObject2DTexture = 0; //aktuell ausgewähltes object
+    
+    private long timer = 0; //timer für die minimap
+    
+    private int mouseX = -100; //mausposition x
+    private int mouseY = -100; //mausposition y
+
+    private int oldMouseX = -100; //alte mausposition x
+    private int oldMouseY = -100; //alte mausposition x 
+
+    private int previewSize = 64; //größe des previews unten rechts von der maus
+    private int offset = 20; //offset für das preview
+    
+    private Image minimapImage; //bild der minimap
+    
+    public int currentMode = 0; //der ausgewählte modus von den tabs (mode = 0 ist der tileselector usw.)
     
     public void setSelectedTile(int id) { //methode um das aktuelle tile zu ändern
-        this.thisTile = id;
+        currentTileType = id;
+        currentRotation = 0; //neu ausgewähltes tile wird von der rotation auf 0 gesetzt
+        repaint();
+    }
+    
+    public void setSelectedPhysicsObject2D(int id) {
+        currentPhysicsObject2DTexture = id;
+        repaint();
     }
 
     public Grid(int rows, int cols, int tileSize, int X, int Y) {
-        mapRows = rows;
-        mapCols = cols;
-        tileSizeG = tileSize;
-        Xg = X;
-        Yg = Y;
+        mapRows = rows; //gesamtanzahl der reihen
+        mapCols = cols; //gesamtanzahl der spalten
+        tileSizeG = tileSize; //tilegröße
+        Xg = X; //offset größe vom grid x
+        Yg = Y; //offset größe vom grid y
         
         mapData = new int[mapRows][mapCols]; //erstellt ein Array mit der größe der Reihen x Spalten
+        for(int r=0; r<mapRows; r++)
+            for(int c=0; c<mapCols; c++)
+                mapData[r][c] = 3; //default tile id (was die ganze map painted)
+        
+        physicsObject2D = new int[mapRows][mapCols]; //erstellt ein Array mit der größe der Reihen x Spalten
+        for(int r = 0; r < mapRows; r++)
+            for(int c = 0; c < mapCols; c++)
+                physicsObject2D[r][c] = -1; //default object id (was die ganze map painted)
+        
+        loadTiles(); //tile bilder laden
+        loadPhysicsObject2DTextures(); //physicsobject bilder laden
         
         //TestMap(); //Debug Map, aber gerade auskommentiert, weil ich sie jetzt nicht brauche
+
+        setPreferredSize(new Dimension(festeGridSize, festeGridSize)); //panelgröße
+        setFocusable(true); //damit keylistener funktioniert
         
-        loadTiles(); //lädt einfach alle Bilder, wie der name eigentlich schon sagt
-        
-        setPreferredSize(new Dimension(festeGridSize, festeGridSize));
-        setFocusable(true);
-        
-        addKeyListener(new KeyAdapter() { //Tastatur Listener / Steuerung der Kamera mit WASD
+        addKeyListener(new KeyAdapter() { //Tastatur Listener / Steuerung der Kamera mit WASD / Rotation der Tiles
             @Override
             public void keyPressed(KeyEvent e) {
 
@@ -60,7 +98,15 @@ public class Grid extends JPanel {
                 if (e.getKeyCode() == KeyEvent.VK_S) Camera(0, 1);
                 if (e.getKeyCode() == KeyEvent.VK_A) Camera(-1, 0);
                 if (e.getKeyCode() == KeyEvent.VK_D) Camera(1, 0);
+                
+                if (e.getKeyCode() == KeyEvent.VK_R) {
+                    currentRotation = (currentRotation + 1) % 4;
+                    }
 
+                if (e.getKeyCode() == KeyEvent.VK_Q) {
+                    currentRotation = (currentRotation + 3) % 4;
+                }
+                repaint();
             }
         });
         
@@ -68,23 +114,74 @@ public class Grid extends JPanel {
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
         
-                if (SwingUtilities.isRightMouseButton(e)) { //wenn rechte Masutaste gedrückt wird dann "löscht" er das Tile, also ersetzt er das Tile mit 0
-                    placeTile(e.getX(), e.getY(), 0);
-                } else { //sonst wird ein Tile hinzugefügt mit dem aktuellen Tile
-                    placeTile(e.getX(), e.getY(), thisTile);
+                int mouseX = e.getX();
+                int mouseY = e.getY();
+
+                if(currentMode == 0) { //tile mode
+
+                    if (SwingUtilities.isRightMouseButton(e)) {
+                        placeTile(mouseX, mouseY, -1); //tile löschen
+                    } else {
+                        placeTile(mouseX, mouseY, currentTileType * 4 + currentRotation); //tile platzieren
+                    }
+
                 }
+
+                if(currentMode == 1) { //physicsobject2D mode
+
+                    if (SwingUtilities.isRightMouseButton(e)) {
+                        placePhysicsObject2D(mouseX, mouseY, -1); //object löschen
+                    } else {
+                        placePhysicsObject2D(mouseX, mouseY, currentPhysicsObject2DTexture); //object löschen
+                    }
+                    repaint();
+                }
+
+            }
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                // sobald die maus ins fenster kommt sofort koordinaten setzen
+                mouseX = e.getX();
+                mouseY = e.getY();
+                repaint(); 
             }
         });
 
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() { //Mausbewegung Listener / das ist einfach dazu da das man nicht jedes einzelne Tile alleine platzieren muss, sondern auch gedrückt halten kann um mehrere zu platzieren
+            
+            @Override
+            public void mouseMoved(java.awt.event.MouseEvent e) { //fürs preview
+
+                oldMouseX = mouseX; //speichert vorherige x position
+                oldMouseY = mouseY; //speichert vorherige y position
+                mouseX = e.getX(); //aktuelle maus x speichern
+                mouseY = e.getY(); //aktuelle maus x speichern
+
+                repaint(oldMouseX + offset - 5, oldMouseY + offset - 5, previewSize + 15, previewSize + 15); //erster repaint löscht das alte preview
+                repaint(mouseX + offset - 5, mouseY + offset - 5, previewSize + 15, previewSize + 15); //zweiter repaint fügt das neue preview hinzu
+            }
+
             @Override
             public void mouseDragged(java.awt.event.MouseEvent e) {
 
-                if (SwingUtilities.isRightMouseButton(e)) { //wenn rechte Masutaste gedrückt wird dann "löscht" er das Tile, also ersetzt er das Tile mit 0
-                    placeTile(e.getX(), e.getY(), 0);
-                } else { //sonst wird ein Tile hinzugefügt mit dem aktuellen Tile
-                    placeTile(e.getX(), e.getY(), thisTile);
+                mouseX = e.getX();
+                mouseY = e.getY();
+
+                if (currentMode == 0) { // Tile
+                    if (SwingUtilities.isRightMouseButton(e)) {
+                        placeTile(mouseX, mouseY, -1); // Rechtsklick löscht Tile
+                    } else {
+                        placeTile(mouseX, mouseY, currentTileType * 4 + currentRotation); // Linksklick platziert Tile
+                    }
+                } 
+                else if (currentMode == 1) { // PhysicsObject
+                    if (SwingUtilities.isRightMouseButton(e)) {
+                        placePhysicsObject2D(mouseX, mouseY, -1); // Rechtsklick löscht Object
+                    } else {
+                        placePhysicsObject2D(mouseX, mouseY, currentPhysicsObject2DTexture); // Linksklick platziert Object
+                    }
                 }
+                repaint();
             }
         });
         
@@ -102,42 +199,65 @@ public class Grid extends JPanel {
                 }
             }
         });
-        
     }
 
+    
+    //paintComponent
     @Override
     protected void paintComponent(Graphics g) { //eine methode die alles auf ein panel zeichnet
         super.paintComponent(g);
         
         int tileSizeG = festeGridSize / visibleCols; //hier berechne ich die größe eines Tiles für das zoomen
         
+        
         //Main Grid (große Grid)
         for (int r = 0; r < visibleRows; r++) {
             for (int c = 0; c < visibleCols; c++) {
 
-                int worldCols = cameraCols + c; //hier wird berechnet welche Spalte gerade auf der Map angezeigt wird
-                int worldRows = cameraRows + r; //hier wird berechnet welche Reihe gerade auf der Map angezeigt wird
-                
-                int x = Xg + c * tileSizeG; //x position eines Tiles
-                int y = Yg + r * tileSizeG; //y psoition eines Tiles
-                
-                int tile = mapData[worldRows][worldCols]; //holt die Tile ID an einem bestimmten Punkt
-                
-                if (tile >= 0 && tile < tiles.length && tiles[tile] != null) { //hier wird geschaut ob das Tile gültig ist. Es darf 1. nicht negativ sein 2.das Tile darf nicht größer als Tile Array sein und bei 3. wird geschaut ob das Bild geladen wurde
-                    g.drawImage(tiles[tile], x, y, tileSizeG, tileSizeG, null); //hier zeichnet er das Bild an der Position und wie groß das ist
-                } else { //wnn die kriterien oben nicht erfüllt werden zeichnet er einfach ein Feld rein, das heißt meistens es gab einen Fehler
-                    g.setColor(Color.GRAY); 
+                int worldCol = cameraCols + c; //gesamtspalten
+                int worldRow = cameraRows + r; //gesamtreihen
+
+                int x = Xg + c * tileSizeG;
+                int y = Yg + r * tileSizeG;
+
+                int tile = mapData[worldRow][worldCol]; //tile id an einer bestimmten position  
+
+                if (tile >= 0 && tile < tiles.length && tiles[tile] != null) { //prüft die tile id (muss ein tile sein, das tile muss im array liegen und es muss ein bild haben)
+                    g.drawImage(tiles[tile], x, y, tileSizeG, tileSizeG, null); //tile bild zeichnen
+                } else {
+                    g.setColor(Color.GRAY); // wenn kein Tile da ist, graues Feld
                     g.fillRect(x, y, tileSizeG, tileSizeG);
                 }
-                
-                g.setColor(Color.BLACK); //farbe des rahmens ist schwarz
-                g.drawRect(x, y, tileSizeG, tileSizeG); //zeichnet ein rahmen um jedes Tile
-                
+
+                g.setColor(Color.BLACK); //schwazre frabe für den tile rahmen
+                g.drawRect(x, y, tileSizeG, tileSizeG); //rahmen um jedes tile
             }
         }
         
+        
+        //physicsObjects auf dem Grid
+        for (int r = 0; r < visibleRows; r++) {
+            for (int c = 0; c < visibleCols; c++) {
+
+                int worldCol = cameraCols + c;
+                int worldRow = cameraRows + r;
+                
+                int x = Xg + c * tileSizeG;
+                int y = Yg + r * tileSizeG;
+                
+                int objectID = physicsObject2D[worldRow][worldCol]; //object id an einer bestimmten position
+
+                if (objectID >= 0 && objectID < physicsObject2DTextures.length && physicsObject2DTextures[objectID] != null) { //prüft die object id (muss ein tile sein, das object muss im array liegen und es muss ein bild haben)
+                    g.drawImage(physicsObject2DTextures[objectID], x, y, tileSizeG, tileSizeG, null); //object bild zeichnen
+                }
+            }
+        }
+        
+        
+        //außenrahmen
         g.setColor(Color.BLACK); //farbe des rahmens ist schwarz
         g.drawRect(Xg, Yg, festeGridSize, festeGridSize); //zeichent den äußeren Rahmen des gesamten großen Grids
+        
         
         //Mini Grid
         int miniBreite = 400; //breite der minimap
@@ -148,27 +268,39 @@ public class Grid extends JPanel {
         double miniTileBreite = (double) miniBreite / mapCols; //berechnet die breite eines Tiles auf der minimap
         double miniTileHoehe = (double) miniHoehe / mapRows; //berechnet die breite eines Tiles auf der minimap
 
-        for (int r = 0; r < mapRows; r++) {
-            for (int c = 0; c < mapCols; c++) {
-
-                int tileId = mapData[r][c]; //eigentlich das gleiche wie oben, nur hab ich den namen etwas geändert damit es übersichtlicher ist, aber hier holt die Tile ID an einem bestimmten Punkt
-
-                if (tileId >= 0 && tileId < tiles.length && tiles[tileId] != null) { //hier wird geschaut ob das Tile gültig ist. Es darf 1. nicht negativ sein 2.das Tile darf nicht größer als Tile Array sein und bei 3. wird geschaut ob das Bild geladen wurde
-                    g.drawImage(tiles[tileId],miniX + (int)(c * miniTileBreite),miniY + (int)(r * miniTileHoehe),(int)miniTileBreite + 1,(int)miniTileHoehe + 1,null); //hier zeichnet er das Bild an der Position und wie groß das ist
-                } else { //wenn die kriterien oben nicht erfüllt werden zeichnet er einfach ein Feld rein, das heißt meistens es gab einen Fehler
-                    g.setColor(Color.GRAY);
-                    g.fillRect(miniX + (int)(c * miniTileBreite),miniY + (int)(r * miniTileHoehe),(int)miniTileBreite + 1,(int)miniTileHoehe + 1);
-                }
-            }
+        if (minimapImage != null) {
+            g.drawImage(minimapImage, miniX, miniY, null); //minimap zeichnen falls es sie gibt
         }
+
+        g.setColor(Color.BLACK); //farbe des rahmens ist scharz
+        g.drawRect(miniX, miniY, miniBreite, miniHoehe); //rahmen um die minimap
         
-        g.setColor(Color.BLACK); //farbe des rahmens ist schwarz
-        g.drawRect(miniX, miniY, miniBreite, miniHoehe); //zeichent den äußeren Rahmen des gesamten großen Grids
         
         //Kamera Rahmen auf Mini Grid
         g.setColor(Color.BLUE); //farbe des rahmens ist blau
         g.drawRect(miniX + (int)(cameraCols * miniTileBreite), miniY + (int)(cameraRows * miniTileHoehe), (int)(visibleCols * miniTileBreite), (int)(visibleRows * miniTileHoehe) //berechnet die x und y position auf der minimap sowie die höhe und die breite
-        );
+);
+        
+        
+        // Preview zeichnen
+        int previewX = mouseX + offset; //x position der preview
+        int previewY = mouseY + offset; //y position der preview
+
+        if(currentMode == 0) { // Tile
+            int tileIndex = currentTileType * 4 + currentRotation; //ausgewähltes tile eventuell mit rotierung
+            if(tileIndex >= 0 && tileIndex < tiles.length && tiles[tileIndex] != null) { //prüft die tile id (muss ein tile sein, das tile muss im array liegen und es muss ein bild haben)
+                g.drawImage(tiles[tileIndex], previewX, previewY, previewSize, previewSize, null); //tile preview zeichnen
+                g.setColor(Color.BLACK); //scharzer rahmen um das preview
+                g.drawRect(previewX, previewY, previewSize, previewSize);
+            }
+        } 
+        else if(currentMode == 1) { // PhysicsObject
+            int objectIndex = currentPhysicsObject2DTexture; //ausgewähltes object
+            if(objectIndex >= 0 && objectIndex < physicsObject2DTextures.length && physicsObject2DTextures[objectIndex] != null) { //prüft die object id (muss ein tile sein, das object muss im array liegen und es muss ein bild haben)
+                g.drawImage(physicsObject2DTextures[objectIndex], previewX, previewY, previewSize, previewSize, null); //object preview zeichnen
+            }
+        }
+        
     }
     
     //Kamera Movemnet für den Rahmen
@@ -262,10 +394,24 @@ public class Grid extends JPanel {
 
                     String path = "src/main/resources/assets/textures/tiles/Tile" + i + "_Rotated/Tile" + r + ".png"; //Bildpfad
 
-                    tiles[counter] = Toolkit.getDefaultToolkit().getImage(path).getScaledInstance(TileSelector.tileSize, TileSelector.tileSize, Image.SCALE_DEFAULT); //lädt das bid von eben und skaliert es noch
-
+                    tiles[counter] = new ImageIcon(path).getImage();
+                    
                     counter++; //zähler damit die tiles unterschiedlich gespeichert werden
                 }
+            }
+            repaint();
+            updateMinimap();
+        }
+   
+   private void loadPhysicsObject2DTextures() {
+            int numObjects = 67; //anzahl der insgesamten objects
+            
+            physicsObject2DTextures = new Image[numObjects];  //gesamtanzahl der objects indem fall 67
+
+            for (int i = 0; i < numObjects; i++) {
+                String path = "src/main/resources/assets/textures/physicsObject2D/Object" + i + ".png"; //Bildpfad
+                
+                physicsObject2DTextures[i] = new ImageIcon(path).getImage();
             }
         }
    
@@ -285,7 +431,47 @@ public class Grid extends JPanel {
 
                 if(mapData[worldRow][worldCol] != tilenum) { //setzt das Tile an diese stelle
                     mapData[worldRow][worldCol] = tilenum;
-                    repaint(); //repaint um map neu zu zeichnen
+                    
+                    int paintX = Xg + mcols * tileSizeG;
+                    int paintY = Yg + mrows * tileSizeG;
+                    
+                    repaint(paintX, paintY, tileSizeG, tileSizeG); //repaint um map neu zu zeichnen
+                    
+                    if(System.currentTimeMillis() - timer > 50) { //repaint mit timer sonst kommt es einfach zu laggs
+                        updateMinimap();
+                        repaint(getWidth() - 467, 67, 400, 400);
+                        timer = System.currentTimeMillis();
+                    }
+                }
+            }
+        }
+    }
+    
+    private void placePhysicsObject2D(int mouseX, int mouseY, int objectNum) {
+
+        int tileSizeG = festeGridSize / visibleCols; //hier berechne ich die größe eines Tiles
+
+        int mcol = (mouseX - Xg) / tileSizeG; //hier wird berechnet auf welcher Spalte die maus geklickt hat
+        int mrow = (mouseY - Yg) / tileSizeG; //hier wird berechnet auf welcher Reihe die maus geklickt hat
+
+        if (mcol >= 0 && mcol < visibleCols && mrow >= 0 && mrow < visibleRows) { //prüfung ob die maus überhaupt auf dem großen grid geklickt hat
+            int worldCol = cameraCols + mcol; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die spalte auf der man geklickt hat
+            int worldRow = cameraRows + mrow; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die reihe auf der man geklickt hat
+
+            if (worldCol >= 0 && worldCol < mapCols && worldRow >= 0 && worldRow < mapRows) { //prüfung ob die position valide ist
+                if (physicsObject2D[worldRow][worldCol] != objectNum) { //setzt das object an diese stelle
+                    physicsObject2D[worldRow][worldCol] = objectNum;
+
+                    int paintX = Xg + mcol * tileSizeG;
+                    int paintY = Yg + mrow * tileSizeG;
+
+                    repaint(paintX, paintY, tileSizeG, tileSizeG); //repaint um map neu zu zeichnen
+                    
+                    if(System.currentTimeMillis() - timer > 50) { //repaint mit timer sonst kommt es einfach zu laggs
+                        updateMinimap();
+                        repaint(getWidth() - 467, 67, 400, 400);
+                        timer = System.currentTimeMillis();
+                    }
                 }
             }
         }
@@ -355,5 +541,37 @@ public class Grid extends JPanel {
         if (cameraRows > mapRows - visibleRows) cameraRows = mapRows - visibleRows; //hier wird dann nochmal die kamera angepasst indem fall die Reihe
 
         repaint(); //repaint nachdem vergrößern oder verkleinern der map
+    }
+    
+    public void updateMinimap() {
+
+        int miniBreite = 400; //feste breite der minimap
+        int miniHoehe = 400; //feste höhe der minimap
+
+        BufferedImage img = new BufferedImage(miniBreite, miniHoehe, BufferedImage.TYPE_INT_ARGB); //erstellt ein neues bild worauf ich die minimap zeichne
+        Graphics g = img.getGraphics(); //fürs zeichnen auf das neue bild (canva)
+
+        double miniTileBreite = (double) miniBreite / mapCols; //breite eines tiles sowie objects auf der minmap
+        double miniTileHoehe = (double) miniHoehe / mapRows; //breite eines tiles sowie objects auf der minmap
+
+        for (int r = 0; r < mapRows; r++) {
+            for (int c = 0; c < mapCols; c++) {
+
+                int tileId = mapData[r][c]; //tile id auf einer bestimmten position
+                if (tileId >= 0 && tileId < tiles.length && tiles[tileId] != null) { //prüft die tile id (muss ein tile sein, das tile muss im array liegen und es muss ein bild haben)
+                    g.drawImage(tiles[tileId], (int)(c * miniTileBreite), (int)(r * miniTileHoehe), (int)miniTileBreite + 1, (int)miniTileHoehe + 1, null); //zeichnet das tile auf der map
+                } else { //sonst zeichnet er etwas graues
+                    g.setColor(Color.GRAY);
+                    g.fillRect((int)(c * miniTileBreite), (int)(r * miniTileHoehe), (int)miniTileBreite + 1, (int)miniTileHoehe + 1); 
+                }
+
+                int objId = physicsObject2D[r][c]; //object id auf einer bestimmten position
+                if(objId >= 0 && objId < physicsObject2DTextures.length && physicsObject2DTextures[objId] != null) { //prüft die object id (muss ein tile sein, das object muss im array liegen und es muss ein bild haben)
+                    g.drawImage(physicsObject2DTextures[objId], (int)(c * miniTileBreite), (int)(r * miniTileHoehe), (int)miniTileBreite + 1, (int)miniTileHoehe + 1, null); //zeichnet das object auf der map
+                }
+            }
+        }
+        g.dispose(); //das zeichnen freigeben sonst kommt es zu speicherlecks
+        minimapImage = img; //speichert die minimap damit paintcomponent es zeichnen kann
     }
 }

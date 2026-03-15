@@ -9,15 +9,12 @@ public class TileSelector extends JPanel {
 
     public static int tileSize = 64; //größe eines tiles in der Tileselection
     private int columns = 8; //anzahl der spalten pro reihe
-    public static int tileCount = 200; //wie viele tiles angezeigt werden
+    public static int tileCount = 100; //wie viele tiles angezeigt werden
 
-    private Grid grid; //Referrenz zum vergleich
+    private Grid grid; //Referenz
 
     public TileSelector(Grid grid) {
         this.grid = grid; //speichert das grid
-
-        int rows = (int)Math.ceil((double)(tileCount - 1) / columns); // brechnet die anzahl Reihen der Tileselection und math.ceil rundet einfach auf
-        setPreferredSize(new Dimension(columns * tileSize, rows * tileSize)); // setzt die größe des panels abhängig von Spalten und Reihen
 
         addMouseListener(new MouseAdapter() { //Maus Listener / schaut an welches tile ich auf der tileselection gedrückt habe
             @Override
@@ -25,11 +22,11 @@ public class TileSelector extends JPanel {
 
                 int col = e.getX() / tileSize; //spalte in der tileselection
                 int row = e.getY() / tileSize; //reihe in der tileselection
-                int index = row * columns + col + 1; //berechnet tile id
+                int index = row * columns + col; //berechnet tile id
 
                 if (index < tileCount) {
                     grid.setSelectedTile(index); //setzt das ausgewählte tile auf dem grid
-                    repaint(); //repaint um neu zu zeichnen
+                    grid.repaint(); //repaint um neu zu zeichnen
                 }
             }
         });
@@ -39,15 +36,15 @@ public class TileSelector extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        for (int i = 1; i < tileCount; i++) { 
-            int col = (i - 1) % columns; //berechnet spalte des tiles in der tileselection
-            int row = (i - 1) / columns; //berechnet reihe des tiles in der tileselection
+        for (int i = 0; i < tileCount; i++) { 
+            int col = (i) % columns; //berechnet spalte des tiles in der tileselection
+            int row = (i) / columns; //berechnet reihe des tiles in der tileselection
 
             int x = col * tileSize; //x position auf der tileselection
             int y = row * tileSize; //y position auf der tileselection
 
             if (Grid.tiles[i] != null) { //wenn ein bild vorhanden ist zeichne es
-                g.drawImage(Grid.tiles[i], x, y, tileSize, tileSize, null);
+                g.drawImage(Grid.tiles[i * 4], x, y, tileSize, tileSize, null);
             } else { //sonst ist das feld grau
                 g.setColor(Color.GRAY);
                 g.fillRect(x, y, tileSize, tileSize);
