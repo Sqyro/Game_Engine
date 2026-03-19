@@ -4,20 +4,37 @@ import Rendering.Camera;
 import Rendering.ImageHandler;
 import Rendering.ImageManager;
 
-public abstract class PauseScreen extends GUIScreen {
-    private int TextureID = ImageManager.INVENTORY; // TexturID von einem Pause Screen
+import java.util.List;
+import java.util.ArrayList;
+
+public class PauseScreen extends GUIScreen {
+    private int CenterX;
+    private int CenterY; 
     
-    //Größe von der Pause Screen Textur auf dem Screen
-    private int TextureWidth = 1080;
-    private int TextureHeight = 1920;
+    public List<GUIButton> PauseButtons = new ArrayList<>();
     
     @Override
     public void renderScreen(ImageHandler renderer, int ScreenWidth, int ScreenHeight) {
-        //Position der Textur ausrechnen, Mitte des Bildschirms minus die hälfte der Länge der Textur, damit es zentriert ist
-        int PosX = ScreenWidth / 2 - TextureWidth / 2 ;
-        int PosY = ScreenHeight / 2 - TextureHeight / 2;
-
-        //An Camera Position anpassen (folgt dann dem Spieler) und in den draw que packen
-        renderer.drawFull(TextureID, PosX - Camera.PosX, PosY - Camera.PosY, TextureWidth, TextureHeight);
+        //Mitte vom Bildschirm ausrechnen, damit es zentriert ist
+        CenterX = ScreenWidth / 2;
+        CenterY = ScreenHeight / 2;
+        
+        for(GUIButton CurrentButton : PauseButtons) {
+            renderer.drawFull(CurrentButton.getTextureID(), CurrentButton.getPosX() - Camera.PosX, CurrentButton.getPosY() - Camera.PosY, CurrentButton.getButtonWidth(), CurrentButton.getButtonHeight());
+            TextHandler.addDisplayedText(new GUIText(CurrentButton.getButtonText(), CurrentButton.getPosX(), CurrentButton.getPosY(), CurrentButton.getButtonHeight(), 50,ImageManager.GAMEFONT));
+        }
+    }
+    
+    public PauseScreen() {
+        PauseButtons.add(new GUIButton(1920 /2 - 300/2, 1080 /2 - 50/2, 300, 50, ImageManager.ENEMY, "Close Game"));
+    }
+    
+    public void handleClick(double CursorX, double CursorY) {
+        for(GUIButton CurrentButton : PauseButtons) {
+            if(CurrentButton.CursorOverButton(CursorX, CursorY)) {
+                System.out.println("Button Works");
+                System.exit(0);
+            }
+        }
     }
 }

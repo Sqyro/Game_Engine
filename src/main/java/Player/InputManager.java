@@ -8,6 +8,7 @@ import GUI.GUIManager;
 import GUI.GUIText;
 import GUI.TextHandler;
 import GUI.InventoryScreen;
+import GUI.PauseScreen;
 
 import java.awt.Color;
 
@@ -59,6 +60,17 @@ public class InputManager {
                             GUIManager.closeScreen(); //Bildschirm schließen
                         } else { //Wenn keiner offen ist, dann machen wir einen neuen aus
                             GUIManager.openScreen(new InventoryScreen(48, 2, 2, 13, 5, 625, 502));
+                        }
+                    }
+                    break;
+                case GLFW_KEY_ESCAPE:
+                    if(action == GLFW_PRESS) {
+                        System.out.println("Escape Pressed");
+                        if(GUIManager.isScreenOpen()) {
+                            TextHandler.clearDisplayedTextQue();
+                            GUIManager.closeScreen();
+                        } else {
+                            GUIManager.openScreen(new PauseScreen());
                         }
                     }
                     break;
@@ -132,6 +144,9 @@ public class InputManager {
                 if(GUIManager.currentScreen instanceof InventoryScreen) { //Wenn der Momentane Bildschirm nen Inventar ist, dann die Handle Click Methode ausführen, um zu schauen ob wir mit nem Slot interagieren können
                     InventoryScreen Inventory = (InventoryScreen) GUIManager.currentScreen; //Inventar holen
                     Inventory.handleClick(MousePosX[0], MousePosY[0]); //handle Click ausführen mit der Maus Position
+                } else if(GUIManager.currentScreen instanceof PauseScreen) {
+                    PauseScreen PauseScreen = (PauseScreen) GUIManager.currentScreen;
+                    PauseScreen.handleClick(MousePosX[0], MousePosY[0]);
                 }
                 
                 //Position von der Maus ausgeben

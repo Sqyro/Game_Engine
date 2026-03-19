@@ -74,17 +74,17 @@ public class InventoryScreen extends GUIScreen {
         //Spieler sneaken
         Player player = Player.Player;
 
-        for(GUIInventorySlot Currentlot : InventorySlots) { //Alle Slots im Inventar duchgehen
-            if(Currentlot.isMouseOver(CursorX, CursorY)) { //Schauen ob der Cursor über diesem Slot ist
+        for(GUIInventorySlot CurrentSlot : InventorySlots) { //Alle Slots im Inventar duchgehen
+            if(CurrentSlot.isMouseOver(CursorX, CursorY)) { //Schauen ob der Cursor über diesem Slot ist
                 //Item aus dem Momentanen Slot holen
-                Item clickedItem = player.inventory.getItem(Currentlot.SlotIndex);
+                Item clickedItem = player.inventory.getItem(CurrentSlot.SlotIndex);
 
                 if(HeldItem == null) { //Wenn gerade kein Item gehalten wird
                     HeldItem = clickedItem; //Das angeclickte Item festhalten
-                    HeldItemLastSlot = Currentlot.SlotIndex; //Den Momentanen Slot als den letzten Slot von dem Item nehmen
-                    player.inventory.setItem(Currentlot.SlotIndex, null); //Das Item aus dem Spieler Inventar an dieser Stelle nehmen
+                    HeldItemLastSlot = CurrentSlot.SlotIndex; //Den Momentanen Slot als den letzten Slot von dem Item nehmen
+                    player.inventory.setItem(CurrentSlot.SlotIndex, null); //Das Item aus dem Spieler Inventar an dieser Stelle nehmen
                 } else { //Wenn gerade ein Item gehalten wird
-                    player.inventory.setItem(Currentlot.SlotIndex, HeldItem); //Das Item was gerade festgehalten wird in das Spieler Inventar an diese Stelle packen
+                    player.inventory.setItem(CurrentSlot.SlotIndex, HeldItem); //Das Item was gerade festgehalten wird in das Spieler Inventar an diese Stelle packen
                     HeldItem = clickedItem; //Das festgehaltene Item auf das Item in dem Slot setzen, also mit einem Item tauschen, oder halt mit nichts tauschen -> ablegen
                     
                     if(HeldItem == null) { //Wenn jetzt das festgehaltene Item leer ist, also das davor gehaltene abgelegt, mit nichts getauscht, wurde

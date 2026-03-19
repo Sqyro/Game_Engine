@@ -13,7 +13,7 @@ public class TextHandler {
         ToBeDisplayedText.add(adddedText);
     }
     
-    public void clearDisplayedTextQue() {
+    public static void clearDisplayedTextQue() {
         ToBeDisplayedText.clear();
     }
 }
