@@ -53,7 +53,9 @@ public class Canva {
         glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Weiß setzen
         
         //Animationen Updaten
-        animationManager.updateAllAnimations(deltaTime);
+        if(Frame.GameRunning) {
+            animationManager.updateAllAnimations(deltaTime);
+        }
         
         //Benutzt die drawMap Methode aus dem Map Handler, die die einzelnen Tiles zeichnet
         Map.drawMap(shader, renderer, ScreenWidth, ScreenHeight);

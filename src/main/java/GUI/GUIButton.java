@@ -1,5 +1,9 @@
 package GUI;
 
+import Rendering.Camera;
+import Rendering.ImageHandler;
+import Rendering.ImageManager;
+
 public class GUIButton {
     private float PosX;
     private float PosY;
@@ -10,8 +14,10 @@ public class GUIButton {
     private int TextureID;
     
     private String ButtonText;
+    private float ButtonTextSpacing;
+    private float ButtonTextSize;
     
-    public GUIButton(float PosX, float PosY, float ButtonWidth, float ButtonHeight, int TextureID, String ButtonText) {
+    public GUIButton(float PosX, float PosY, float ButtonWidth, float ButtonHeight, int TextureID, String ButtonText, float ButtonTextSpacing, float ButtonTextSize) {
         this.PosX = PosX;
         this.PosY = PosY;
         
@@ -21,6 +27,13 @@ public class GUIButton {
         this.TextureID = TextureID;
         
         this.ButtonText = ButtonText;
+        this.ButtonTextSpacing = ButtonTextSpacing;
+        this.ButtonTextSize = ButtonTextSize;
+    }
+    
+    public void drawButton(ImageHandler renderer) {
+        renderer.drawFull(TextureID, PosX - Camera.PosX, PosY - Camera.PosY, ButtonWidth, ButtonHeight);
+        TextHandler.addDisplayedText(new GUIText(ButtonText, PosX + ButtonWidth / 2 - (ButtonText.length() * ButtonTextSpacing + ButtonTextSize) / 2, PosY + ButtonHeight / 2 - ButtonTextSize / 2, ButtonTextSize, ButtonTextSpacing,ImageManager.GAMEFONT));
     }
     
     public boolean CursorOverButton(double CursorX, double CursorY) {
@@ -64,7 +77,7 @@ public class GUIButton {
     }
    
     public void setTextureID(int newTextureID) {
-        this.TextureID = newTextureID;
+        TextureID = newTextureID;
     }
     
     public String getButtonText() {
@@ -72,6 +85,14 @@ public class GUIButton {
     }
     
     public void setButtonText(String newButtonText) {
-        this.ButtonText = newButtonText;
+        ButtonText = newButtonText;
+    }
+    
+    public float getButtonTextSpacing() {
+        return ButtonTextSpacing;
+    }
+    
+    public void setButtonTextSpacing(float newButtonTextSpacing) {
+        ButtonTextSpacing = newButtonTextSpacing;
     }
 }

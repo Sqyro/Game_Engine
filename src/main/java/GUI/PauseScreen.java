@@ -1,6 +1,6 @@
 package GUI;
 
-import Rendering.Camera;
+import Rendering.Frame;
 import Rendering.ImageHandler;
 import Rendering.ImageManager;
 
@@ -9,7 +9,13 @@ import java.util.ArrayList;
 
 public class PauseScreen extends GUIScreen {
     private int CenterX;
-    private int CenterY; 
+    private int CenterY;
+    
+    private final String CloseButtonText = "Close Game";
+    private final float CloseButtonWidth = 300;
+    private final float CloseButtonHeight = 50;
+    private final float CloseButtonTextSpacing = 15;
+    private final float CloseButtonTextSize = 30;
     
     public List<GUIButton> PauseButtons = new ArrayList<>();
     
@@ -20,13 +26,13 @@ public class PauseScreen extends GUIScreen {
         CenterY = ScreenHeight / 2;
         
         for(GUIButton CurrentButton : PauseButtons) {
-            renderer.drawFull(CurrentButton.getTextureID(), CurrentButton.getPosX() - Camera.PosX, CurrentButton.getPosY() - Camera.PosY, CurrentButton.getButtonWidth(), CurrentButton.getButtonHeight());
-            TextHandler.addDisplayedText(new GUIText(CurrentButton.getButtonText(), CurrentButton.getPosX(), CurrentButton.getPosY(), CurrentButton.getButtonHeight(), 50,ImageManager.GAMEFONT));
+            CurrentButton.drawButton(renderer);
         }
     }
     
     public PauseScreen() {
-        PauseButtons.add(new GUIButton(1920 /2 - 300/2, 1080 /2 - 50/2, 300, 50, ImageManager.ENEMY, "Close Game"));
+        Frame.GameRunning = false;
+        PauseButtons.add(new GUIButton(Frame.ScreenWidth /2 - CloseButtonWidth/2, Frame.ScreenHeight /2 - CloseButtonHeight/2, CloseButtonWidth, CloseButtonHeight, ImageManager.PLAYER, CloseButtonText, CloseButtonTextSpacing, CloseButtonTextSize));
     }
     
     public void handleClick(double CursorX, double CursorY) {

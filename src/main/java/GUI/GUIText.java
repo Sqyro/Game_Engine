@@ -15,7 +15,6 @@ public class GUIText {
 
     //Contructor für jeden Text, relativ unspektakulär
     public GUIText(String Text, float PosX, float PosY, float CharacterSize, float CharacterSpacing, int FontTextureID) {
-
         this.Text = Text;
         this.PosX = PosX;
         this.PosY = PosY;

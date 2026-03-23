@@ -23,6 +23,8 @@ public class Frame {
     
     public static int FramesPerSecond = 60; // 60 FPS sind gerade Standart, soll dann aber einstellbar sein
             
+    public static boolean GameRunning;
+    
     public Frame(String Title) { //Constructor, wird in Main gecalled. Von hier aus wird alles andere gestatet
         Start(Title); // Ruft die Start Methode auf, leitet alles zu starten dahin weiter
         Canva = new Canva(); //Erstellt nen neuen Canva, mit der größe vom Screen
@@ -41,6 +43,8 @@ public class Frame {
         long Monitor = glfwGetPrimaryMonitor();
         GLFWVidMode videoMode = glfwGetVideoMode(Monitor);
 
+        GameRunning = true;
+        
         //Bildschirmgröße auf den Monitor anpassen
         ScreenWidth = videoMode.width();
         ScreenHeight = videoMode.height();
@@ -82,36 +86,38 @@ public class Frame {
     private void Update() {
         float targetDeltaTime = 1.0f / FramesPerSecond; // Gewünschte FPS (FPS Cap)
         lastTime = System.nanoTime(); //Bei startup die erste Vergangenheit setzen
-        
+            
         while (!glfwWindowShouldClose(Window)) { //Solange das Window offen ist
-            long currentTime = System.nanoTime(); //liest die Frame unabhängige "System Zeit"
-            float deltaTime = (currentTime - lastTime) / 1_000_000_000f; //Differenz aus jetzige Zeit und vorherige Zeit ist die Zeit Pro Frame. Diese Zahl benutze ich, damit Geschwindigkeiten auf 30 FPS gleichstark wie auf 60 sind
-            lastTime = currentTime; //Das jetzt ist jetzt vorbeit und ist vergangenheit, weil delta Time gesetzt wurde
-            
-            //Hört allen Events zu. KeyboardInput Event für den Input Handler
-            glfwPollEvents();
-            
-            //Cursor Position updaten
-            Mouse.UpdateMousePos(Window);
-            
-            //Rechen Updates
-            InputManager.updatePlayerDirection();
-            VelocityHandler.calculatePosition(Player.Player, deltaTime);
-            Camera.UpdateCamera(Player.Player);
-            
-            //Grafik Updates
-            Canva.drawNewFrame(deltaTime);
-            
-            if (deltaTime < targetDeltaTime) { //capped FPS bei den oben gesetzten
-                try {
-                    Thread.sleep((long)((targetDeltaTime - deltaTime) * 1000)); // Wir schlafen für die differenz aus der gewünschten und der wirklichen deltaTime (*1000, weil wir deltatime ja durch 1000000000 teilen und wieder auf millisekunden kommen wollen)
-                } catch (InterruptedException e) { //schmeißt ne Exception und gibt Stacktrace für Fehlerbehebung aus, wenn das nicht klappt
-                    e.printStackTrace();
+                long currentTime = System.nanoTime(); //liest die Frame unabhängige "System Zeit"
+                float deltaTime = (currentTime - lastTime) / 1_000_000_000f; //Differenz aus jetzige Zeit und vorherige Zeit ist die Zeit Pro Frame. Diese Zahl benutze ich, damit Geschwindigkeiten auf 30 FPS gleichstark wie auf 60 sind
+                lastTime = currentTime; //Das jetzt ist jetzt vorbeit und ist vergangenheit, weil delta Time gesetzt wurde
+                
+                //Hört allen Events zu. KeyboardInput Event für den Input Handler
+                glfwPollEvents();
+                
+                //Cursor Position updaten
+                Mouse.UpdateMousePos(Window);
+                
+                //Rechen Updates
+                if(GameRunning) {
+                    InputManager.updatePlayerDirection();
+                    VelocityHandler.calculatePosition(Player.Player, deltaTime);
+                    Camera.UpdateCamera(Player.Player);
                 }
-            }
-
-            //OpenGL Buffering, switched einfach das was der User gerade sieht mit dem was er sehen soll, also alles was gerendert wurde
-            glfwSwapBuffers(Window);
+                
+                //Grafik Updates
+                Canva.drawNewFrame(deltaTime);
+                
+                if (deltaTime < targetDeltaTime) { //capped FPS bei den oben gesetzten
+                    try {
+                        Thread.sleep((long)((targetDeltaTime - deltaTime) * 1000)); // Wir schlafen für die differenz aus der gewünschten und der wirklichen deltaTime (*1000, weil wir deltatime ja durch 1000000000 teilen und wieder auf millisekunden kommen wollen)
+                    } catch (InterruptedException e) { //schmeißt ne Exception und gibt Stacktrace für Fehlerbehebung aus, wenn das nicht klappt
+                        e.printStackTrace();
+                    }
+                }
+                
+                //OpenGL Buffering, switched einfach das was der User gerade sieht mit dem was er sehen soll, also alles was gerendert wurde
+                glfwSwapBuffers(Window);
         }
     }
 
