@@ -31,26 +31,32 @@ public class InputManager {
             //Spieler Objekt aus der Spieler Klasse. Ich weiß die Namen von den Methoden und klassen könnten besser sein (Nicht alle Player)
             Player player = Player.Player;
             
-            if(Frame.GameRunning) {
-            
                 boolean Pressed = action != GLFW_RELEASE; //ist was gedrückt worden?
             
                 switch (key) {
                     case GLFW_KEY_W: // W wurde gedrückt
-                        System.out.println("W Pressed"); //Nachricht für den Debug
-                        wPressed = Pressed; //Wurde gerückt, also ja es wurde was gerückt hier rein schreiben für später
-                        break; //Schau nicht weiter (Wenn das nicht hier ist, dann wartet er bis ein Key gedrückt wurde und führt dann alles aus)
+                        if(Frame.GameRunning) {
+                            System.out.println("W Pressed"); //Nachricht für den Debug
+                            wPressed = Pressed; //Wurde gerückt, also ja es wurde was gerückt hier rein schreiben für später//Schau nicht weiter (Wenn das nicht hier ist, dann wartet er bis ein Key gedrückt wurde und führt dann alles aus)
+                        }
+                        break;
                     case GLFW_KEY_S:
-                        System.out.println("S Pressed");
-                        sPressed = Pressed;
+                        if(Frame.GameRunning) {
+                            System.out.println("S Pressed");
+                            sPressed = Pressed;
+                        }
                         break;
                     case GLFW_KEY_A:
-                        System.out.println("A Pressed");
-                        aPressed = Pressed;
+                        if(Frame.GameRunning) {
+                            System.out.println("A Pressed");
+                            aPressed = Pressed;
+                        }
                         break;
                     case GLFW_KEY_D:
-                        System.out.println("D Pressed");
-                        dPressed = Pressed;
+                        if(Frame.GameRunning) {
+                            System.out.println("D Pressed");
+                            dPressed = Pressed;
+                        }
                         break;
                     case GLFW_KEY_E:
                         if(action == GLFW_PRESS) { // Nur ausführen wenn der Key gedrückt wird, sonst wird das hier beim loslassen nochmal ausgeführt und der Screen schließt sich
@@ -82,55 +88,70 @@ public class InputManager {
                         }
                         break;
                     case GLFW_KEY_R:
-                        System.out.println("R Pressed");
-                        if(Rendering.HudHandler.HudElements.isEmpty()) {
-                            Rendering.HudHandler.PlaceNewBar(100, 100, 400, 50, Rendering.ImageManager.TESTBAR, 0, 60, 4, Color.RED); //Erstellt eine Bar auf der GUI
+                        if(Frame.GameRunning) {
+                            System.out.println("R Pressed");
+                            if(Rendering.HudHandler.HudElements.isEmpty()) {
+                                Rendering.HudHandler.PlaceNewBar(100, 100, 400, 50, Rendering.ImageManager.TESTBAR, 0, 60, 4, Color.RED); //Erstellt eine Bar auf der GUI
+                            }
                         }
                         break;
                     case GLFW_KEY_Q:
-                        System.out.println("Q Pressed");
-                        Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0); //Nimmt das Hud Element was auf Position 0 ist
-                        BarElement bar = (BarElement) Hud; //Konvertiert das Hud Element in ne Bar, geht gerade weil ich nur ein Objekt in der GUI hab, daher ist die Bar immer auf 0
-                        if(bar.getBarDamage() < bar.getHudLength() - bar.getBarOffsetX()) { //Wenn noch was von der Bar übrig ist, damit sie nicht ins Minus gerät
-                            bar.setBarDamage(bar.getBarDamage() + 2); //Damaged die Bar etwas ums zu testen
+                        if(Frame.GameRunning) {
+                            System.out.println("Q Pressed");
+                            Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0); //Nimmt das Hud Element was auf Position 0 ist
+                            BarElement bar = (BarElement) Hud; //Konvertiert das Hud Element in ne Bar, geht gerade weil ich nur ein Objekt in der GUI hab, daher ist die Bar immer auf 0
+                            if(bar.getBarDamage() < bar.getHudLength() - bar.getBarOffsetX()) { //Wenn noch was von der Bar übrig ist, damit sie nicht ins Minus gerät
+                                bar.setBarDamage(bar.getBarDamage() + 2); //Damaged die Bar etwas ums zu testen
+                            }
                         }
                         break;
                     case GLFW_KEY_C:
-                        System.out.println("C Pressed");
-                        Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, Direction); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
+                        if(Frame.GameRunning) {
+                            System.out.println("C Pressed");
+                            Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, Direction); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
+                        }
                         break;
                     case GLFW_KEY_I:
-                        System.out.println("I Pressed");
-                        PointLight pointLight = new PointLight(670, 670, 1f, 1f, 1f, 300f); //Erstellt ein neues Point Light bei 670, 670 mit den RGB Werten von 1, 1, 1 und der Reichweite von 300
-                        LightManager.addLight(pointLight); //Frügt das Light in die Liste für Lights hinzu
+                        if(Frame.GameRunning) {
+                            System.out.println("I Pressed");
+                            PointLight pointLight = new PointLight(670, 670, 1f, 1f, 1f, 300f); //Erstellt ein neues Point Light bei 670, 670 mit den RGB Werten von 1, 1, 1 und der Reichweite von 300
+                            LightManager.addLight(pointLight); //Frügt das Light in die Liste für Lights hinzu
+                        }
                         break;
                     case GLFW_KEY_Z:
-                        System.out.println("Y Pressed");
-                        GUIText randomText = new GUIText("Skibidi Tripple T Sigma :3", 80, 80, 80, 50, ImageManager.GAMEFONT); //Erstellt ein neues Text Element
-                        TextHandler.addDisplayedText(randomText); //Packt das Text Element in den To Be Displayed Text
+                        if(Frame.GameRunning) {
+                            System.out.println("Y Pressed");
+                            GUIText randomText = new GUIText("Skibidi Tripple T Sigma :3", 80, 80, 80, 50, ImageManager.GAMEFONT); //Erstellt ein neues Text Element
+                            TextHandler.addDisplayedText(randomText); //Packt das Text Element in den To Be Displayed Text
+                        }
                         break;
                     case GLFW_KEY_V:
-                        System.out.println("V Pressed");
-                            Player LoadedData = (Player) Save.Save.LoadData(); //Läd Spieldateinen aus dem Speicher
-                            if (LoadedData != null) { //Darf nicht leer sein
-                                Player.Player.setPosX(LoadedData.getPosX()); //Holt sich die Positonen aus den Daten
-                                Player.Player.setPosY(LoadedData.getPosY());
-                                Player.Player.inventory = LoadedData.inventory; //Holt sich das Inventar aus dem Speicher
-                            }
+                        if(Frame.GameRunning) {
+                            System.out.println("V Pressed");
+                                Player LoadedData = (Player) Save.Save.LoadData(); //Läd Spieldateinen aus dem Speicher
+                                if (LoadedData != null) { //Darf nicht leer sein
+                                    Player.Player.setPosX(LoadedData.getPosX()); //Holt sich die Positonen aus den Daten
+                                    Player.Player.setPosY(LoadedData.getPosY());
+                                    Player.Player.inventory = LoadedData.inventory; //Holt sich das Inventar aus dem Speicher
+                                }
+                        }
                         break;
                     case GLFW_KEY_X:
-                        System.out.println("X Pressed");
-                        Save.Save.SaveData(Player.Player); //Speichert Daten vom Spieler
+                        if(Frame.GameRunning) {
+                            System.out.println("X Pressed");
+                            Save.Save.SaveData(Player.Player); //Speichert Daten vom Spieler
+                        }
                         break;
                 }
             
-                // Wir callen Move jedes mal wenn irgendeiner von den Movement Keys jetzt gerade gedrückt wird und wenn nicht, dann stoppen wir
-                if (wPressed || aPressed || sPressed || dPressed) {
-                    InputHandler.Move(player);
-                } else {
-                    InputHandler.Stop(player);
+                if(Frame.GameRunning) {
+                    // Wir callen Move jedes mal wenn irgendeiner von den Movement Keys jetzt gerade gedrückt wird und wenn nicht, dann stoppen wir
+                    if (wPressed || aPressed || sPressed || dPressed) {
+                        InputHandler.Move(player);
+                    } else {
+                        InputHandler.Stop(player);
+                    }
                 }
-            }
         });
         
         //Mouse Event, für Mouse related Dinge

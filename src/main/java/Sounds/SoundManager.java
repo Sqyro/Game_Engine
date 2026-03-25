@@ -1,31 +1,33 @@
 package Sounds;
 
+import Rendering.Frame;
+
 public class SoundManager {
     private long lastSoundTime = 0;
     
-    public void PlayASound(String SoundName, int TimeInSeconds, float Volume) {
-        SoundHandler.playSound(SoundName, TimeInSeconds, Volume);
+    public void PlayASound(String SoundName, int TimeInMilliseconds, float Volume) {
+        SoundHandler.playSound(SoundName, TimeInMilliseconds, Volume);
     }
     
-    public void PlaySoundsWithDelay(String SoundName, int TimeInSeconds, float Volume, float DelayInSeconds) {
+    public void PlaySoundsWithDelay(String SoundName, int TimeInMilliseconds, float Volume, float DelayInMilliseconds) {
         long currentTime = System.currentTimeMillis();
 
-        if (currentTime - lastSoundTime >= DelayInSeconds * 1000) {
+        if (currentTime - lastSoundTime >= DelayInMilliseconds) {
             lastSoundTime = currentTime;
-            PlayASound(SoundName, TimeInSeconds, Volume);
+            PlayASound(SoundName, TimeInMilliseconds, Volume);
         }
     }
     
-    public void PlayASoundAtPos(String SoundName, int TimeInSeconds, float Volume, float PosX, float PosY, float Falloff) {
-        SoundHandler.playSoundAtPos(SoundName, TimeInSeconds, Volume, PosX, PosY, Falloff);
+    public void PlayASoundAtPos(String SoundName, int TimeInMilliseconds, float Volume, float PosX, float PosY, float Falloff) {
+        SoundHandler.playSoundAtPos(SoundName, TimeInMilliseconds, Volume, PosX, PosY, Falloff);
     }
     
-    public void PlaySoundsWithDelayAtPos(String SoundName, int TimeInSeconds, float Volume, float DelayInSeconds, float PosX, float PosY, float Falloff) {
+    public void PlaySoundsWithDelayAtPos(String SoundName, int TimeInMilliseconds, float Volume, float DelayInMilliseconds, float PosX, float PosY, float Falloff) {
         long currentTime = System.currentTimeMillis();
 
-        if (currentTime - lastSoundTime >= DelayInSeconds * 1000) {
+        if (currentTime - lastSoundTime >= DelayInMilliseconds) {
             lastSoundTime = currentTime;
-            PlayASoundAtPos(SoundName, TimeInSeconds, Volume, PosX, PosY, Falloff);
+            PlayASoundAtPos(SoundName, TimeInMilliseconds, Volume, PosX, PosY, Falloff);
         }
     }
 }
