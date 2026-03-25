@@ -1,7 +1,5 @@
 package Sounds;
 
-import Rendering.Frame;
-
 public class SoundManager {
     private long lastSoundTime = 0;
     

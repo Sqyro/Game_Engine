@@ -4,6 +4,7 @@ import GUI.Mouse;
 import Physics2D.VelocityHandler;
 import Player.InputManager;
 import Player.Player;
+import Sounds.SoundHandler;
 
 import org.lwjgl.opengl.GL;
 import static org.lwjgl.glfw.GLFW.*;
@@ -24,6 +25,7 @@ public class Frame {
     public static int FramesPerSecond = 60; // 60 FPS sind gerade Standart, soll dann aber einstellbar sein
             
     public static boolean GameRunning;
+    private boolean wasGameRunning = true;
     
     public Frame(String Title) { //Constructor, wird in Main gecalled. Von hier aus wird alles andere gestatet
         Start(Title); // Ruft die Start Methode auf, leitet alles zu starten dahin weiter
@@ -98,10 +100,20 @@ public class Frame {
                 //Cursor Position updaten
                 Mouse.UpdateMousePos(Window);
                 
+                if (GameRunning != wasGameRunning) { //Schaut ob sich der GameRunning State geändert hat
+                    if (!GameRunning) { //Wenn das Spiel gestoppt wurde dann pausiere alle Sounds
+                        SoundHandler.pauseAll();
+                    } else { //Wenn das Spiel nicht gestoppt, also resumed wurde, dann unpausiere alle Sounds
+                        SoundHandler.resumeAll();
+                    }
+                    wasGameRunning = GameRunning; //Die was Game Running variable updaten auf das neuste
+                }
+                
                 //Rechen Updates
                 if(GameRunning) {
                     InputManager.updatePlayerDirection();
                     VelocityHandler.calculatePosition(Player.Player, deltaTime);
+                    SoundHandler.updateSounds(deltaTime);
                     Camera.UpdateCamera(Player.Player);
                 }
                 
