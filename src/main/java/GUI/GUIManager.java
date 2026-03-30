@@ -30,6 +30,11 @@ public class GUIManager {
     public static void renderText(GUIText guiText, ImageHandler renderer) {
         String StringText = guiText.getText(); //Holt sich den Text als String
 
+        //Farbe Holen
+        float Red = guiText.TextColor.getRed() / 255f;
+        float Green = guiText.TextColor.getGreen() / 255f;
+        float Blue = guiText.TextColor.getBlue() / 255f;
+        
         for(int i = 0; i < StringText.length(); i++) { //Für jeden Character im String
             char CharacterAt = StringText.charAt(i); //Nimm dir den Character
 
@@ -38,7 +43,7 @@ public class GUIManager {
             float LetterY = guiText.getPosY();
 
             //Enqued den Buchstaben
-            renderer.draw(guiText.getFontTextureID(), LetterX - Camera.PosX, LetterY - Camera.PosY, guiText.getCharacterSize(), guiText.getCharacterSize(), GUIBitmapFont.getTextureX(CharacterAt), GUIBitmapFont.getTextureY(CharacterAt), GUIBitmapFont.getWidth(), GUIBitmapFont.getHeight());
+            renderer.draw(guiText.getFontTextureID(), LetterX - Camera.PosX, LetterY - Camera.PosY, guiText.getCharacterSize(), guiText.getCharacterSize(), GUIBitmapFont.getTextureX(CharacterAt), GUIBitmapFont.getTextureY(CharacterAt), GUIBitmapFont.getWidth(), GUIBitmapFont.getHeight(), Red, Green, Blue);
         }
     }
 }

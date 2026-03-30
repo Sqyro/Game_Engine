@@ -1,5 +1,7 @@
 package GUI;
 
+import java.awt.Color;
+
 public class GUIText {
     
     //Variablen deklarieren
@@ -13,14 +15,17 @@ public class GUIText {
 
     private int FontTextureID;
 
+    public Color TextColor;
+    
     //Contructor für jeden Text, relativ unspektakulär
-    public GUIText(String Text, float PosX, float PosY, float CharacterSize, float CharacterSpacing, int FontTextureID) {
+    public GUIText(String Text, float PosX, float PosY, float CharacterSize, float CharacterSpacing, int FontTextureID, Color TextColor) {
         this.Text = Text;
         this.PosX = PosX;
         this.PosY = PosY;
         this.CharacterSize = CharacterSize;
         this.CharacterSpacing = CharacterSpacing;
         this.FontTextureID = FontTextureID;
+        this.TextColor = TextColor;
     }
 
     //Hilfsmethoden

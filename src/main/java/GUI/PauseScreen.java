@@ -7,6 +7,8 @@ import Rendering.ImageManager;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.awt.Color;
+
 public class PauseScreen extends GUIScreen {
     private int CenterX;
     private int CenterY;
@@ -26,7 +28,7 @@ public class PauseScreen extends GUIScreen {
         CenterY = ScreenHeight / 2;
         
         for(GUIButton CurrentButton : PauseButtons) {
-            CurrentButton.drawButton(renderer);
+            CurrentButton.drawButton(renderer, Color.WHITE);
         }
     }
     

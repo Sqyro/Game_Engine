@@ -36,7 +36,7 @@ public class InventoryScreen extends GUIScreen {
         int PosY = ScreenHeight / 2 - TextureHeight / 2;
 
         //An Camera Position anpassen (folgt dann dem Spieler) und in den draw que packen
-        renderer.drawFull(TextureID, PosX - Camera.PosX, PosY - Camera.PosY, TextureWidth, TextureHeight);
+        renderer.drawFull(TextureID, PosX - Camera.PosX, PosY - Camera.PosY, TextureWidth, TextureHeight, 1f, 1f, 1f);
         
         //Spieler holen
         Player player = Player.Player;
@@ -45,13 +45,13 @@ public class InventoryScreen extends GUIScreen {
             Item CurrentItem = player.inventory.getItem(CurrentSlot.SlotIndex); //Item im momentanen Slot holen
             if(CurrentItem != null) { //Wenn im Momentanen Slot ein Item ist
                 //Item zeichnen an der Position vom Slot in der größe vom Slot
-                renderer.drawFull(CurrentItem.getTextureID(), CurrentSlot.PosX - Camera.PosX, CurrentSlot.PosY - Camera.PosY, CurrentSlot.SlotSize, CurrentSlot.SlotSize);
+                renderer.drawFull(CurrentItem.getTextureID(), CurrentSlot.PosX - Camera.PosX, CurrentSlot.PosY - Camera.PosY, CurrentSlot.SlotSize, CurrentSlot.SlotSize, 1f, 1f, 1f);
             }
         }
 
         if(HeldItem != null) { // Wenn wir gerade ein Item mit der Cursor festhalten
             //Das item was wir gerade Festhalten an der Position vom Cursor zentriert zeichnen
-            renderer.drawFull(HeldItem.getTextureID(), (float)Mouse.PosX - HeldItem.getTextureWidth() / 2 - Camera.PosX, (float)Mouse.PosY - HeldItem.getTextureWidth() / 2 - Camera.PosY, PickedUpItemSize, PickedUpItemSize);
+            renderer.drawFull(HeldItem.getTextureID(), (float)Mouse.PosX - HeldItem.getTextureWidth() / 2 - Camera.PosX, (float)Mouse.PosY - HeldItem.getTextureWidth() / 2 - Camera.PosY, PickedUpItemSize, PickedUpItemSize, 1f, 1f, 1f);
         }
     }
     

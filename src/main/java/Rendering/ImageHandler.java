@@ -97,8 +97,8 @@ public class ImageHandler {
         return TextureID;
     }
 
-    public void drawFull(int TextureID, float TextureX, float TextureY, float TextureWidth, float TextureHeight) { //Wenn man die Textur komplett zeichnen will, setzt einfach Position auf 0 und größe auf 1
-        draw(TextureID, TextureX, TextureY, TextureWidth, TextureHeight, 0f, 0f, 1f, 1f);
+    public void drawFull(int TextureID, float TextureX, float TextureY, float TextureWidth, float TextureHeight, float Red, float Green, float Blue) { //Wenn man die Textur komplett zeichnen will, setzt einfach Position auf 0 und größe auf 1
+        draw(TextureID, TextureX, TextureY, TextureWidth, TextureHeight, 0f, 0f, 1f, 1f, Red, Green, Blue);
     }
     
     public void drawRectangle(int TextureID, float TextureX, float TextureY, float TextureWidth, float TextureHeight, float Red, float Green, float Blue) { //Methode um Rechtecke zu zeichnen, nimmt ne 1x1 Weiße Textur, eine Position, Größe und Farbwerte und passt die Textur entsprechend an
@@ -106,9 +106,9 @@ public class ImageHandler {
                    .add(new RenderCommand(TextureX, TextureY, TextureWidth, TextureHeight, 0f, 0f, 1f, 1f, Red, Green, Blue)); //Render Command mit den Werten machen, onTexture Größe und Position ist 0, 0 und 1, 1, weil die Textur 1x1 ist
     }
     
-    public void draw(int TextureID, float TextureX, float TextureY, float TextureWidth, float TextureHeight, float onTextureX, float onTextureY, float onTextureWidth, float onTextureHeight) { //fügt Texturen in den draw que hinzu für da Frame
+    public void draw(int TextureID, float TextureX, float TextureY, float TextureWidth, float TextureHeight, float onTextureX, float onTextureY, float onTextureWidth, float onTextureHeight, float Red, float Green, float Blue) { //fügt Texturen in den draw que hinzu für da Frame
         renderQueue.computeIfAbsent(TextureID, k -> new ArrayList<>()) //wenn es noch keine Liste für diese Textur gibt mach eine, heißt wenn wir die gleiche textur 1000 mal haben wird sie nicht 1000 mal neu gemacht
-                   .add(new RenderCommand(TextureX, TextureY, TextureWidth, TextureHeight, onTextureX, onTextureY, onTextureWidth, onTextureHeight, 1f, 1f, 1f)); //Render Command für diese Textur in die Liste hinzufügen
+                   .add(new RenderCommand(TextureX, TextureY, TextureWidth, TextureHeight, onTextureX, onTextureY, onTextureWidth, onTextureHeight, Red, Green, Blue)); //Render Command für diese Textur in die Liste hinzufügen
     }
     
     public void flush(Shader Shader, int ScreenWidth, int ScreenHeight) { //Führt jetzt für jede Textur das zeichnen aus
