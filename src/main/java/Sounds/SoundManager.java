@@ -1,18 +1,20 @@
 package Sounds;
 
+import Rendering.Frame;
+
 public class SoundManager {
-    private long lastSoundTime = 0;
+    private float lastSoundTime = 0;
     
     public void PlayASound(String SoundName, int TimeInMilliseconds, float Volume) {
         SoundHandler.playSound(SoundName, TimeInMilliseconds, Volume);
     }
     
-    public void PlaySoundsWithDelay(String SoundName, int TimeInMilliseconds, float Volume, float DelayInMilliseconds) {
-        long currentTime = System.currentTimeMillis();
-
-        if (currentTime - lastSoundTime >= DelayInMilliseconds) {
+    public void PlaySoundsWithDelay(String SoundName, int TimeInSeconds, float Volume, float DelayInSeconds) {
+        float currentTime = Frame.Gametime;
+        
+        if (currentTime - lastSoundTime >= DelayInSeconds || lastSoundTime == 0) {
             lastSoundTime = currentTime;
-            PlayASound(SoundName, TimeInMilliseconds, Volume);
+            PlayASound(SoundName, TimeInSeconds, Volume);
         }
     }
     
@@ -21,9 +23,9 @@ public class SoundManager {
     }
     
     public void PlaySoundsWithDelayAtPos(String SoundName, int TimeInMilliseconds, float Volume, float DelayInMilliseconds, float PosX, float PosY, float Falloff) {
-        long currentTime = System.currentTimeMillis();
+        float currentTime = Frame.Gametime;
 
-        if (currentTime - lastSoundTime >= DelayInMilliseconds) {
+        if (currentTime - lastSoundTime >= DelayInMilliseconds || lastSoundTime == 0) {
             lastSoundTime = currentTime;
             PlayASoundAtPos(SoundName, TimeInMilliseconds, Volume, PosX, PosY, Falloff);
         }

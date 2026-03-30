@@ -27,6 +27,8 @@ public class Frame {
     public static boolean GameRunning;
     private boolean wasGameRunning = true;
     
+    public static float Gametime = 0;
+    
     public Frame(String Title) { //Constructor, wird in Main gecalled. Von hier aus wird alles andere gestatet
         Start(Title); // Ruft die Start Methode auf, leitet alles zu starten dahin weiter
         Canva = new Canva(); //Erstellt nen neuen Canva, mit der größe vom Screen
@@ -111,6 +113,7 @@ public class Frame {
                 
                 //Rechen Updates
                 if(GameRunning) {
+                    Gametime += deltaTime;
                     InputManager.updatePlayerDirection();
                     VelocityHandler.calculatePosition(Player.Player, deltaTime);
                     SoundHandler.updateSounds(deltaTime);

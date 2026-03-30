@@ -1,6 +1,7 @@
 package Sounds;
 
 import Player.Player;
+import Rendering.Frame;
 
 import javax.sound.sampled.*;
 
@@ -9,9 +10,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class SoundHandler {
-    private static List<Sound> AllSounds = new ArrayList<>();
+    public static List<Sound> AllSounds = new ArrayList<>();
     
-    public static void playSound(String SoundName, int TimeInMilliseconds, float Volume) {
+    public static void playSound(String SoundName, float TimeInSeconds, float Volume) {
         try {
             Clip Clip = AudioSystem.getClip(); //Neues AudioClip Objekt
             AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File("src/main/resources/assets/sounds" + SoundName).getAbsoluteFile()); //Läd die File mit nem Audio Input Stream
@@ -23,7 +24,7 @@ public class SoundHandler {
             Clip.start(); //Startet die Audio Datei
             
             //Wir definieren einen neuen Sound ohne Position
-            Sound sound = new Sound(Clip, VolumeControl, TimeInMilliseconds, System.currentTimeMillis(), Volume, false, 0, 0, 0);
+            Sound sound = new Sound(Clip, VolumeControl, TimeInSeconds, System.currentTimeMillis(), Volume, false, 0, 0, 0);
             
             //Wir fügen den neuen Sound in die Liste mit allen Sounds hinzu
             AllSounds.add(sound);
@@ -33,7 +34,7 @@ public class SoundHandler {
         }
     }
     
-    public static void playSoundAtPos(final String SoundName, int TimeInMilliseconds, float Volume, float PosX, float PosY, float Falloff) {
+    public static void playSoundAtPos(final String SoundName, float TimeInSeconds, float Volume, float PosX, float PosY, float Falloff) {
         try {
             Clip Clip = AudioSystem.getClip(); //Neues AudioClip Objekt
             AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File("src/main/resources/assets/sounds" + SoundName).getAbsoluteFile()); //Läd die File mit nem Audio Input Stream
@@ -45,7 +46,7 @@ public class SoundHandler {
             Clip.start(); //Startet die Audio Datei
             
             //Wir definieren einen neuen Sound mit Position
-            Sound sound = new Sound(Clip, VolumeControl, TimeInMilliseconds, System.currentTimeMillis(), Volume, true, PosX, PosY, Falloff);
+            Sound sound = new Sound(Clip, VolumeControl, TimeInSeconds, System.currentTimeMillis(), Volume, true, PosX, PosY, Falloff);
             
             //Wir fügen den neuen Sound in die Liste mit allen Sounds hinzu
             AllSounds.add(sound);
@@ -56,7 +57,7 @@ public class SoundHandler {
     }
     
     public static void updateSounds(float deltaTime) { //Methode um alle Sounds zu updaten
-        long Now = System.currentTimeMillis(); // Jetzt holen
+        float Now = Frame.Gametime; // Jetzt holen
 
         for (int i = 0; i < AllSounds.size(); i++) { //Einen Loop für alle Sounds, kein Sound CurrentSound : AllSounds, weil ich später den momentanen Sound removed will und keine Ahnung hab wie das so geht
             Sound CurrentSound = AllSounds.get(i); //Den Sound an der jetzigen Position holen

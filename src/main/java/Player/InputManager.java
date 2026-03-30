@@ -128,7 +128,7 @@ public class InputManager {
                     case GLFW_KEY_V:
                         if(Frame.GameRunning) {
                             System.out.println("V Pressed");
-                                Player LoadedData = (Player) Save.Save.LoadData(); //Läd Spieldateinen aus dem Speicher
+                                Player LoadedData = (Player) Save.Save.LoadObjectData(); //Läd Spieldateinen aus dem Speicher
                                 if (LoadedData != null) { //Darf nicht leer sein
                                     Player.Player.setPosX(LoadedData.getPosX()); //Holt sich die Positonen aus den Daten
                                     Player.Player.setPosY(LoadedData.getPosY());
@@ -139,7 +139,7 @@ public class InputManager {
                     case GLFW_KEY_X:
                         if(Frame.GameRunning) {
                             System.out.println("X Pressed");
-                            Save.Save.SaveData(Player.Player); //Speichert Daten vom Spieler
+                            Save.Save.SaveData(Player.Player, "gamesession/Playerdata/Player.ser"); //Speichert Daten vom Spieler
                         }
                         break;
                 }

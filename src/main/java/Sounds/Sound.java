@@ -7,8 +7,8 @@ public class Sound { //Klasse für Sounds
     public FloatControl VolumeControl; //Die VolumeControl Instanz, also der Volume Regler
 
     //Variablen für Zeitpunkte
-    public long RemainingTime;
-    public long LastTime;
+    public float RemainingTime;
+    public float LastTime;
 
     //Laustärke des Geräuschs
     public float Volume;
@@ -21,7 +21,7 @@ public class Sound { //Klasse für Sounds
     public float Falloff; //Wie viel der Sound schwächer wird, wenn man von ihm wegläuft
     
     
-    public Sound(Clip Clip, FloatControl VolumeControl, long RemainingTime, long LastTime, float Volume, boolean isPositional, float PosX, float PosY, float Falloff) { //Constructor
+    public Sound(Clip Clip, FloatControl VolumeControl, float RemainingTime, float LastTime, float Volume, boolean isPositional, float PosX, float PosY, float Falloff) { //Constructor
         //Setzt die ganzen Variablen pro Objekt
         this.Clip = Clip;
         this.VolumeControl = VolumeControl;
