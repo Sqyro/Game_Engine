@@ -34,14 +34,13 @@ public class PauseScreen extends GUIScreen {
     
     public PauseScreen() {
         Frame.GameRunning = false;
-        PauseButtons.add(new GUIButton(Frame.ScreenWidth /2 - CloseButtonWidth/2, Frame.ScreenHeight /2 - CloseButtonHeight/2, CloseButtonWidth, CloseButtonHeight, ImageManager.PLAYER, CloseButtonText, CloseButtonTextSpacing, CloseButtonTextSize));
+        PauseButtons.add(new GUIQuitButton(Frame.ScreenWidth /2 - CloseButtonWidth/2, Frame.ScreenHeight /2 - CloseButtonHeight/2, CloseButtonWidth, CloseButtonHeight, ImageManager.PLAYER, CloseButtonText, CloseButtonTextSpacing, CloseButtonTextSize));
     }
     
     public void handleClick(double CursorX, double CursorY) {
         for(GUIButton CurrentButton : PauseButtons) {
             if(CurrentButton.CursorOverButton(CursorX, CursorY)) {
-                System.out.println("Button Works");
-                System.exit(0);
+                CurrentButton.onButtonClick();
             }
         }
     }

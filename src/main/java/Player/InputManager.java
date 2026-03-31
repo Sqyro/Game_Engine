@@ -91,7 +91,7 @@ public class InputManager {
                         if(Frame.GameRunning) {
                             System.out.println("R Pressed");
                             if(Rendering.HudHandler.HudElements.isEmpty()) {
-                                Rendering.HudHandler.PlaceNewBar(100, 100, 400, 50, Rendering.ImageManager.TESTBAR, 0, 60, 4, Color.RED); //Erstellt eine Bar auf der GUI
+                                Rendering.HudHandler.PlaceNewBar(100, 100, 400, 50, Rendering.ImageManager.TESTBAR, 1, 60, 4, Color.RED); //Erstellt eine Bar auf der GUI
                             }
                         }
                         break;
@@ -100,8 +100,8 @@ public class InputManager {
                             System.out.println("Q Pressed");
                             Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0); //Nimmt das Hud Element was auf Position 0 ist
                             BarElement bar = (BarElement) Hud; //Konvertiert das Hud Element in ne Bar, geht gerade weil ich nur ein Objekt in der GUI hab, daher ist die Bar immer auf 0
-                            if(bar.getBarDamage() < bar.getHudLength() - bar.getBarOffsetX()) { //Wenn noch was von der Bar übrig ist, damit sie nicht ins Minus gerät
-                                bar.setBarDamage(bar.getBarDamage() + 2); //Damaged die Bar etwas ums zu testen
+                            if(bar.getBarFilledPercentage() * bar.getHudLength() > 0 + bar.getBarOffsetX()) { //Wenn noch was von der Bar übrig ist, damit sie nicht ins Minus gerät
+                                bar.setBarFilledPercentage(bar.getBarFilledPercentage() - 0.02f); //Damaged die Bar etwas ums zu testen
                             }
                         }
                         break;

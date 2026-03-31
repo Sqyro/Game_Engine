@@ -138,7 +138,7 @@ public class Canva {
                 float Blue = bar.getColor().getBlue() / 255f;
                 
                 //Rechteck unter die Textur zeichnen
-                renderer.drawRectangle(ImageManager.BAR, HudX - Camera.PosX + bar.getBarOffsetX(), HudY - Camera.PosY + bar.getBarOffsetY(), bar.getHudLength() - bar.getBarDamage() - bar.getBarOffsetX(), bar.getHudHeight() - bar.getBarOffsetY() * 2, Red, Green, Blue);
+                renderer.drawRectangle(ImageManager.BAR, HudX - Camera.PosX + bar.getBarOffsetX(), HudY - Camera.PosY + bar.getBarOffsetY(), bar.getHudLength() * bar.getBarFilledPercentage() - bar.getBarOffsetX(), bar.getHudHeight() - bar.getBarOffsetY() * 2, Red, Green, Blue);
                 //Bar Extra flushen, damit es unter der Textur liegt
                 renderer.flush(hudshader, ScreenWidth, ScreenHeight);
             }
