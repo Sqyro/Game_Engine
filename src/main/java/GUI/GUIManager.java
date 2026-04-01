@@ -2,7 +2,7 @@ package GUI;
 
 import Rendering.ImageHandler;
 import Rendering.Camera;
-import Rendering.Frame;
+import Scenes.GameScene;
 
 public class GUIManager {
     public static GUIScreen currentScreen = null;
@@ -23,7 +23,7 @@ public class GUIManager {
     public static void closeScreen() {
         currentScreen.setOpenScreen(false); //Setzt isOpen im Screen auf false mit der Hilfs Methode
         currentScreen = null; //Setzt den momentan offenen Screen auf leer
-        Frame.GameRunning = true;
+        GameScene.GameRunning = true;
     }
     
     //Methode um Text in den draw Que hinzu zu fügen. Braucht den Text für alle Variablen und den renderer (Image Handler) um es zu enquen

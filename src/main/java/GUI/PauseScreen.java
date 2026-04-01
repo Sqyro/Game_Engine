@@ -3,6 +3,8 @@ package GUI;
 import Rendering.Frame;
 import Rendering.ImageHandler;
 import Rendering.ImageManager;
+import Scenes.SceneManager;
+import Scenes.GameScene;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -12,6 +14,18 @@ import java.awt.Color;
 public class PauseScreen extends GUIScreen {
     private int CenterX;
     private int CenterY;
+    
+    private final String ResumeButtonText = "Resume";
+    private final float ResumeButtonWidth = 300;
+    private final float ResumeButtonHeight = 50;
+    private final float ResumeButtonTextSpacing = 15;
+    private final float ResumeButtonTextSize = 30;
+    
+    private final String SettingsButtonText = "Settings";
+    private final float SettingsButtonWidth = 300;
+    private final float SettingsButtonHeight = 50;
+    private final float SettingsButtonTextSpacing = 15;
+    private final float SettingsButtonTextSize = 30;
     
     private final String CloseButtonText = "Close Game";
     private final float CloseButtonWidth = 300;
@@ -33,14 +47,16 @@ public class PauseScreen extends GUIScreen {
     }
     
     public PauseScreen() {
-        Frame.GameRunning = false;
+        GameScene.GameRunning = false;
+        PauseButtons.add(new GUIResumeButton(Frame.ScreenWidth /2 - ResumeButtonWidth/2, Frame.ScreenHeight /2 - ResumeButtonHeight/2 - 67 * Frame.NormalizedPixelHeight * 2, ResumeButtonWidth, ResumeButtonHeight, ImageManager.PLAYER, ResumeButtonText, ResumeButtonTextSpacing, ResumeButtonTextSize));
+        PauseButtons.add(new GUISettingsButton(Frame.ScreenWidth /2 - SettingsButtonWidth/2, Frame.ScreenHeight /2 - SettingsButtonHeight/2 - 67 * Frame.NormalizedPixelHeight, SettingsButtonWidth, SettingsButtonHeight, ImageManager.PLAYER, SettingsButtonText, SettingsButtonTextSpacing, SettingsButtonTextSize));
         PauseButtons.add(new GUIQuitButton(Frame.ScreenWidth /2 - CloseButtonWidth/2, Frame.ScreenHeight /2 - CloseButtonHeight/2, CloseButtonWidth, CloseButtonHeight, ImageManager.PLAYER, CloseButtonText, CloseButtonTextSpacing, CloseButtonTextSize));
     }
     
-    public void handleClick(double CursorX, double CursorY) {
+    public void handleClick(long Window, double CursorX, double CursorY) {
         for(GUIButton CurrentButton : PauseButtons) {
             if(CurrentButton.CursorOverButton(CursorX, CursorY)) {
-                CurrentButton.onButtonClick();
+                CurrentButton.onButtonClick(Window);
             }
         }
     }

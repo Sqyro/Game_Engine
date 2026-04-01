@@ -1,7 +1,7 @@
 package Sounds;
 
 import Player.Player;
-import Rendering.Frame;
+import Scenes.GameScene;
 
 import javax.sound.sampled.*;
 
@@ -57,7 +57,7 @@ public class SoundHandler {
     }
     
     public static void updateSounds(float deltaTime) { //Methode um alle Sounds zu updaten
-        float Now = Frame.Gametime; // Jetzt holen
+        float Now = GameScene.Gametime; // Jetzt holen
 
         for (int i = 0; i < AllSounds.size(); i++) { //Einen Loop für alle Sounds, kein Sound CurrentSound : AllSounds, weil ich später den momentanen Sound removed will und keine Ahnung hab wie das so geht
             Sound CurrentSound = AllSounds.get(i); //Den Sound an der jetzigen Position holen

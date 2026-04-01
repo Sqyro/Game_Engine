@@ -33,7 +33,7 @@ public abstract class GUIButton {
         this.ButtonTextSize = ButtonTextSize;
     }
     
-    public abstract void onButtonClick();
+    public abstract void onButtonClick(long Window);
      
     public void drawButton(ImageHandler renderer, Color TextColor) {
         renderer.drawFull(TextureID, PosX - Camera.PosX, PosY - Camera.PosY, ButtonWidth, ButtonHeight, 1f, 1f, 1f);

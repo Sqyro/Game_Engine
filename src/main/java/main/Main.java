@@ -3,6 +3,7 @@ package main;
 import Rendering.Frame;
 
 public class Main {
+    
     //Wenn das Programm startet
     public static void main(String[] args) {
         System.out.println("Debug:"); //Debug: (Alles was folgt ist teil vom Debug)

@@ -1,34 +1,42 @@
-package Rendering;
+package Scenes;
 
-import Player.Player;
-import Player.AnimationManager;
 import Enemy.Enemy;
-import Shader.Shader;
-import Shader.LightManager;
 import GUI.GUIManager;
-import GUI.TextHandler;
 import GUI.GUIText;
+import GUI.TextHandler;
+import Physics2D.VelocityHandler;
+import Player.AnimationManager;
+import Player.InputManager;
+import Player.Player;
+import Rendering.BarElement;
+import Rendering.Camera;
+import Rendering.Frame;
+import Rendering.HudElement;
+import Rendering.HudHandler;
+import Rendering.ImageHandler;
+import Rendering.ImageManager;
+import Shader.LightManager;
+import Shader.Shader;
+import Sounds.SoundHandler;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
 
-
-public class Canva {
-    
-    //Variablen Definieren
-    Map.MapHandler Map;
-    
-    private int ScreenWidth;
-    private int ScreenHeight;
-    
+public class GameScene extends Scene {
     private Shader shader;
     private Shader hudshader;
     private ImageHandler renderer;
     private AnimationManager animationManager;
     
-    public Canva() {
-        this.ScreenWidth = Frame.ScreenWidth; //Canva Größe gleich Screengröße
-        this.ScreenHeight = Frame.ScreenHeight;
-        
+    Map.MapHandler Map;
+    
+    public static boolean GameRunning;
+    private boolean wasGameRunning = true;
+    
+    public static float Gametime = 0;
+    
+    public GameScene() {
         Map = new Map.MapHandler(); //Neues Map Objekt erstellen, gibt gerade nur eine Map, später aber vielleicht mehrere (Räume)
         
         //Erstellt das Shader Objekt für die Globalen Shader, also die, die alle Game Objekte rendern/beeinflussen
@@ -42,10 +50,45 @@ public class Canva {
         renderer = new ImageHandler(); //Ja, ich benutze gerade den Image Handler als Renderer. Ich sollte dafür ne eingene Renderer Klasse machen, hab aber das eben von meinem alten Code geported und war zu faul
     
         animationManager = new AnimationManager();
-        animationManager.createAllAnimations();
+        animationManager.createGameAnimations();
     }
     
-    protected void drawNewFrame(float deltaTime) { // Zeichnet ein neues Frame
+    @Override
+    public void onCreation(long Window) {
+        ImageManager.loadGameTextures();
+        
+        //Spieler erstellen
+        Player.createPlayer();
+    }
+    
+    @Override
+    public void onLoadup(long Window) {
+        GameRunning = true;
+        
+        //Hört allen Tastatur Inputs zu, startet im Prinzip den Input Manager
+        InputManager.ListenforGameKeys(Window);
+    }
+    
+    @Override
+    public void onUpdate(float deltaTime) {
+        if (GameRunning != wasGameRunning) { //Schaut ob sich der GameRunning State geändert hat
+            if (!GameRunning) { //Wenn das Spiel gestoppt wurde dann pausiere alle Sounds
+                SoundHandler.pauseAll();
+            } else { //Wenn das Spiel nicht gestoppt, also resumed wurde, dann unpausiere alle Sounds
+        SoundHandler.resumeAll();
+            }
+            wasGameRunning = GameRunning; //Die was Game Running variable updaten auf das neuste
+        }
+                
+                //Rechen Updates
+                if(GameRunning) {
+                    Gametime += deltaTime;
+                    InputManager.updatePlayerDirection();
+                    VelocityHandler.calculatePosition(Player.Player, deltaTime);
+                    SoundHandler.updateSounds(deltaTime);
+                    Camera.UpdateCamera(Player.Player);
+                }
+        
         
         //Der Background ist beeinflusst von dem Global light (Aber keinen Point Lights...)
         float GlobalLight = LightManager.getGlobalLight();
@@ -53,18 +96,18 @@ public class Canva {
         glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Weiß setzen
         
         //Animationen Updaten
-        if(Frame.GameRunning) {
-            animationManager.updateAllAnimations(deltaTime);
+        if(GameRunning) {
+            animationManager.updateGameAnimations(deltaTime);
         }
         
         //Benutzt die drawMap Methode aus dem Map Handler, die die einzelnen Tiles zeichnet
-        Map.drawMap(shader, renderer, ScreenWidth, ScreenHeight);
+        Map.drawMap(shader, renderer, Frame.ScreenWidth, Frame.ScreenHeight);
         
         //Findet die Randpunkte des Bildschirms
         int ScreenLeft   = (int) -Camera.PosX;
-        int ScreenRight  = ScreenLeft + ScreenWidth;
+        int ScreenRight  = ScreenLeft + Frame.ScreenWidth;
         int ScreenTop    = (int) -Camera.PosY;
-        int ScreenBottom = ScreenTop + ScreenHeight;
+        int ScreenBottom = ScreenTop + Frame.ScreenHeight;
         
         //Render Enemies;
         for(int i = 0; i < Enemy.Enemies.size(); i++) { //Liest die Enemies Liste durch
@@ -85,7 +128,7 @@ public class Canva {
         }
         
         //Flushed Map und Enemies unter den Spieler. Werden geshaded und gezeichnet mit dem Global Shader
-        renderer.flush(shader, ScreenWidth, ScreenHeight);
+        renderer.flush(shader, Frame.ScreenWidth, Frame.ScreenHeight);
         
         //Render Player
         
@@ -116,7 +159,7 @@ public class Canva {
             }
         }
         //Flushed den Spieler später, damit er über allem drüber liegt. Er wird gashaded mit dem Global Shader und gezeichnet
-        renderer.flush(shader, ScreenWidth, ScreenHeight);
+        renderer.flush(shader, Frame.ScreenWidth, Frame.ScreenHeight);
         
         //Render HUD
         
@@ -140,7 +183,7 @@ public class Canva {
                 //Rechteck unter die Textur zeichnen
                 renderer.drawRectangle(ImageManager.BAR, HudX - Camera.PosX + bar.getBarOffsetX(), HudY - Camera.PosY + bar.getBarOffsetY(), bar.getHudLength() * bar.getBarFilledPercentage() - bar.getBarOffsetX(), bar.getHudHeight() - bar.getBarOffsetY() * 2, Red, Green, Blue);
                 //Bar Extra flushen, damit es unter der Textur liegt
-                renderer.flush(hudshader, ScreenWidth, ScreenHeight);
+                renderer.flush(hudshader, Frame.ScreenWidth, Frame.ScreenHeight);
             }
             
             //Fügt die Hud Elemente in den neuen draw que hinzu
@@ -148,13 +191,13 @@ public class Canva {
         }
         
         //Flushed alle neuen Elemente im draw que (Nur HUD). Objekte werden mit dem HudShader geshaded und gezeichnet
-        renderer.flush(hudshader, ScreenWidth, ScreenHeight);
+        renderer.flush(hudshader, Frame.ScreenWidth, Frame.ScreenHeight);
         
         //Render GUI
         
         if(GUIManager.isScreenOpen()) {
             //Enqued den momentan offenen Screen in draw
-            GUIManager.currentScreen.renderScreen(renderer, ScreenWidth, ScreenHeight);
+            GUIManager.currentScreen.renderScreen(renderer, Frame.ScreenWidth, Frame.ScreenHeight);
         }
         
         for(GUIText guiText : TextHandler.ToBeDisplayedText) { //Für jeden Text im ToBeDisplayed Text
@@ -165,6 +208,6 @@ public class Canva {
         renderer.drawFull(ImageManager.CURSOR, (float)GUI.Mouse.PosX - Camera.PosX, (float)GUI.Mouse.PosY - Camera.PosY, 32, 32, 1f, 1f, 1f);
         
         //Flushed den Screen Render durch mit dem Hud Shader
-        renderer.flush(hudshader, ScreenWidth, ScreenHeight);
+        renderer.flush(hudshader, Frame.ScreenWidth, Frame.ScreenHeight);
     }
 }

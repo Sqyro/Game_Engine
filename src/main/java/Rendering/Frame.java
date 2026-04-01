@@ -1,10 +1,9 @@
 package Rendering;
 
 import GUI.Mouse;
-import Physics2D.VelocityHandler;
-import Player.InputManager;
-import Player.Player;
-import Sounds.SoundHandler;
+import Scenes.SceneManager;
+import Scenes.SettingsScene;
+import Scenes.GameScene;
 
 import org.lwjgl.opengl.GL;
 import static org.lwjgl.glfw.GLFW.*;
@@ -16,22 +15,21 @@ public class Frame {
 
     //Variablen erstellen
     private long Window;
-    public Canva Canva;
     long lastTime;
    
     public static int ScreenWidth = 1920;
     public static int ScreenHeight = 1080; // Wird je nach Setting überschrieben, HD FullScreen ist der Standart, wird aber je nach Monitor entsprechend geändert
     
     public static int FramesPerSecond = 60; // 60 FPS sind gerade Standart, soll dann aber einstellbar sein
-            
-    public static boolean GameRunning;
-    private boolean wasGameRunning = true;
     
-    public static float Gametime = 0;
+    public static float NormalizedPixelWidth;
+    public static float NormalizedPixelHeight;
+    
+    public static SettingsScene SettingsScene;
+    public static GameScene GameScene;
     
     public Frame(String Title) { //Constructor, wird in Main gecalled. Von hier aus wird alles andere gestatet
         Start(Title); // Ruft die Start Methode auf, leitet alles zu starten dahin weiter
-        Canva = new Canva(); //Erstellt nen neuen Canva, mit der größe vom Screen
 
         //Startet die Update Methode, die für den Loop zuständig ist
         Update();
@@ -46,12 +44,13 @@ public class Frame {
         //Monitor holen und den in einen Video Mode schreiben von dem ich Variablen lesen kann
         long Monitor = glfwGetPrimaryMonitor();
         GLFWVidMode videoMode = glfwGetVideoMode(Monitor);
-
-        GameRunning = true;
         
         //Bildschirmgröße auf den Monitor anpassen
         ScreenWidth = videoMode.width();
         ScreenHeight = videoMode.height();
+        
+        NormalizedPixelWidth = ScreenWidth/1920;
+        NormalizedPixelHeight = ScreenWidth/1080;
         
         //glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // Fenster kann vom User scaliert werden
         Window = glfwCreateWindow(ScreenWidth, ScreenHeight, Title, Monitor, 0); //Fenster mit richtiger Größe und Titel erstellen. Monitor, weil es Fullscreen ist, 0 würde heißen windowed
@@ -77,14 +76,15 @@ public class Frame {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         
-        //Alle Texturen einmal laden
-        ImageManager.loadAllTextures();
+        SettingsScene = new SettingsScene();
+        SceneManager.CreateNewScene(SettingsScene, Window);
+        GameScene = new GameScene();
+        SceneManager.CreateNewScene(GameScene, Window);
         
-        //Spieler erstellen
-        Player.createPlayer();
+        //Alle nötigen Texturen laden
+        ImageManager.loadStartTextures();
         
-        //Hört allen Tastatur Inputs zu, startet im Prinzip den Input Manager
-        InputManager.ListenforKeys(Window);
+        SceneManager.LoadScene(GameScene, Window);
     }
     
     private void Update() {
@@ -102,26 +102,8 @@ public class Frame {
                 //Cursor Position updaten
                 Mouse.UpdateMousePos(Window);
                 
-                if (GameRunning != wasGameRunning) { //Schaut ob sich der GameRunning State geändert hat
-                    if (!GameRunning) { //Wenn das Spiel gestoppt wurde dann pausiere alle Sounds
-                        SoundHandler.pauseAll();
-                    } else { //Wenn das Spiel nicht gestoppt, also resumed wurde, dann unpausiere alle Sounds
-                        SoundHandler.resumeAll();
-                    }
-                    wasGameRunning = GameRunning; //Die was Game Running variable updaten auf das neuste
-                }
-                
-                //Rechen Updates
-                if(GameRunning) {
-                    Gametime += deltaTime;
-                    InputManager.updatePlayerDirection();
-                    VelocityHandler.calculatePosition(Player.Player, deltaTime);
-                    SoundHandler.updateSounds(deltaTime);
-                    Camera.UpdateCamera(Player.Player);
-                }
-                
-                //Grafik Updates
-                Canva.drawNewFrame(deltaTime);
+                //Szenen Updaten
+                SceneManager.ActiveScene.onUpdate(deltaTime);
                 
                 if (deltaTime < targetDeltaTime) { //capped FPS bei den oben gesetzten
                     try {
@@ -134,10 +116,5 @@ public class Frame {
                 //OpenGL Buffering, switched einfach das was der User gerade sieht mit dem was er sehen soll, also alles was gerendert wurde
                 glfwSwapBuffers(Window);
         }
-    }
-
-    //Hilfsmethode, wenn man das Window haben will
-    public long getWindow() {
-        return Window;
     }
 }

@@ -1,6 +1,6 @@
 package Sounds;
 
-import Rendering.Frame;
+import Scenes.GameScene;
 
 public class SoundManager {
     private float lastSoundTime = 0;
@@ -10,7 +10,7 @@ public class SoundManager {
     }
     
     public void PlaySoundsWithDelay(String SoundName, int TimeInSeconds, float Volume, float DelayInSeconds) {
-        float currentTime = Frame.Gametime;
+        float currentTime = GameScene.Gametime;
         
         if (currentTime - lastSoundTime >= DelayInSeconds || lastSoundTime == 0) {
             lastSoundTime = currentTime;
@@ -23,7 +23,7 @@ public class SoundManager {
     }
     
     public void PlaySoundsWithDelayAtPos(String SoundName, int TimeInMilliseconds, float Volume, float DelayInMilliseconds, float PosX, float PosY, float Falloff) {
-        float currentTime = Frame.Gametime;
+        float currentTime = GameScene.Gametime;
 
         if (currentTime - lastSoundTime >= DelayInMilliseconds || lastSoundTime == 0) {
             lastSoundTime = currentTime;

@@ -6,7 +6,7 @@ public class GUIQuitButton extends GUIButton {
     }
     
     @Override
-    public void onButtonClick() {
+    public void onButtonClick(long Window) {
         System.out.println("Quit Button Works");
         System.exit(0);
     }

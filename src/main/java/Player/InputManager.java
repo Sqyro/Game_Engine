@@ -10,6 +10,8 @@ import GUI.TextHandler;
 import GUI.InventoryScreen;
 import GUI.PauseScreen;
 import Rendering.Frame;
+import Scenes.SceneManager;
+import Scenes.GameScene;
 
 import java.awt.Color;
 
@@ -25,35 +27,34 @@ public class InputManager {
     private static final int[] Direction = {0, 0};
     
     //Eine Methode die ein Event Benutzt um zu hören ob vom Keyboard Inputs gemacht wurden
-    public static void ListenforKeys(long window) {
-
-        glfwSetKeyCallback(window, (win, key, scancode, action, mods) -> { //Event
-            //Spieler Objekt aus der Spieler Klasse. Ich weiß die Namen von den Methoden und klassen könnten besser sein (Nicht alle Player)
-            Player player = Player.Player;
+    public static void ListenforGameKeys(long Window) {
+        glfwSetKeyCallback(Window, (win, key, scancode, action, mods) -> { //Event
+                //Spieler Objekt aus der Spieler Klasse. Ich weiß die Namen von den Methoden und klassen könnten besser sein (Nicht alle Player)
+                Player player = Player.Player;
             
                 boolean Pressed = action != GLFW_RELEASE; //ist was gedrückt worden?
             
                 switch (key) {
                     case GLFW_KEY_W: // W wurde gedrückt
-                        if(Frame.GameRunning) {
+                        if(GameScene.GameRunning) {
                             System.out.println("W Pressed"); //Nachricht für den Debug
                             wPressed = Pressed; //Wurde gerückt, also ja es wurde was gerückt hier rein schreiben für später//Schau nicht weiter (Wenn das nicht hier ist, dann wartet er bis ein Key gedrückt wurde und führt dann alles aus)
                         }
                         break;
                     case GLFW_KEY_S:
-                        if(Frame.GameRunning) {
+                        if(GameScene.GameRunning) {
                             System.out.println("S Pressed");
                             sPressed = Pressed;
                         }
                         break;
                     case GLFW_KEY_A:
-                        if(Frame.GameRunning) {
+                        if(GameScene.GameRunning) {
                             System.out.println("A Pressed");
                             aPressed = Pressed;
                         }
                         break;
                     case GLFW_KEY_D:
-                        if(Frame.GameRunning) {
+                        if(GameScene.GameRunning) {
                             System.out.println("D Pressed");
                             dPressed = Pressed;
                         }
@@ -88,7 +89,7 @@ public class InputManager {
                         }
                         break;
                     case GLFW_KEY_R:
-                        if(Frame.GameRunning) {
+                        if(GameScene.GameRunning) {
                             System.out.println("R Pressed");
                             if(Rendering.HudHandler.HudElements.isEmpty()) {
                                 Rendering.HudHandler.PlaceNewBar(100, 100, 400, 50, Rendering.ImageManager.TESTBAR, 1, 60, 4, Color.RED); //Erstellt eine Bar auf der GUI
@@ -96,7 +97,7 @@ public class InputManager {
                         }
                         break;
                     case GLFW_KEY_Q:
-                        if(Frame.GameRunning) {
+                        if(GameScene.GameRunning) {
                             System.out.println("Q Pressed");
                             Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0); //Nimmt das Hud Element was auf Position 0 ist
                             BarElement bar = (BarElement) Hud; //Konvertiert das Hud Element in ne Bar, geht gerade weil ich nur ein Objekt in der GUI hab, daher ist die Bar immer auf 0
@@ -106,27 +107,27 @@ public class InputManager {
                         }
                         break;
                     case GLFW_KEY_C:
-                        if(Frame.GameRunning) {
+                        if(GameScene.GameRunning) {
                             System.out.println("C Pressed");
                             Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, Direction); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
                         }
                         break;
                     case GLFW_KEY_I:
-                        if(Frame.GameRunning) {
+                        if(GameScene.GameRunning) {
                             System.out.println("I Pressed");
                             PointLight pointLight = new PointLight(670, 670, 1f, 1f, 1f, 300f); //Erstellt ein neues Point Light bei 670, 670 mit den RGB Werten von 1, 1, 1 und der Reichweite von 300
                             LightManager.addLight(pointLight); //Frügt das Light in die Liste für Lights hinzu
                         }
                         break;
                     case GLFW_KEY_Z:
-                        if(Frame.GameRunning) {
+                        if(GameScene.GameRunning) {
                             System.out.println("Y Pressed");
                             GUIText randomText = new GUIText("Skibidi Tripple T Sigma :3", 80, 80, 80, 50, ImageManager.GAMEFONT, Color.RED); //Erstellt ein neues Text Element
                             TextHandler.addDisplayedText(randomText); //Packt das Text Element in den To Be Displayed Text
                         }
                         break;
                     case GLFW_KEY_V:
-                        if(Frame.GameRunning) {
+                        if(GameScene.GameRunning) {
                             System.out.println("V Pressed");
                                 Player LoadedData = (Player) Save.Save.LoadObjectData(); //Läd Spieldateinen aus dem Speicher
                                 if (LoadedData != null) { //Darf nicht leer sein
@@ -137,14 +138,14 @@ public class InputManager {
                         }
                         break;
                     case GLFW_KEY_X:
-                        if(Frame.GameRunning) {
+                        if(GameScene.GameRunning) {
                             System.out.println("X Pressed");
                             Save.Save.SaveData(Player.Player, "gamesession/Playerdata/Player.ser"); //Speichert Daten vom Spieler
                         }
                         break;
                 }
             
-                if(Frame.GameRunning) {
+                if(GameScene.GameRunning) {
                     // Wir callen Move jedes mal wenn irgendeiner von den Movement Keys jetzt gerade gedrückt wird und wenn nicht, dann stoppen wir
                     if (wPressed || aPressed || sPressed || dPressed) {
                         InputHandler.Move(player);
@@ -155,29 +156,54 @@ public class InputManager {
         });
         
         //Mouse Event, für Mouse related Dinge
-        glfwSetMouseButtonCallback(window, (win, button, action, mods) -> {
-            if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) { //Wenn der Linke Mouse Button gedrückt wird
-                Player player = Player.Player; // Spieler holen
+        glfwSetMouseButtonCallback(Window, (win, button, action, mods) -> {
+                if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) { //Wenn der Linke Mouse Button gedrückt wird
+                    //Variablen für die Position von der Maus erstellen
+                    double[] MousePosX = new double[1];
+                    double[] MousePosY = new double[1];
+
+                    //Position von der Maus holen und in die Variablen schreiben
+                    glfwGetCursorPos(Window, MousePosX, MousePosY);
+
+                    if(GUIManager.currentScreen instanceof InventoryScreen) { //Wenn der Momentane Bildschirm nen Inventar ist, dann die Handle Click Methode ausführen, um zu schauen ob wir mit nem Slot interagieren können
+                        InventoryScreen Inventory = (InventoryScreen) GUIManager.currentScreen; //Inventar holen
+                        Inventory.handleClick(MousePosX[0], MousePosY[0]); //handle Click ausführen mit der Maus Position
+                    } else if(GUIManager.currentScreen instanceof PauseScreen) {
+                        PauseScreen PauseScreen = (PauseScreen) GUIManager.currentScreen;
+                        PauseScreen.handleClick(Window, MousePosX[0], MousePosY[0]);
+                    }
                 
-                //Variablen für die Position von der Maus erstellen
-                double[] MousePosX = new double[1];
-                double[] MousePosY = new double[1];
-
-                //Position von der Maus holen und in die Variablen schreiben
-                glfwGetCursorPos(window, MousePosX, MousePosY);
-
-                if(GUIManager.currentScreen instanceof InventoryScreen) { //Wenn der Momentane Bildschirm nen Inventar ist, dann die Handle Click Methode ausführen, um zu schauen ob wir mit nem Slot interagieren können
-                    InventoryScreen Inventory = (InventoryScreen) GUIManager.currentScreen; //Inventar holen
-                    Inventory.handleClick(MousePosX[0], MousePosY[0]); //handle Click ausführen mit der Maus Position
-                } else if(GUIManager.currentScreen instanceof PauseScreen) {
-                    PauseScreen PauseScreen = (PauseScreen) GUIManager.currentScreen;
-                    PauseScreen.handleClick(MousePosX[0], MousePosY[0]);
+                    //Position von der Maus ausgeben
+                    System.out.println("Mouse clicked at: " + MousePosX[0] + ", " + MousePosY[0]);
                 }
-                
-                //Position von der Maus ausgeben
-                System.out.println("Mouse clicked at: " + MousePosX[0] + ", " + MousePosY[0]);
-            }
+        });
+    }
+    
+    public static void ListenforSettingsKeys(long Window) {
+        glfwSetKeyCallback(Window, (win, key, scancode, action, mods) -> { //Event
+                switch (key) {
+                    case GLFW_KEY_ESCAPE:
+                        if(action == GLFW_PRESS) {
+                            SceneManager.LoadScene(Frame.GameScene, Window);
+                            GUIManager.openScreen(new PauseScreen());
+                        }
+                        break;
+                    }
+            });
+        
+        //Mouse Event, für Mouse related Dinge
+        glfwSetMouseButtonCallback(Window, (win, button, action, mods) -> {
+                if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) { //Wenn der Linke Mouse Button gedrückt wird
+                    //Variablen für die Position von der Maus erstellen
+                    double[] MousePosX = new double[1];
+                    double[] MousePosY = new double[1];
 
+                    //Position von der Maus holen und in die Variablen schreiben
+                    glfwGetCursorPos(Window, MousePosX, MousePosY);
+                
+                    //Position von der Maus ausgeben
+                    System.out.println("Mouse clicked at: " + MousePosX[0] + ", " + MousePosY[0]);
+                }
         });
     }
     

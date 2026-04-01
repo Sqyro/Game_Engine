@@ -24,7 +24,7 @@ public class ImageManager {
     public static int CURSOR;
     
     //Methode um alle texturen zu laden beim Game start
-    public static void loadAllTextures() {
+    public static void loadGameTextures() {
         try {
         //Hier einfach alle Texturen mit .loadTextures reinschreiben die man will. Gibt den Integer für die Texture ID in OpenGL zurück
         PLAYER = ImageHandler.loadTexture("src/main/resources/assets/textures/player/Player.png");
@@ -44,6 +44,19 @@ public class ImageManager {
         
         SWORD = ImageHandler.loadTexture("src/main/resources/assets/textures/item/sword.png");
         
+        System.out.println("Textures loaded"); //Nachricht für den Dabug
+        } catch (Exception e) { //Falls es nicht geht
+
+            System.err.println("Failed to load Textures!"); //Nachricht für den Debug
+            e.printStackTrace(); //Stacktrace ausgeben auch für debugging
+
+            System.exit(-1); //Programm schließen
+        }
+    }
+    
+    public static void loadStartTextures() {
+        try {
+        //Hier einfach alle Texturen mit .loadTextures reinschreiben die man will. Gibt den Integer für die Texture ID in OpenGL zurück
         GAMEFONT = ImageHandler.loadTexture("src/main/resources/assets/fonts/font.png");
         
         CURSOR = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/cursor/cursor3.png");
