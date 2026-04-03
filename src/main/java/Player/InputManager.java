@@ -2,6 +2,7 @@ package Player;
 
 import Rendering.BarElement;
 import Rendering.ImageManager;
+import Scenes.MainMenuScene;
 import Shader.PointLight;
 import Shader.LightManager;
 import GUI.GUIManager;
@@ -205,6 +206,40 @@ public class InputManager {
                     //Position von der Maus ausgeben
                     System.out.println("Mouse clicked at: " + MousePosX[0] + ", " + MousePosY[0]);
                 }
+        });
+    }
+
+    public static void ListenforMainMenuKeys(long Window) {
+        /*
+        glfwSetKeyCallback(Window, (win, key, scancode, action, mods) -> { //Event
+            switch (key) {
+                case GLFW_KEY_ESCAPE:
+                    if(action == GLFW_PRESS) {
+                        SceneManager.LoadScene(Frame.GameScene, Window);
+                        GUIManager.openScreen(new PauseScreen());
+                    }
+                    break;
+            }
+        });
+        */
+
+        //Mouse Event, für Mouse related Dinge
+        glfwSetMouseButtonCallback(Window, (win, button, action, mods) -> {
+            if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) { //Wenn der Linke Mouse Button gedrückt wird
+                //Variablen für die Position von der Maus erstellen
+                double[] MousePosX = new double[1];
+                double[] MousePosY = new double[1];
+
+                //Position von der Maus holen und in die Variablen schreiben
+                glfwGetCursorPos(Window, MousePosX, MousePosY);
+
+                //Position von der Maus ausgeben
+                System.out.println("Mouse clicked at: " + MousePosX[0] + ", " + MousePosY[0]);
+
+                if(SceneManager.ActiveScene instanceof MainMenuScene) {
+                    ((MainMenuScene) SceneManager.ActiveScene).handleClick(Window, MousePosX[0], MousePosY[0]);
+                }
+            }
         });
     }
     

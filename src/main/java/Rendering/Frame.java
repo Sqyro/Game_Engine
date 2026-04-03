@@ -2,6 +2,7 @@ package Rendering;
 
 import GUI.Mouse;
 import Physics2D.CollisionManager;
+import Scenes.MainMenuScene;
 import Scenes.SceneManager;
 import Scenes.SettingsScene;
 import Scenes.GameScene;
@@ -27,7 +28,8 @@ public class Frame {
     
     public static float NormalizedPixelWidth;
     public static float NormalizedPixelHeight;
-    
+
+    public static MainMenuScene MainMenuScene;
     public static SettingsScene SettingsScene;
     public static GameScene GameScene;
     
@@ -78,7 +80,9 @@ public class Frame {
         //Texturen die Transparent sind tatsächlich transparent rendern
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        
+
+        MainMenuScene = new MainMenuScene();
+        SceneManager.CreateNewScene(MainMenuScene, Window);
         SettingsScene = new SettingsScene();
         SceneManager.CreateNewScene(SettingsScene, Window);
         GameScene = new GameScene();
@@ -107,9 +111,6 @@ public class Frame {
                 
                 //Szenen Updaten
                 SceneManager.ActiveScene.onUpdate(deltaTime);
-                
-                //Hitbox update machen
-                CollisionManager.Player_Enemy();
                 
                 if (deltaTime < targetDeltaTime) { //capped FPS bei den oben gesetzten
                     try {

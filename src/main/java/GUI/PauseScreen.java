@@ -2,8 +2,6 @@ package GUI;
 
 import Rendering.Frame;
 import Rendering.ImageHandler;
-import Rendering.ImageManager;
-import Scenes.SceneManager;
 import Scenes.GameScene;
 
 import java.util.List;
@@ -12,9 +10,7 @@ import java.util.ArrayList;
 import java.awt.Color;
 
 public class PauseScreen extends GUIScreen {
-    private int CenterX;
-    private int CenterY;
-    
+
     private final float ResumeButtonWidth = 300;
     private final float ResumeButtonHeight = 50;
     private final String ResumeButtonText = "Resume";
@@ -29,7 +25,7 @@ public class PauseScreen extends GUIScreen {
     
     private final float CloseButtonWidth = 300;
     private final float CloseButtonHeight = 50;
-    private final String CloseButtonText = "Close Game";
+    private final String CloseButtonText = "Save & Quit";
     private final float CloseButtonTextSpacing = 15;
     private final float CloseButtonTextSize = 30;
     
@@ -37,9 +33,6 @@ public class PauseScreen extends GUIScreen {
     
     @Override
     public void renderScreen(ImageHandler renderer, int ScreenWidth, int ScreenHeight) {
-        //Mitte vom Bildschirm ausrechnen, damit es zentriert ist
-        CenterX = ScreenWidth / 2;
-        CenterY = ScreenHeight / 2;
         
         for(GUIButton CurrentButton : PauseButtons) {
             CurrentButton.drawButton(renderer, Color.WHITE);
@@ -50,7 +43,7 @@ public class PauseScreen extends GUIScreen {
         GameScene.GameRunning = false;
         PauseButtons.add(new GUIResumeButton(Frame.ScreenWidth /2 - ResumeButtonWidth/2, Frame.ScreenHeight /2 - ResumeButtonHeight/2 - 67 * Frame.NormalizedPixelHeight * 2, ResumeButtonWidth, ResumeButtonHeight, ResumeButtonText, ResumeButtonTextSpacing, ResumeButtonTextSize));
         PauseButtons.add(new GUISettingsButton(Frame.ScreenWidth /2 - SettingsButtonWidth/2, Frame.ScreenHeight /2 - SettingsButtonHeight/2 - 67 * Frame.NormalizedPixelHeight, SettingsButtonWidth, SettingsButtonHeight, SettingsButtonText, SettingsButtonTextSpacing, SettingsButtonTextSize));
-        PauseButtons.add(new GUIQuitButton(Frame.ScreenWidth /2 - CloseButtonWidth/2, Frame.ScreenHeight /2 - CloseButtonHeight/2, CloseButtonWidth, CloseButtonHeight, CloseButtonText, CloseButtonTextSpacing, CloseButtonTextSize));
+        PauseButtons.add(new GUIQuitToMainMenuButton(Frame.ScreenWidth /2 - CloseButtonWidth/2, Frame.ScreenHeight /2 - CloseButtonHeight/2, CloseButtonWidth, CloseButtonHeight, CloseButtonText, CloseButtonTextSpacing, CloseButtonTextSize));
     }
     
     public void handleClick(long Window, double CursorX, double CursorY) {
@@ -61,7 +54,7 @@ public class PauseScreen extends GUIScreen {
         }
     }
     
-    public void handleHovering(long Window, double CursorX, double CursorY) {
+    public void handleHovering(double CursorX, double CursorY) {
         for(GUIButton CurrentButton : PauseButtons) {
             CurrentButton.CursorHoveringOverButton(CursorX, CursorY);
         }

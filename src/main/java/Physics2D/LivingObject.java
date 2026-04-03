@@ -62,10 +62,10 @@ public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle
     }
     
     public boolean isFLipped() {
-        if (this.getDirectionX() < 1) {
+        if (this.getDirectionX() >= -1 && this.getDirectionX() < 0) {
             ObjectFlippedX = true;
         }
-        else if (this.getDirectionX() > 1) {
+        else if (this.getDirectionX() <= 1 && this.getDirectionX() > 0) {
             ObjectFlippedX = false;
         }
         return ObjectFlippedX;

@@ -74,7 +74,7 @@ public abstract class GUIButton {
     
     public boolean CursorHoveringOverButton(double CursorX, double CursorY) {
         isHoveringOver = PosX <= CursorX && PosX + ButtonWidth >= CursorX && PosY <= CursorY && PosY + ButtonHeight >= CursorY;
-        if(isHoveringOver) System.out.println("Cursor Hovering over Button");
+        //if(isHoveringOver) System.out.println("Cursor Hovering over Button");
         return isHoveringOver;
     }
     

@@ -1,6 +1,8 @@
 package GUI;
 
 import Rendering.Frame;
+import Scenes.MainMenuScene;
+import Scenes.SceneManager;
 
 import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
 
@@ -27,7 +29,11 @@ public class Mouse {
         
         if(GUIManager.currentScreen instanceof PauseScreen) {
             PauseScreen CurrentScreen = (PauseScreen) GUIManager.currentScreen;
-            CurrentScreen.handleHovering(Window, PosX, PosY);
+            CurrentScreen.handleHovering(PosX, PosY);
+        }
+
+        if (SceneManager.ActiveScene instanceof MainMenuScene) {
+            ((MainMenuScene) SceneManager.ActiveScene).handleHovering(PosX, PosY);
         }
     }
 }

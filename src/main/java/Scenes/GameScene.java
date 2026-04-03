@@ -4,6 +4,7 @@ import Enemy.Enemy;
 import GUI.GUIManager;
 import GUI.GUIText;
 import GUI.TextHandler;
+import Physics2D.CollisionManager;
 import Physics2D.VelocityHandler;
 import Player.AnimationManager;
 import Player.InputManager;
@@ -77,20 +78,21 @@ public class GameScene extends Scene {
             if (!GameRunning) { //Wenn das Spiel gestoppt wurde dann pausiere alle Sounds
                 SoundHandler.pauseAll();
             } else { //Wenn das Spiel nicht gestoppt, also resumed wurde, dann unpausiere alle Sounds
-        SoundHandler.resumeAll();
+                SoundHandler.resumeAll();
             }
             wasGameRunning = GameRunning; //Die was Game Running variable updaten auf das neuste
         }
                 
-                //Rechen Updates
-                if(GameRunning) {
-                    Gametime += deltaTime;
-                    InputManager.updatePlayerDirection();
-                    VelocityHandler.calculatePosition(Player.Player, deltaTime);
-                    SoundHandler.updateSounds(deltaTime);
-                    Camera.UpdateCamera(Player.Player);
-                }
-        
+        //Rechen Updates
+        if(GameRunning) {
+            Gametime += deltaTime;
+            InputManager.updatePlayerDirection();
+            VelocityHandler.calculatePosition(Player.Player, deltaTime);
+            SoundHandler.updateSounds(deltaTime);
+            Camera.UpdateCamera(Player.Player);
+            //Hitbox update machen
+            CollisionManager.Player_Enemy();
+        }
         
         //Der Background ist beeinflusst von dem Global light (Aber keinen Point Lights...)
         float GlobalLight = LightManager.getGlobalLight();
