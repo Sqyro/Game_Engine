@@ -5,6 +5,7 @@ import Rendering.ImageManager;
 import Rendering.Frame;
 import Item.Item;
 import Item.SwordItem;
+import Physics2D.Hitbox;
 
 import java.io.Serializable;
 
@@ -24,7 +25,7 @@ public class Player extends LivingObject implements Serializable { // Serializat
     public static Player Player;
     
     //Ausrichtung, wenn der Spieler gespawned wird
-    private static int[] DefaultDirection = {0, 0};
+    private static float[] DefaultDirection = {0, 0};
     
     public static int HP;
     
@@ -32,13 +33,13 @@ public class Player extends LivingObject implements Serializable { // Serializat
     public InventoryManager inventory = new InventoryManager(65);
     
     //Constructor vom Spieler, gibt alle Werte an LivingObject hoch
-    public Player(float PosX, float PosY, float PlayerLength, float PlayerHeight, int TextureID, float Velocity, int[] Direction /*, String name, int hp*/) { //Constructor
-        super(PosX, PosY, PlayerLength, PlayerHeight, TextureID, Velocity, Direction); //Passed alle Werte an LivingObject weiter
+    public Player(float PosX, float PosY, float PlayerLength, float PlayerHeight, int TextureID, float Velocity, float[] Direction, Hitbox Hitbox /*, String name, int hp*/) { //Constructor
+        super(PosX, PosY, PlayerLength, PlayerHeight, TextureID, Velocity, Direction, Hitbox); //Passed alle Werte an LivingObject weiter
         //this.HP = HP;
     }
     
     public static void createPlayer() { // Methode um nen Spieler zu erstellen
-        Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
+        Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection, new Hitbox(32, 0, 15)); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
         //Erstellt zwei test Items wärend der Spieler erstellung, damit man das Inventar schonmal ausprobieren kann
         Player.Player.inventory.setItem(0, new SwordItem(ImageManager.SWORD, 64, 64, "sword"));
         Player.Player.inventory.setItem(1, new SwordItem(ImageManager.SWORD, 64, 64, "sword2"));

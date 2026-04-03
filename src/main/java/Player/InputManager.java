@@ -12,6 +12,7 @@ import GUI.PauseScreen;
 import Rendering.Frame;
 import Scenes.SceneManager;
 import Scenes.GameScene;
+import Physics2D.Hitbox;
 
 import java.awt.Color;
 
@@ -24,7 +25,7 @@ public class InputManager {
     private static volatile boolean sPressed = false;
     private static volatile boolean dPressed = false;
     
-    private static final int[] Direction = {0, 0};
+    private static final float[] Direction = {0, 0};
     
     //Eine Methode die ein Event Benutzt um zu hören ob vom Keyboard Inputs gemacht wurden
     public static void ListenforGameKeys(long Window) {
@@ -109,7 +110,7 @@ public class InputManager {
                     case GLFW_KEY_C:
                         if(GameScene.GameRunning) {
                             System.out.println("C Pressed");
-                            Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, Direction); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
+                            Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, Direction, new Hitbox(22, 0, 0)); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
                         }
                         break;
                     case GLFW_KEY_I:
@@ -209,8 +210,8 @@ public class InputManager {
     
     public static void updatePlayerDirection() { // Hab den Direction Skript von oben hier runter gemoved und ihn flüssig gemacht, vorher hat der so gestottert, weil Direction für eine Frame 0 war (nach W-S oder A-D)
         //Immer vorher auf 0 setzen
-        int DirX = 0;
-        int DirY = 0;
+        float DirX = 0;
+        float DirY = 0;
         
         Player player = Player.Player;
         

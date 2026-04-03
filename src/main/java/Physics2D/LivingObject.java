@@ -7,13 +7,13 @@ public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle
     public transient float Velocity = 0;
     
     //Ausrichtung von dem Objekt
-    public transient int[] Direction = {0, 0};
+    public transient float[] Direction = {0, 0};
     
     boolean ObjectFlippedX = false;
-    private int lastDirectionY = 0;
+    private float lastDirectionY = 0;
     
-    public LivingObject(float PosX, float PosY, float ObjLength, float ObjHeight, int TextureID, float Velocity, int[] Direction) { //Constructor
-        super(PosX, PosY, ObjLength, ObjHeight, TextureID); //Passed alles außer Velocity und Direction an PhysicsObject2D weiter
+    public LivingObject(float PosX, float PosY, float ObjLength, float ObjHeight, int TextureID, float Velocity, float[] Direction, Hitbox Hitbox) { //Constructor
+        super(PosX, PosY, ObjLength, ObjHeight, TextureID, Hitbox); //Passed alles außer Velocity und Direction an PhysicsObject2D weiter
         //Variablen pro Objekt setzen
         this.Velocity = Velocity;
         this.Direction = Direction;
@@ -29,48 +29,45 @@ public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle
         Velocity = newVelocity;
     }
    
-    public int[] getDirection() {
+    public float[] getDirection() {
         return Direction;
     }
    
-    public int getDirectionX() {
+    public float getDirectionX() {
         return Direction[0];
     }
    
-    public int getDirectionY() {
+    public float getDirectionY() {
         return Direction[1];
     }
    
-    public void setDirection(int[] newDirection) {
+    public void setDirection(float[] newDirection) {
         Direction = newDirection;
     }
    
-    public void setDirectionX(int newX) {
+    public void setDirectionX(float newX) {
         Direction[0] = newX;
     }
    
-    public void setDirectionY(int newY) {
+    public void setDirectionY(float newY) {
         Direction[1] = newY;
     }
     
-    public int getLastDirectionY() {
+    public float getLastDirectionY() {
         return lastDirectionY;
     }
 
-    public void setLastDirectionY(int dir) {
+    public void setLastDirectionY(float dir) {
         lastDirectionY = dir;
     }
     
     public boolean isFLipped() {
-        switch (this.getDirectionX()) {
-            case -1:
-                ObjectFlippedX = true;
-                break;
-            case 1:
-                ObjectFlippedX = false;
-                break;
+        if (this.getDirectionX() < 1) {
+            ObjectFlippedX = true;
         }
-        
+        else if (this.getDirectionX() > 1) {
+            ObjectFlippedX = false;
+        }
         return ObjectFlippedX;
     }
 }

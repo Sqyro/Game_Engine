@@ -3,6 +3,7 @@ package Enemy;
 import Physics2D.LivingObject;
 import java.util.ArrayList;
 import Rendering.Camera;
+import Physics2D.Hitbox;
 
 public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ein sich bewegendes
     
@@ -14,12 +15,12 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
     
     public int HP; //Macht bisher noch nichts, move ich vermutlich auch zu Living Object
     
-    public Enemy(float PosX, float PosY, float EnemyLength, float EnemyHeight, int TextureID, float Velocity, int[] Direction) { //Constructor für einen neuen Enemy
-        super(PosX, PosY, EnemyLength, EnemyHeight, TextureID, Velocity, Direction); //Passed einfach nur alle Values weiter an Living Object
+    public Enemy(float PosX, float PosY, float EnemyLength, float EnemyHeight, int TextureID, float Velocity, float[] Direction, Hitbox Hitbox) { //Constructor für einen neuen Enemy
+        super(PosX, PosY, EnemyLength, EnemyHeight, TextureID, Velocity, Direction, Hitbox); //Passed einfach nur alle Values weiter an Living Object
     }
     
     //Soll einen neuen Enemy Spawnen
-    public static void Spawn(float PosX, float PosY, float EnemyLength, float EnemyHeight, int TextureID, float Velocity, int[] Direction) {
+    public static void Spawn(float PosX, float PosY, float EnemyLength, float EnemyHeight, int TextureID, float Velocity, float[] Direction, Hitbox Hitbox) {
         Enemy newEnemy; //Erstellt neue Enemy Variable
         
         //neuen Gegner erstellen, wenn keiner recycled werden kann, alten verwenden wenn noch einer da ist. 
@@ -36,10 +37,13 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
             newEnemy.setTextureID(TextureID);
             newEnemy.setVelocity(Velocity);
             newEnemy.setDirection(Direction);
+            newEnemy.Hitbox.setRadius(Hitbox.getRadius());
+            newEnemy.Hitbox.setOffsetX(Hitbox.getOffsetX());
+            newEnemy.Hitbox.setOffsetY(Hitbox.getOffsetY());
 
         } else {
             //Erstellt neues Enemy Object mit den reinkommenden Values, wenn kein alter recycled werden kann
-            newEnemy = new Enemy((int)PosX, (int)PosY, (int)EnemyLength, (int)EnemyHeight, TextureID, Velocity, Direction);
+            newEnemy = new Enemy((int)PosX, (int)PosY, (int)EnemyLength, (int)EnemyHeight, TextureID, Velocity, Direction, Hitbox);
         }
         
         //fügt den eben erstellten Enemy in die Liste hinzu

@@ -1,9 +1,12 @@
 package Rendering;
 
 import GUI.Mouse;
+import Physics2D.CollisionManager;
 import Scenes.SceneManager;
 import Scenes.SettingsScene;
 import Scenes.GameScene;
+import Player.Player;
+import Physics2D.Hitbox;
 
 import org.lwjgl.opengl.GL;
 import static org.lwjgl.glfw.GLFW.*;
@@ -104,6 +107,9 @@ public class Frame {
                 
                 //Szenen Updaten
                 SceneManager.ActiveScene.onUpdate(deltaTime);
+                
+                //Hitbox update machen
+                CollisionManager.Player_Enemy();
                 
                 if (deltaTime < targetDeltaTime) { //capped FPS bei den oben gesetzten
                     try {
