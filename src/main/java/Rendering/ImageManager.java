@@ -19,6 +19,8 @@ public class ImageManager {
     
     public static int SWORD;
     
+    public static int GUI_ELEMENTS;
+    
     public static int GAMEFONT;
     
     public static int CURSOR;
@@ -57,6 +59,8 @@ public class ImageManager {
     public static void loadStartTextures() {
         try {
         //Hier einfach alle Texturen mit .loadTextures reinschreiben die man will. Gibt den Integer für die Texture ID in OpenGL zurück
+        GUI_ELEMENTS = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/gui_elements.png");
+        
         GAMEFONT = ImageHandler.loadTexture("src/main/resources/assets/fonts/font.png");
         
         CURSOR = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/cursor/cursor3.png");

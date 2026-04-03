@@ -1,6 +1,7 @@
 package GUI;
 
 import Rendering.Camera;
+import Rendering.ImageManager;
 import Rendering.ImageHandler;
 
 public class GUISlider {
@@ -15,10 +16,23 @@ public class GUISlider {
     
     public float SliderPercentageFilled;
     
+    //Positionen auf der Textur sind immer in Anteilen an der Texture angegeben
+    //Ich teile also die Position auf der Textur in Pixeln durch die Gesamte Pixel Größe der Textur um auf den Anteil zu kommen
     public int TextureID;
-    public int SliderTextureID;
+    private float TextureWidth = 128;
+    private float TextureHeight = 48;
     
-    public GUISlider(float PosX, float PosY, float BackgroundWidth, float BackgroundHeight, float SliderWidth, float SliderHeight, float SliderPercentageFilled, int TextureID, int SliderTextureID) {
+    private float onTextureX = 0/TextureWidth;
+    private float onTextureY = 0/TextureHeight;
+    private float onTextureWidth = 96/TextureWidth;
+    private float onTextureHeight = 8/TextureHeight;
+    
+    private float SlideronTextureX = 96/TextureWidth;
+    private float SlideronTextureY = 0/TextureHeight;
+    private float SlideronTextureWidth = 2/TextureWidth;
+    private float SlideronTextureHeight = 8/TextureHeight;
+    
+    public GUISlider(float PosX, float PosY, float BackgroundWidth, float BackgroundHeight, float SliderWidth, float SliderHeight, float SliderPercentageFilled) {
         this.PosX = PosX;
         this.PosY = PosY;
         
@@ -30,16 +44,15 @@ public class GUISlider {
         
         this.SliderPercentageFilled = SliderPercentageFilled;
         
-        this.TextureID = TextureID;
-        this.SliderTextureID = SliderTextureID;
+        this.TextureID = ImageManager.GUI_ELEMENTS;
     }
     
     public void drawSlider(ImageHandler renderer) {
-        renderer.drawFull(TextureID, PosX - Camera.PosX, PosY - Camera.PosY, BackgroundWidth, BackgroundHeight, 1f, 1f, 1f);
-        renderer.drawFull(SliderTextureID, (PosX + SliderWidth * SliderPercentageFilled) - Camera.PosX, PosY - Camera.PosY, SliderWidth, SliderHeight, 1f, 1f, 1f);
+        renderer.draw(TextureID, PosX - Camera.PosX, PosY - Camera.PosY, BackgroundWidth, BackgroundHeight, onTextureX, onTextureY, onTextureWidth, onTextureHeight, 1f, 1f, 1f);
+        renderer.draw(TextureID, (PosX + SliderWidth * SliderPercentageFilled) - Camera.PosX, PosY - Camera.PosY, SliderWidth, SliderHeight, SlideronTextureX, SlideronTextureY, SlideronTextureWidth, SlideronTextureHeight, 1f, 1f, 1f);
     }
     
-    public boolean CursorOverSlider(double CursorX, double CursorY) {
+    public boolean CursorHoveringOverSlider(double CursorX, double CursorY) {
         if (PosX <= CursorX && PosX + BackgroundWidth >= CursorX && PosY <= CursorY && PosY + BackgroundHeight >= CursorY) {
             SetFilledPercentageToCursorPos(CursorX, CursorY);
             return true;
@@ -72,9 +85,5 @@ public class GUISlider {
     
     public void setTextureID(int newTextureID) {
         TextureID = newTextureID;
-    }
-    
-    public void setSliderTextureID(int newSliderTextureID) {
-        SliderTextureID = newSliderTextureID;
     }
 }

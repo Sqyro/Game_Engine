@@ -67,6 +67,8 @@ public class GameScene extends Scene {
         
         //Hört allen Tastatur Inputs zu, startet im Prinzip den Input Manager
         InputManager.ListenforGameKeys(Window);
+        
+        TextHandler.clearDisplayedTextQue();
     }
     
     @Override

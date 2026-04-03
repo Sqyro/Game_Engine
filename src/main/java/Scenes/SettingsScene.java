@@ -33,12 +33,14 @@ public class SettingsScene extends Scene {
     @Override
     public void onLoadup(long Window) {
         InputManager.ListenforSettingsKeys(Window);
+        
+        TextHandler.clearDisplayedTextQue();
     }
     
     @Override
     public void onUpdate(float deltaTime) {
-        glClearColor(1f, 1f, 1f, 1f);
-        glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Weiß setzen
+        glClearColor(0f, 0f, 0f, 0f);
+        glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Schwarz setzen
         
         for(GUIText guiText : TextHandler.ToBeDisplayedText) { //Für jeden Text im ToBeDisplayed Text
             GUIManager.renderText(guiText, renderer); //Fügt den Text in den Render Que hinzu

@@ -4,8 +4,8 @@ import Rendering.Frame;
 import Scenes.SceneManager;
 
 public class GUISettingsButton extends GUIButton {
-    public GUISettingsButton(float PosX, float PosY, float ButtonWidth, float ButtonHeight, int TextureID, String ButtonText, float ButtonTextSpacing, float ButtonTextSize) {
-        super(PosX, PosY, ButtonWidth, ButtonHeight, TextureID, ButtonText, ButtonTextSpacing, ButtonTextSize);
+    public GUISettingsButton(float PosX, float PosY, float ButtonWidth, float ButtonHeight, String ButtonText, float ButtonTextSpacing, float ButtonTextSize) {
+        super(PosX, PosY, ButtonWidth, ButtonHeight, ButtonText, ButtonTextSpacing, ButtonTextSize);
     }
 
     @Override
