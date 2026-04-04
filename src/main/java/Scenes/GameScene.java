@@ -19,6 +19,7 @@ import Rendering.ImageManager;
 import Shader.LightManager;
 import Shader.Shader;
 import Sounds.SoundHandler;
+import Map.Wall;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
@@ -92,6 +93,8 @@ public class GameScene extends Scene {
             Camera.UpdateCamera(Player.Player);
             //Hitbox update machen
             CollisionManager.Player_Enemy();
+            CollisionManager.Player_Wall();
+            CollisionManager.Enemy_Wall();
         }
         
         //Der Background ist beeinflusst von dem Global light (Aber keinen Point Lights...)
@@ -129,6 +132,23 @@ public class GameScene extends Scene {
             
             //Sonst fügt er den Enemy in den draw que hinzu
             renderer.drawFull(currentEnemy.getTextureID(), EnemyX, EnemyY, currentEnemy.getObjLength(), currentEnemy.getObjHeight(), 1f, 1f, 1f);
+        }
+        //Render Walls
+        for(int i = 0; i < Wall.Walls.size(); i++) { //Liest die Walls Liste durch
+            //Kopiert die momentan gelesene Wall in eine Lokale Variable
+            Wall currentWall = Wall.Walls.get(i);
+            
+            //Sneaked sich die ganzen Positionen in andere Variablen rein, damit man es besser lesen kann
+            float WallX = currentWall.getPosX();
+            float WallY = currentWall.getPosY();
+            
+            //Wenn diese Wall nicht auf dem Screen ist (Plus Minus 100, damit man es nicht merkt)
+            if (WallX < ScreenLeft - 100 || WallX > ScreenRight + 100 ||WallY < ScreenTop - 100 || WallY > ScreenBottom + 100) {
+                continue; // Skippt diese Wall und macht mit dem nächsten weiter
+            }
+            
+            //Sonst fügt er den Enemy in den draw que hinzu
+            renderer.drawFull(currentWall.getTextureID(), WallX, WallY, currentWall.getObjLength(), currentWall.getObjHeight(), 1f, 1f, 1f);
         }
         
         //Flushed Map und Enemies unter den Spieler. Werden geshaded und gezeichnet mit dem Global Shader

@@ -114,6 +114,12 @@ public class InputManager {
                             Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, Direction, new Hitbox(22, 0, 0)); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
                         }
                         break;
+                    case GLFW_KEY_P:
+                        if(GameScene.GameRunning) {
+                            System.out.println("P Pressed");
+                            Map.Wall.Spawn(200, 200, 50, 50, ImageManager.ENEMY, new Hitbox(22, 0, 0)); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
+                        }
+                        break;
                     case GLFW_KEY_I:
                         if(GameScene.GameRunning) {
                             System.out.println("I Pressed");
