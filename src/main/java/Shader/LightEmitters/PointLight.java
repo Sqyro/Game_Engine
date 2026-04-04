@@ -1,5 +1,7 @@
-package Shader;
+package Shader.LightEmitters;
 
+
+import Shader.LightEmitter;
 
 public class PointLight extends LightEmitter { //Gibt Licht ab
     

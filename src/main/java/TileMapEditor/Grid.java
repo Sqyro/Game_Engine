@@ -14,7 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Stack;
 import Shader.LightManager;
-import Shader.PointLight;
+import Shader.LightEmitters.PointLight;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;

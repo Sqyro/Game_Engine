@@ -1,6 +1,7 @@
 package Shader;
 
 import Rendering.Camera;
+import Shader.LightEmitters.PointLight;
 
 import java.util.ArrayList;
 import java.util.List;

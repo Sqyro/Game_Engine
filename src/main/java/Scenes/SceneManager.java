@@ -8,6 +8,9 @@ public class SceneManager {
     }
     
     public static void LoadScene(Scene newScene, long Window) {
+        if (ActiveScene != null) {
+            ActiveScene.onUnload();
+        }
         ActiveScene = newScene;
         newScene.onLoadup(Window);
     }

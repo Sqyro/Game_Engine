@@ -1,10 +1,11 @@
 package Player;
 
 import GUI.*;
+import GUI.Screens.InventoryScreen;
+import GUI.Screens.PauseScreen;
 import Rendering.BarElement;
 import Rendering.ImageManager;
-import Scenes.MainMenuScene;
-import Shader.PointLight;
+import Shader.LightEmitters.PointLight;
 import Shader.LightManager;
 import Rendering.Frame;
 import Scenes.SceneManager;
@@ -126,13 +127,13 @@ public class InputManager {
                         if(GameScene.GameRunning) {
                             System.out.println("Y Pressed");
                             GUIText randomText = new GUIText("Skibidi Tripple T Sigma :3", 80, 80, 80, 50, ImageManager.GAMEFONT, Color.RED); //Erstellt ein neues Text Element
-                            TextHandler.addDisplayedText(randomText); //Packt das Text Element in den To Be Displayed Text
+                            SceneManager.ActiveScene.addDisplayedText(randomText); //Packt das Text Element in den To Be Displayed Text
                         }
                         break;
                     case GLFW_KEY_V:
                         if(GameScene.GameRunning) {
                             System.out.println("V Pressed");
-                                Player LoadedData = (Player) Save.Save.LoadObjectData(); //Läd Spieldateinen aus dem Speicher
+                                Player LoadedData = (Player) Save.Save.LoadObjectData(1); //Läd Spieldateinen aus dem Speicher
                                 if (LoadedData != null) { //Darf nicht leer sein
                                     Player.Player.setPosX(LoadedData.getPosX()); //Holt sich die Positonen aus den Daten
                                     Player.Player.setPosY(LoadedData.getPosY());
@@ -143,7 +144,7 @@ public class InputManager {
                     case GLFW_KEY_X:
                         if(GameScene.GameRunning) {
                             System.out.println("X Pressed");
-                            Save.Save.SaveData(Player.Player, "gamesession/Playerdata/Player.ser"); //Speichert Daten vom Spieler
+                            Save.Save.SaveObjectData(Player.Player, "/Playerdata/Player.ser", 1); //Speichert Daten vom Spieler
                         }
                         break;
                 }
@@ -179,13 +180,14 @@ public class InputManager {
                 switch (key) {
                     case GLFW_KEY_ESCAPE:
                         if(action == GLFW_PRESS) {
+                            System.out.println("Escape Pressed");
                             SceneManager.LoadScene(Frame.GameScene, Window);
                             GUIManager.openScreen(new PauseScreen());
                         }
                         break;
-                    }
-            });
-        
+                }
+        });
+
         //Mouse Event, für Mouse related Dinge
         glfwSetMouseButtonCallback(Window, (win, button, action, mods) -> {
                 if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) { //Wenn der Linke Mouse Button gedrückt wird
@@ -195,26 +197,46 @@ public class InputManager {
 
                     //Position von der Maus holen und in die Variablen schreiben
                     glfwGetCursorPos(Window, MousePosX, MousePosY);
-                
+
                     //Position von der Maus ausgeben
                     System.out.println("Mouse clicked at: " + MousePosX[0] + ", " + MousePosY[0]);
                 }
         });
     }
 
-    public static void ListenforMainMenuKeys(long Window) {
-        /*
+    public static void ListenforLoadGameKeys(long Window) {
         glfwSetKeyCallback(Window, (win, key, scancode, action, mods) -> { //Event
             switch (key) {
                 case GLFW_KEY_ESCAPE:
                     if(action == GLFW_PRESS) {
-                        SceneManager.LoadScene(Frame.GameScene, Window);
-                        GUIManager.openScreen(new PauseScreen());
+                        System.out.println("Escape Pressed");
+                        SceneManager.LoadScene(Frame.MainMenuScene, Window);
                     }
                     break;
             }
         });
-        */
+
+        //Mouse Event, für Mouse related Dinge
+        glfwSetMouseButtonCallback(Window, (win, button, action, mods) -> {
+            if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) { //Wenn der Linke Mouse Button gedrückt wird
+                //Position von der Maus ausgeben
+                System.out.println("Mouse clicked at: " + Mouse.PosX + ", " + Mouse.PosY);
+
+                SceneManager.ActiveScene.handleClick(Window, Mouse.PosX, Mouse.PosY);
+            }
+        });
+    }
+
+    public static void ListenforMainMenuKeys(long Window) {
+        glfwSetKeyCallback(Window, (win, key, scancode, action, mods) -> { //Event
+            switch (key) {
+                case GLFW_KEY_ESCAPE:
+                    if(action == GLFW_PRESS) {
+                        System.out.println("Escape Pressed");
+                    }
+                    break;
+            }
+        });
 
         //Mouse Event, für Mouse related Dinge
         glfwSetMouseButtonCallback(Window, (win, button, action, mods) -> {

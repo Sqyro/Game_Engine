@@ -22,8 +22,7 @@ public class GUIManager {
     }
 
     public static void closeScreen() {
-        SceneManager.ActiveScene.clearOnScreenButtons();
-        TextHandler.clearDisplayedTextQue();
+        SceneManager.ActiveScene.clearOnScreenFields();
         currentScreen.setOpenScreen(false); //Setzt isOpen im Screen auf false mit der Hilfs Methode
         currentScreen = null; //Setzt den momentan offenen Screen auf leer
         GameScene.GameRunning = true;

@@ -1,5 +1,8 @@
-package GUI;
+package GUI.Screens;
 
+import GUI.GUIInventorySlot;
+import GUI.GUIScreen;
+import GUI.Mouse;
 import Rendering.ImageHandler;
 import Rendering.ImageManager;
 import Rendering.Camera;
@@ -51,7 +54,7 @@ public class InventoryScreen extends GUIScreen {
 
         if(HeldItem != null) { // Wenn wir gerade ein Item mit der Cursor festhalten
             //Das item was wir gerade Festhalten an der Position vom Cursor zentriert zeichnen
-            renderer.drawFull(HeldItem.getTextureID(), (float)Mouse.PosX - HeldItem.getTextureWidth() / 2 - Camera.PosX, (float)Mouse.PosY - HeldItem.getTextureWidth() / 2 - Camera.PosY, PickedUpItemSize, PickedUpItemSize, 1f, 1f, 1f);
+            renderer.drawFull(HeldItem.getTextureID(), (float) Mouse.PosX - HeldItem.getTextureWidth() / 2 - Camera.PosX, (float)Mouse.PosY - HeldItem.getTextureWidth() / 2 - Camera.PosY, PickedUpItemSize, PickedUpItemSize, 1f, 1f, 1f);
         }
     }
     

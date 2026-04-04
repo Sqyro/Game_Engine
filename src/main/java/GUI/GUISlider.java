@@ -52,7 +52,7 @@ public class GUISlider {
         renderer.draw(TextureID, (PosX + SliderWidth * SliderPercentageFilled) - Camera.PosX, PosY - Camera.PosY, SliderWidth, SliderHeight, SlideronTextureX, SlideronTextureY, SlideronTextureWidth, SlideronTextureHeight, 1f, 1f, 1f);
     }
     
-    public boolean CursorHoveringOverSlider(double CursorX, double CursorY) {
+    public boolean CursorClickedSlider(double CursorX, double CursorY) {
         if (PosX <= CursorX && PosX + BackgroundWidth >= CursorX && PosY <= CursorY && PosY + BackgroundHeight >= CursorY) {
             SetFilledPercentageToCursorPos(CursorX, CursorY);
             return true;

@@ -1,4 +1,6 @@
-package Item;
+package Item.Weapons;
+
+import Item.Item;
 
 public class SwordItem extends Item {
     

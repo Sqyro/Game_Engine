@@ -4,7 +4,7 @@ import Physics2D.LivingObject;
 import Rendering.ImageManager;
 import Rendering.Frame;
 import Item.Item;
-import Item.SwordItem;
+import Item.Weapons.SwordItem;
 import Physics2D.Hitbox;
 
 import java.io.Serializable;

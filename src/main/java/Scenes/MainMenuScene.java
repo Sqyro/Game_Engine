@@ -1,6 +1,8 @@
 package Scenes;
 
 import GUI.*;
+import GUI.Buttons.ExitGameButton;
+import GUI.Buttons.LoadGameButton;
 import Player.InputManager;
 import Rendering.Camera;
 import Rendering.Frame;
@@ -19,7 +21,7 @@ public class MainMenuScene extends Scene {
     private Shader mainMenuShader;
     private ImageHandler renderer;
 
-    public List<GUIButton> MainMenuButtons = new ArrayList<>();
+    public List<GUIInteractableField> MainMenuInteractableFields = new ArrayList<>();
 
     private final float ExitButtonWidth = 300;
     private final float ExitButtonHeight = 50;
@@ -27,25 +29,39 @@ public class MainMenuScene extends Scene {
     private final float ExitButtonTextSpacing = 15;
     private final float ExitButtonTextSize = 30;
 
+    private final float LoadGameButtonWidth = 300;
+    private final float LoadGameButtonHeight = 50;
+    private final String LoadGameButtonText = "Load Game";
+    private final float LoadGameButtonTextSpacing = 15;
+    private final float LoadGameButtonTextSize = 30;
+
+    //Liste für alle Texte die gerendert werden sollen
+    public static List<GUIText> MainMenuDisplayedText = new ArrayList<>();
+
     public MainMenuScene() {
         mainMenuShader = new Shader("src/main/resources/shaders/hudshader.vsh",
                 "src/main/resources/shaders/hudshader.fsh");
         renderer = new ImageHandler();
-}
+    }
     
     @Override
     public void onCreation(long Window) {
         //Alle nötigen Texturen laden
         ImageManager.loadStartTextures();
-        }
+    }
     
     @Override
     public void onLoadup(long Window) {
         InputManager.ListenforMainMenuKeys(Window);
 
-        TextHandler.clearDisplayedTextQue();
+        MainMenuInteractableFields.add(new LoadGameButton(Frame.ScreenWidth /2 - LoadGameButtonWidth/2, Frame.ScreenHeight /2 - LoadGameButtonHeight/2 - Frame.NormalizedPixelHeight * ExitButtonHeight, LoadGameButtonWidth, LoadGameButtonHeight, LoadGameButtonText, LoadGameButtonTextSpacing, LoadGameButtonTextSize, Color.WHITE));
+        MainMenuInteractableFields.add(new ExitGameButton(Frame.ScreenWidth /2 - ExitButtonWidth/2, Frame.ScreenHeight /2 - ExitButtonHeight/2, ExitButtonWidth, ExitButtonHeight, ExitButtonText, ExitButtonTextSpacing, ExitButtonTextSize, Color.WHITE));
+    }
 
-        MainMenuButtons.add(new GUIExitGameButton(Frame.ScreenWidth /2 - ExitButtonWidth/2, Frame.ScreenHeight /2 - ExitButtonHeight/2, ExitButtonWidth, ExitButtonHeight, ExitButtonText, ExitButtonTextSpacing, ExitButtonTextSize));
+    @Override
+    public void onUnload() {
+        clearOnScreenFields();
+        clearDisplayedTextQue();
     }
 
     @Override
@@ -53,11 +69,11 @@ public class MainMenuScene extends Scene {
         glClearColor(0f, 0f, 0f, 1f);
         glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Schwarz setzen
 
-        for(GUIButton CurrentButton : MainMenuButtons) {
-            CurrentButton.drawButton(renderer, Color.WHITE);
+        for(GUIInteractableField CurrentField : MainMenuInteractableFields) {
+            CurrentField.drawField(renderer);
         }
 
-        for(GUIText guiText : TextHandler.ToBeDisplayedText) { //Für jeden Text im ToBeDisplayed Text
+        for(GUIText guiText : MainMenuDisplayedText) { //Für jeden Text im ToBeDisplayed Text
             GUIManager.renderText(guiText, renderer); //Fügt den Text in den Render Que hinzu
         }
 
@@ -69,15 +85,15 @@ public class MainMenuScene extends Scene {
     }
 
     @Override
-    public void clearOnScreenButtons() {
-        MainMenuButtons.clear();
+    public void clearOnScreenFields() {
+        MainMenuInteractableFields.clear();
     }
 
     @Override
     public void handleClick(long Window, double CursorX, double CursorY) {
-        for(GUIButton CurrentButton : MainMenuButtons) {
-            if(CurrentButton.CursorHoveringOverButton(CursorX, CursorY)) {
-                CurrentButton.onButtonClick(Window);
+        for(GUIInteractableField CurrentField : MainMenuInteractableFields) {
+            if(CurrentField.CursorHoveringOver(CursorX, CursorY)) {
+                CurrentField.onFieldClick(Window);
                 break;
             }
         }
@@ -85,8 +101,18 @@ public class MainMenuScene extends Scene {
 
     @Override
     public void handleHovering(double CursorX, double CursorY) {
-        for(GUIButton CurrentButton : MainMenuButtons) {
-            CurrentButton.CursorHoveringOverButton(CursorX, CursorY);
+        for(GUIInteractableField CurrentField : MainMenuInteractableFields) {
+            CurrentField.CursorHoveringOver(CursorX, CursorY);
         }
+    }
+
+    @Override
+    public void addDisplayedText(GUIText addedText) {
+        MainMenuDisplayedText.add(addedText);
+    }
+
+    @Override
+    public void clearDisplayedTextQue() {
+        MainMenuDisplayedText.clear();
     }
 }

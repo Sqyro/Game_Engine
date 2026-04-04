@@ -2,13 +2,15 @@ package Scenes;
 
 import GUI.GUIManager;
 import GUI.GUIText;
-import GUI.TextHandler;
 import Player.InputManager;
 import Rendering.Camera;
 import Rendering.Frame;
 import Rendering.ImageHandler;
 import Rendering.ImageManager;
 import Shader.Shader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
@@ -18,7 +20,10 @@ public class SettingsScene extends Scene {
     
     private Shader settingsShader;
     private ImageHandler renderer;
-    
+
+    //Liste für alle Texte die gerendert werden sollen
+    public static List<GUIText> SettingsDisplayedText = new ArrayList<>();
+
     public SettingsScene() {
         settingsShader = new Shader("src/main/resources/shaders/hudshader.vsh",
                               "src/main/resources/shaders/hudshader.fsh");
@@ -33,16 +38,20 @@ public class SettingsScene extends Scene {
     @Override
     public void onLoadup(long Window) {
         InputManager.ListenforSettingsKeys(Window);
-
-        TextHandler.clearDisplayedTextQue();
     }
-    
+
+    @Override
+    public void onUnload() {
+        clearOnScreenFields();
+        clearDisplayedTextQue();
+    }
+
     @Override
     public void onUpdate(float deltaTime) {
         glClearColor(0f, 0f, 0f, 0f);
         glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Schwarz setzen
         
-        for(GUIText guiText : TextHandler.ToBeDisplayedText) { //Für jeden Text im ToBeDisplayed Text
+        for(GUIText guiText : SettingsDisplayedText) { //Für jeden Text im ToBeDisplayed Text
             GUIManager.renderText(guiText, renderer); //Fügt den Text in den Render Que hinzu
         }
         
@@ -54,7 +63,7 @@ public class SettingsScene extends Scene {
     }
 
     @Override
-    public void clearOnScreenButtons() {
+    public void clearOnScreenFields() {
 
     }
 
@@ -66,5 +75,15 @@ public class SettingsScene extends Scene {
     @Override
     public void handleHovering(double CursorX, double CursorY) {
 
+    }
+
+    @Override
+    public void addDisplayedText(GUIText addedText) {
+        SettingsDisplayedText.add(addedText);
+    }
+
+    @Override
+    public void clearDisplayedTextQue() {
+        SettingsDisplayedText.clear();
     }
 }

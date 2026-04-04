@@ -2,9 +2,9 @@ package Scenes;
 
 import Enemy.Enemy;
 import GUI.GUIButton;
+import GUI.GUIInteractableField;
 import GUI.GUIManager;
 import GUI.GUIText;
-import GUI.TextHandler;
 import Physics2D.CollisionManager;
 import Physics2D.VelocityHandler;
 import Player.AnimationManager;
@@ -43,7 +43,10 @@ public class GameScene extends Scene {
     
     public static float Gametime = 0;
 
-    public List<GUIButton> GameButtons = new ArrayList<>();
+    public List<GUIInteractableField> GameInteractableFields = new ArrayList<>();
+
+    //Liste für alle Texte die gerendert werden sollen
+    public static List<GUIText> GameDisplayedText = new ArrayList<>();
     
     public GameScene() {
         Map = new Map.MapHandler(); //Neues Map Objekt erstellen, gibt gerade nur eine Map, später aber vielleicht mehrere (Räume)
@@ -76,10 +79,14 @@ public class GameScene extends Scene {
         
         //Hört allen Tastatur Inputs zu, startet im Prinzip den Input Manager
         InputManager.ListenforGameKeys(Window);
-
-        TextHandler.clearDisplayedTextQue();
     }
-    
+
+    @Override
+    public void onUnload() {
+        clearOnScreenFields();
+        clearDisplayedTextQue();
+    }
+
     @Override
     public void onUpdate(float deltaTime) {
         if (GameRunning != wasGameRunning) { //Schaut ob sich der GameRunning State geändert hat
@@ -231,11 +238,11 @@ public class GameScene extends Scene {
             GUIManager.currentScreen.renderScreen(renderer, Frame.ScreenWidth, Frame.ScreenHeight);
         }
 
-        for(GUIButton CurrentButton : Frame.GameScene.GameButtons) {
-            CurrentButton.drawButton(renderer, Color.WHITE);
+        for(GUIInteractableField CurrentField : GameInteractableFields) {
+            CurrentField.drawField(renderer);
         }
 
-        for(GUIText guiText : TextHandler.ToBeDisplayedText) { //Für jeden Text im ToBeDisplayed Text
+        for(GUIText guiText : GameDisplayedText) { //Für jeden Text im ToBeDisplayed Text
             GUIManager.renderText(guiText, renderer); //Fügt den Text in den Render Que hinzu
         }
         
@@ -247,15 +254,15 @@ public class GameScene extends Scene {
     }
 
     @Override
-    public void clearOnScreenButtons() {
-        GameButtons.clear();
+    public void clearOnScreenFields() {
+        GameInteractableFields.clear();
     }
 
     @Override
     public void handleClick(long Window, double CursorX, double CursorY) {
-        for(GUIButton CurrentButton : GameButtons) {
-            if(CurrentButton.CursorHoveringOverButton(CursorX, CursorY)) {
-                CurrentButton.onButtonClick(Window);
+        for(GUIInteractableField CurrentField : GameInteractableFields) {
+            if(CurrentField.CursorHoveringOver(CursorX, CursorY)) {
+                CurrentField.onFieldClick(Window);
                 break;
             }
         }
@@ -263,8 +270,18 @@ public class GameScene extends Scene {
 
     @Override
     public void handleHovering(double CursorX, double CursorY) {
-        for(GUIButton CurrentButton : GameButtons) {
-            CurrentButton.CursorHoveringOverButton(CursorX, CursorY);
+        for(GUIInteractableField CurrentField : GameInteractableFields) {
+            CurrentField.CursorHoveringOver(CursorX, CursorY);
         }
+    }
+
+    @Override
+    public void addDisplayedText(GUIText addedText) {
+        GameDisplayedText.add(addedText);
+    }
+
+    @Override
+    public void clearDisplayedTextQue() {
+        GameDisplayedText.clear();
     }
 }

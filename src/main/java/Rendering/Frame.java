@@ -2,10 +2,7 @@ package Rendering;
 
 import GUI.Mouse;
 import Physics2D.CollisionManager;
-import Scenes.MainMenuScene;
-import Scenes.SceneManager;
-import Scenes.SettingsScene;
-import Scenes.GameScene;
+import Scenes.*;
 import Player.Player;
 import Physics2D.Hitbox;
 
@@ -30,6 +27,7 @@ public class Frame {
     public static float NormalizedPixelHeight;
 
     public static MainMenuScene MainMenuScene;
+    public static LoadGameScene LoadGameScene;
     public static SettingsScene SettingsScene;
     public static GameScene GameScene;
     
@@ -83,15 +81,14 @@ public class Frame {
 
         MainMenuScene = new MainMenuScene();
         SceneManager.CreateNewScene(MainMenuScene, Window);
+        LoadGameScene = new LoadGameScene();
+        SceneManager.CreateNewScene(LoadGameScene, Window);
         SettingsScene = new SettingsScene();
         SceneManager.CreateNewScene(SettingsScene, Window);
         GameScene = new GameScene();
         SceneManager.CreateNewScene(GameScene, Window);
         
-        //Alle nötigen Texturen laden
-        ImageManager.loadStartTextures();
-        
-        SceneManager.LoadScene(GameScene, Window);
+        SceneManager.LoadScene(MainMenuScene, Window);
     }
     
     private void Update() {

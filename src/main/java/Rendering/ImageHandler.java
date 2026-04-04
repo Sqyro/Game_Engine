@@ -2,7 +2,7 @@ package Rendering;
 
 import Shader.Shader;
 import Shader.LightManager;
-import Shader.PointLight;
+import Shader.LightEmitters.PointLight;
 
 import java.util.Map;
 import java.util.List;
