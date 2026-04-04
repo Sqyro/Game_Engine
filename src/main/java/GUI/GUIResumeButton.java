@@ -7,8 +7,6 @@ public class GUIResumeButton extends GUIButton {
 
     @Override
     public void onButtonClick(long Window) {
-        TextHandler.clearDisplayedTextQue();
         GUIManager.closeScreen();
     }
-    
 }

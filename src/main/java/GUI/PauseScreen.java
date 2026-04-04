@@ -4,9 +4,6 @@ import Rendering.Frame;
 import Rendering.ImageHandler;
 import Scenes.GameScene;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import java.awt.Color;
 
 public class PauseScreen extends GUIScreen {
@@ -29,34 +26,20 @@ public class PauseScreen extends GUIScreen {
     private final float CloseButtonTextSpacing = 15;
     private final float CloseButtonTextSize = 30;
     
-    public List<GUIButton> PauseButtons = new ArrayList<>();
-    
     @Override
     public void renderScreen(ImageHandler renderer, int ScreenWidth, int ScreenHeight) {
-        
-        for(GUIButton CurrentButton : PauseButtons) {
-            CurrentButton.drawButton(renderer, Color.WHITE);
-        }
+
     }
     
     public PauseScreen() {
         GameScene.GameRunning = false;
-        PauseButtons.add(new GUIResumeButton(Frame.ScreenWidth /2 - ResumeButtonWidth/2, Frame.ScreenHeight /2 - ResumeButtonHeight/2 - 67 * Frame.NormalizedPixelHeight * 2, ResumeButtonWidth, ResumeButtonHeight, ResumeButtonText, ResumeButtonTextSpacing, ResumeButtonTextSize));
-        PauseButtons.add(new GUISettingsButton(Frame.ScreenWidth /2 - SettingsButtonWidth/2, Frame.ScreenHeight /2 - SettingsButtonHeight/2 - 67 * Frame.NormalizedPixelHeight, SettingsButtonWidth, SettingsButtonHeight, SettingsButtonText, SettingsButtonTextSpacing, SettingsButtonTextSize));
-        PauseButtons.add(new GUIQuitToMainMenuButton(Frame.ScreenWidth /2 - CloseButtonWidth/2, Frame.ScreenHeight /2 - CloseButtonHeight/2, CloseButtonWidth, CloseButtonHeight, CloseButtonText, CloseButtonTextSpacing, CloseButtonTextSize));
+        Frame.GameScene.GameButtons.add(new GUIResumeButton(Frame.ScreenWidth /2 - ResumeButtonWidth/2, Frame.ScreenHeight /2 - ResumeButtonHeight/2 - 67 * Frame.NormalizedPixelHeight * 2, ResumeButtonWidth, ResumeButtonHeight, ResumeButtonText, ResumeButtonTextSpacing, ResumeButtonTextSize));
+        Frame.GameScene.GameButtons.add(new GUISettingsButton(Frame.ScreenWidth /2 - SettingsButtonWidth/2, Frame.ScreenHeight /2 - SettingsButtonHeight/2 - 67 * Frame.NormalizedPixelHeight, SettingsButtonWidth, SettingsButtonHeight, SettingsButtonText, SettingsButtonTextSpacing, SettingsButtonTextSize));
+        Frame.GameScene.GameButtons.add(new GUIQuitToMainMenuButton(Frame.ScreenWidth /2 - CloseButtonWidth/2, Frame.ScreenHeight /2 - CloseButtonHeight/2, CloseButtonWidth, CloseButtonHeight, CloseButtonText, CloseButtonTextSpacing, CloseButtonTextSize));
     }
-    
-    public void handleClick(long Window, double CursorX, double CursorY) {
-        for(GUIButton CurrentButton : PauseButtons) {
-            if(CurrentButton.CursorHoveringOverButton(CursorX, CursorY)) {
-                CurrentButton.onButtonClick(Window);
-            }
-        }
-    }
-    
-    public void handleHovering(double CursorX, double CursorY) {
-        for(GUIButton CurrentButton : PauseButtons) {
-            CurrentButton.CursorHoveringOverButton(CursorX, CursorY);
-        }
+
+    public void CloseScreen() {
+        TextHandler.clearDisplayedTextQue();
+        GUIManager.closeScreen();
     }
 }

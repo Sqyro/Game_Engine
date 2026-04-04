@@ -1,15 +1,11 @@
 package Player;
 
+import GUI.*;
 import Rendering.BarElement;
 import Rendering.ImageManager;
 import Scenes.MainMenuScene;
 import Shader.PointLight;
 import Shader.LightManager;
-import GUI.GUIManager;
-import GUI.GUIText;
-import GUI.TextHandler;
-import GUI.InventoryScreen;
-import GUI.PauseScreen;
 import Rendering.Frame;
 import Scenes.SceneManager;
 import Scenes.GameScene;
@@ -81,7 +77,6 @@ public class InputManager {
                         if(action == GLFW_PRESS) {
                             System.out.println("Escape Pressed");
                             if(GUIManager.isScreenOpen()) {
-                                TextHandler.clearDisplayedTextQue();
                                 GUIManager.closeScreen();
                             } else {
                                 if(GUIManager.currentScreen == null) {
@@ -166,23 +161,15 @@ public class InputManager {
         //Mouse Event, für Mouse related Dinge
         glfwSetMouseButtonCallback(Window, (win, button, action, mods) -> {
                 if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) { //Wenn der Linke Mouse Button gedrückt wird
-                    //Variablen für die Position von der Maus erstellen
-                    double[] MousePosX = new double[1];
-                    double[] MousePosY = new double[1];
-
-                    //Position von der Maus holen und in die Variablen schreiben
-                    glfwGetCursorPos(Window, MousePosX, MousePosY);
-
                     if(GUIManager.currentScreen instanceof InventoryScreen) { //Wenn der Momentane Bildschirm nen Inventar ist, dann die Handle Click Methode ausführen, um zu schauen ob wir mit nem Slot interagieren können
                         InventoryScreen Inventory = (InventoryScreen) GUIManager.currentScreen; //Inventar holen
-                        Inventory.handleClick(MousePosX[0], MousePosY[0]); //handle Click ausführen mit der Maus Position
-                    } else if(GUIManager.currentScreen instanceof PauseScreen) {
-                        PauseScreen PauseScreen = (PauseScreen) GUIManager.currentScreen;
-                        PauseScreen.handleClick(Window, MousePosX[0], MousePosY[0]);
+                        Inventory.handleClick(Mouse.PosX, Mouse.PosY); //handle Click ausführen mit der Maus Position
                     }
-                
+
+                    SceneManager.ActiveScene.handleClick(Window, Mouse.PosX, Mouse.PosY);
+
                     //Position von der Maus ausgeben
-                    System.out.println("Mouse clicked at: " + MousePosX[0] + ", " + MousePosY[0]);
+                    System.out.println("Mouse clicked at: " + Mouse.PosX + ", " + Mouse.PosY);
                 }
         });
     }
@@ -232,19 +219,10 @@ public class InputManager {
         //Mouse Event, für Mouse related Dinge
         glfwSetMouseButtonCallback(Window, (win, button, action, mods) -> {
             if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) { //Wenn der Linke Mouse Button gedrückt wird
-                //Variablen für die Position von der Maus erstellen
-                double[] MousePosX = new double[1];
-                double[] MousePosY = new double[1];
-
-                //Position von der Maus holen und in die Variablen schreiben
-                glfwGetCursorPos(Window, MousePosX, MousePosY);
-
                 //Position von der Maus ausgeben
-                System.out.println("Mouse clicked at: " + MousePosX[0] + ", " + MousePosY[0]);
+                System.out.println("Mouse clicked at: " + Mouse.PosX + ", " + Mouse.PosY);
 
-                if(SceneManager.ActiveScene instanceof MainMenuScene) {
-                    ((MainMenuScene) SceneManager.ActiveScene).handleClick(Window, MousePosX[0], MousePosY[0]);
-                }
+                SceneManager.ActiveScene.handleClick(Window, Mouse.PosX, Mouse.PosY);
             }
         });
     }

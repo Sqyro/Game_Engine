@@ -33,7 +33,7 @@ public class SettingsScene extends Scene {
     @Override
     public void onLoadup(long Window) {
         InputManager.ListenforSettingsKeys(Window);
-        
+
         TextHandler.clearDisplayedTextQue();
     }
     
@@ -51,5 +51,20 @@ public class SettingsScene extends Scene {
         
         //Flushed den Screen Render durch mit dem Hud Shader
         renderer.flush(settingsShader, Frame.ScreenWidth, Frame.ScreenHeight);
+    }
+
+    @Override
+    public void clearOnScreenButtons() {
+
+    }
+
+    @Override
+    public void handleClick(long Window, double CursorX, double CursorY) {
+
+    }
+
+    @Override
+    public void handleHovering(double CursorX, double CursorY) {
+
     }
 }

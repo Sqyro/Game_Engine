@@ -3,6 +3,7 @@ package GUI;
 import Rendering.ImageHandler;
 import Rendering.Camera;
 import Scenes.GameScene;
+import Scenes.SceneManager;
 
 public class GUIManager {
     public static GUIScreen currentScreen = null;
@@ -21,6 +22,8 @@ public class GUIManager {
     }
 
     public static void closeScreen() {
+        SceneManager.ActiveScene.clearOnScreenButtons();
+        TextHandler.clearDisplayedTextQue();
         currentScreen.setOpenScreen(false); //Setzt isOpen im Screen auf false mit der Hilfs Methode
         currentScreen = null; //Setzt den momentan offenen Screen auf leer
         GameScene.GameRunning = true;

@@ -1,6 +1,7 @@
 package Scenes;
 
 import Enemy.Enemy;
+import GUI.GUIButton;
 import GUI.GUIManager;
 import GUI.GUIText;
 import GUI.TextHandler;
@@ -21,6 +22,10 @@ import Shader.Shader;
 import Sounds.SoundHandler;
 import Map.Wall;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
@@ -37,6 +42,8 @@ public class GameScene extends Scene {
     private boolean wasGameRunning = true;
     
     public static float Gametime = 0;
+
+    public List<GUIButton> GameButtons = new ArrayList<>();
     
     public GameScene() {
         Map = new Map.MapHandler(); //Neues Map Objekt erstellen, gibt gerade nur eine Map, später aber vielleicht mehrere (Räume)
@@ -69,7 +76,7 @@ public class GameScene extends Scene {
         
         //Hört allen Tastatur Inputs zu, startet im Prinzip den Input Manager
         InputManager.ListenforGameKeys(Window);
-        
+
         TextHandler.clearDisplayedTextQue();
     }
     
@@ -223,7 +230,11 @@ public class GameScene extends Scene {
             //Enqued den momentan offenen Screen in draw
             GUIManager.currentScreen.renderScreen(renderer, Frame.ScreenWidth, Frame.ScreenHeight);
         }
-        
+
+        for(GUIButton CurrentButton : Frame.GameScene.GameButtons) {
+            CurrentButton.drawButton(renderer, Color.WHITE);
+        }
+
         for(GUIText guiText : TextHandler.ToBeDisplayedText) { //Für jeden Text im ToBeDisplayed Text
             GUIManager.renderText(guiText, renderer); //Fügt den Text in den Render Que hinzu
         }
@@ -233,5 +244,27 @@ public class GameScene extends Scene {
         
         //Flushed den Screen Render durch mit dem Hud Shader
         renderer.flush(hudshader, Frame.ScreenWidth, Frame.ScreenHeight);
+    }
+
+    @Override
+    public void clearOnScreenButtons() {
+        GameButtons.clear();
+    }
+
+    @Override
+    public void handleClick(long Window, double CursorX, double CursorY) {
+        for(GUIButton CurrentButton : GameButtons) {
+            if(CurrentButton.CursorHoveringOverButton(CursorX, CursorY)) {
+                CurrentButton.onButtonClick(Window);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void handleHovering(double CursorX, double CursorY) {
+        for(GUIButton CurrentButton : GameButtons) {
+            CurrentButton.CursorHoveringOverButton(CursorX, CursorY);
+        }
     }
 }

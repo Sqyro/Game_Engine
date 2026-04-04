@@ -26,14 +26,6 @@ public class Mouse {
             PosY = Y[0];
             //System.out.println(PosX + ":" + PosY);
         }
-        
-        if(GUIManager.currentScreen instanceof PauseScreen) {
-            PauseScreen CurrentScreen = (PauseScreen) GUIManager.currentScreen;
-            CurrentScreen.handleHovering(PosX, PosY);
-        }
-
-        if (SceneManager.ActiveScene instanceof MainMenuScene) {
-            ((MainMenuScene) SceneManager.ActiveScene).handleHovering(PosX, PosY);
-        }
+        SceneManager.ActiveScene.handleHovering(PosX, PosY);
     }
 }
