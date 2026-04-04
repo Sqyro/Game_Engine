@@ -17,7 +17,7 @@ public class LightManager {
     //Liste von allen Point Lights die an den Shader geschickt werden
     public static final List<PointLight> PointLights = new ArrayList<>();
     //Liste wo alle Point Lights drin gespeichert werden
-    private static final List<PointLight> AllPointLights = new ArrayList<>();
+    public static final List<PointLight> AllPointLights = new ArrayList<>();
     
     public LightManager() { //Constructor for the Love of the Game
     

@@ -9,7 +9,7 @@ public class TileSelector extends JPanel {
 
     public static int tileSize = 64; //größe eines tiles in der Tileselection
     private int columns = 8; //anzahl der spalten pro reihe
-    public static int tileCount = 100; //wie viele tiles angezeigt werden
+    public static int tileCount; //wie viele tiles angezeigt werden
 
     private Grid grid; //Referenz
 
@@ -43,9 +43,12 @@ public class TileSelector extends JPanel {
             int x = col * tileSize; //x position auf der tileselection
             int y = row * tileSize; //y position auf der tileselection
 
-            if (Grid.tiles[i] != null) { //wenn ein bild vorhanden ist zeichne es
-                g.drawImage(Grid.tiles[i * 4], x, y, tileSize, tileSize, null);
-            } else { //sonst ist das feld grau
+            int arrayindex = i * 4; 
+
+            // Prüfen, ob der Index im Array existiert und nicht null ist
+            if (arrayindex < Grid.tiles.length && Grid.tiles[arrayindex] != null) { 
+                g.drawImage(Grid.tiles[arrayindex], x, y, tileSize, tileSize, null);
+            } else { 
                 g.setColor(Color.GRAY);
                 g.fillRect(x, y, tileSize, tileSize);
             }

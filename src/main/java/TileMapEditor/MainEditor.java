@@ -10,12 +10,12 @@ public class MainEditor {
         JFrame frame = new JFrame("Map Editor"); //erstellt das hauptfenster
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //schließt das programm wenn du auf x drückst
         frame.setSize(1920, 1080); //fenstergröße idnem fall 1920x1080
+        CursorManager.load(frame); //lädt die bilder von der custom maus und setzt sofort pencil als standard
 
         frame.setLayout(new BorderLayout()); //teilt das fenster ein in "parts"
 
         Grid grid = new Grid(128, 128, 16, 100, 100); //erstellt neues grid mit (Reihen, Zeilen, Tile Größe, verschoben X Richtung, verschoben Y Richtung)
         frame.add(grid, BorderLayout.CENTER); //das Grid liegt im center ungefähr
-
         
         //eingabefelder
         JTextField sizeInput = new JTextField(4);
@@ -30,8 +30,8 @@ public class MainEditor {
         JButton resizeMap = new JButton("Resize Map");
 
         //panels für die buttons und labels
-        buttonPanel.add(zoomIn);
-        buttonPanel.add(zoomOut);
+        //buttonPanel.add(zoomIn);
+        //buttonPanel.add(zoomOut);
         //buttonPanel.add(print);
         buttonPanel.add(importm);
         buttonPanel.add(exportm);
@@ -56,9 +56,17 @@ public class MainEditor {
         objectScroll.setPreferredSize(new Dimension(530, 1250)); //und das ist die größe
         tabs.addTab("objects", objectScroll); //addet es auch zum tab
         
-        //licht und hitboxen tab
-        JPanel lighthitboxenPanel = new JPanel();
-        tabs.addTab("light/hitboxen", lighthitboxenPanel); //addet es auch zum tab
+        //licht selector tab
+        LightSelector lightSelector = new LightSelector(grid); 
+        JScrollPane lightScroll = new JScrollPane(lightSelector);
+        lightScroll.setPreferredSize(new Dimension(530, 1250));
+        tabs.addTab("light", lightScroll); //addet es auch zum tab
+        
+        //licht selector tab
+        HitboxenSelector hitboxenSelector = new HitboxenSelector(grid); 
+        JScrollPane hitboxenScroll = new JScrollPane(hitboxenSelector);
+        hitboxenScroll.setPreferredSize(new Dimension(530, 1250));
+        tabs.addTab("hitboxen", hitboxenScroll); //addet es auch zum tab
         
         //tab wechsel
         tabs.addChangeListener(e -> {
@@ -67,7 +75,8 @@ public class MainEditor {
 
         if(index == 0) grid.currentMode = 0; //tiles
         if(index == 1) grid.currentMode = 1; //physicsobjects2D
-        if(index == 2) grid.currentMode = 2; //licht und hitboxen
+        if(index == 2) grid.currentMode = 2; //licht
+        if(index == 3) grid.currentMode = 3; //hitboxen
 
     });
         
