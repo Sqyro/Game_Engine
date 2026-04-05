@@ -5,6 +5,8 @@ import GUI.GUIButton;
 import GUI.GUIInteractableField;
 import GUI.GUIManager;
 import GUI.GUIText;
+import Item.Items;
+import Map.MapObjects;
 import Physics2D.CollisionManager;
 import Physics2D.VelocityHandler;
 import Player.AnimationManager;
@@ -75,12 +77,15 @@ public class GameScene extends Scene {
     
     @Override
     public void onLoadup(long Window) {
-        GameRunning = true;
-        
+        MapObjects.RegisterMapObjects();
+        Items.RegisterItems();
+
         //Hört allen Tastatur Inputs zu, startet im Prinzip den Input Manager
         InputManager.ListenforGameKeys(Window);
 
         Camera.UpdateCamera(Player.Player);
+
+        GameRunning = true;
     }
 
     @Override

@@ -1,14 +1,16 @@
 package Item;
 
+import Registry.Registrable;
+
 import java.io.Serializable;
 
-public class Item implements Serializable {
+public class Item implements Registrable, Serializable {
     private static final long serialVersionUID = 1L;
     
-    private int TextureID;
+    public int TextureID;
     
-    private int TextureWidth;
-    private int TextureHeight;
+    public int TextureWidth;
+    public int TextureHeight;
     
     private String RegistryName;
     
@@ -18,32 +20,21 @@ public class Item implements Serializable {
         this.TextureHeight = TextureHeight;
         this.RegistryName = RegistryName;
     }
-    
-    public int getTextureID() {
-        return TextureID;
+
+    @Override
+    public String getRegistryName() {
+        return RegistryName;
     }
    
     public void setTextureID(int newTextureID) {
         this.TextureID = newTextureID;
     }
-
-    public int getTextureWidth() {
-        return TextureWidth;
-    }
    
     public void setTextureWidth(int newTextureWidth) {
         this.TextureWidth = newTextureWidth;
     }
-    
-    public int getTextureHeight() {
-        return TextureHeight;
-    }
-   
+
     public void setTextureHeight(int newTextureHeight) {
         this.TextureHeight = newTextureHeight;
-    }
-    
-    public String getRegistryName() {
-        return RegistryName;
     }
 }

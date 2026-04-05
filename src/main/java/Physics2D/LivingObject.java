@@ -2,8 +2,10 @@ package Physics2D;
 
 import GameLang.Float.Vector2F;
 
+import java.io.Serializable;
+
 public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle Objekte die Physik haben und sich bewegen können
-    
+
     //Variablen (transient wegen Speichern)
     //Geschwindigkeit von dem Objekt
     public transient float Velocity;

@@ -4,6 +4,7 @@ import Physics2D.LivingObject;
 import Rendering.ImageManager;
 import Rendering.Frame;
 import Item.Item;
+import Item.Items;
 import Item.Weapons.SwordItem;
 import Physics2D.Hitbox;
 
@@ -41,8 +42,8 @@ public class Player extends LivingObject implements Serializable { // Serializat
     public static void createPlayer() { // Methode um nen Spieler zu erstellen
         Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection, new Hitbox(32, 0, 15)); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
         //Erstellt zwei test Items wärend der Spieler erstellung, damit man das Inventar schonmal ausprobieren kann
-        Player.Player.inventory.setItem(0, new SwordItem(ImageManager.SWORD, 64, 64, "sword"));
-        Player.Player.inventory.setItem(1, new SwordItem(ImageManager.SWORD, 64, 64, "sword2"));
+        Player.Player.inventory.setItem(0, Items.ITEMS.getRegistry("sword"));
+        Player.Player.inventory.setItem(1, Items.ITEMS.getRegistry("sword"));
     }
     
     //Methode, um ein Item ins Spieler Inventar hinzu zu fügen, z.B von nem Drop
