@@ -76,8 +76,8 @@ public class SoundHandler {
                 Player player = Player.Player; //Den Spieler Sneaken, um die Position zu bekommen
                 
                 //Abstand zwischen Spieler und Sound für X und Y separat holen
-                float DeltaPosX = CurrentSound.PosX - player.getPosX();
-                float DeltaPosY = CurrentSound.PosY - player.getPosY();
+                float DeltaPosX = CurrentSound.PosX - player.PosX;
+                float DeltaPosY = CurrentSound.PosY - player.PosY;
 
                 //Satz des Pythagoras, um den Abstand in eine Länge zu bekommen (Hypothenuse in nem Dreieck mit den beiden Längen)
                 float Distance = (float)Math.sqrt(DeltaPosX * DeltaPosX + DeltaPosY * DeltaPosY);

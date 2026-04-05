@@ -1,50 +1,25 @@
 package Physics2D;
 
-import java.awt.Graphics;
-import java.awt.Image;
-
-
 public class GameAsset {
-    int x, y;
-    Image img;
-    String name;
+    public int PosX;
+    public int PosY;
+    public int TextureID;
 
-    public GameAsset(int x, int y, Image img, String name) {
-        this.x = x;
-        this.y = y;
-        this.img = img;
-        this.name = name;
+    public GameAsset(int PosX, int PosY, int TextureID) {
+        this.PosX = PosX;
+        this.PosY = PosY;
+        this.TextureID = TextureID;
     }
 
-    public int getX() {
-        return x;
+    public void setPosX(int newPosX) {
+        this.PosX = newPosX;
     }
 
-    public int getY() {
-        return y;
+    public void setPosY(int newPosY) {
+        this.PosY = newPosY;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public Image getImg() {
-        return img;
-    }
-
-    public void setImg(Image img) {
-        this.img = img;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public void draw(Graphics g) {
-        g.drawImage(img, x, y, null);
+    public void setTextureID(int newTextureID) {
+        this.TextureID = newTextureID;
     }
 }

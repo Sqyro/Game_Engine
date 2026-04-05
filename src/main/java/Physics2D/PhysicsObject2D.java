@@ -8,13 +8,13 @@ public abstract class PhysicsObject2D implements Serializable { // Klasse für a
     //Variablen deklarieren
     
     //Position
-    private float PosX = 0;
-    private float PosY = 0;
+    public float PosX;
+    public float PosY;
     
     //Größe
     //Transient, weil größe nicht gespeichert werden muss
-    private transient float ObjLength;
-    private transient float ObjHeight;
+    public transient float ObjLength;
+    public transient float ObjHeight;
     
     //TexturID für OpenGL
     public transient int TextureID; //Transient, weil Textur nicht gespeichert werden muss
@@ -33,40 +33,21 @@ public abstract class PhysicsObject2D implements Serializable { // Klasse für a
     }
     
     //Methoden um an die Variablen von jedem Objekt zu kommen
-    public float getPosX() {
-        return PosX;
-    }
-   
+
     public void setPosX(float newPosX) {
         PosX = newPosX;
-    }
-   
-    public float getPosY() {
-        return PosY;
     }
    
     public void setPosY(float newPosY) {
         PosY = newPosY;
     }
    
-    public float getObjLength() {
-        return ObjLength;
-    }
-   
     public void setObjLength(float newObjLength) {
         ObjLength = newObjLength;
     }
    
-    public float getObjHeight() {
-        return ObjHeight;
-    }
-   
     public void setObjHeight(float newObjHeight) {
         ObjHeight = newObjHeight;
-    }
-   
-    public int getTextureID() {
-        return TextureID;
     }
    
     public void setTextureID(int newTextureID) {

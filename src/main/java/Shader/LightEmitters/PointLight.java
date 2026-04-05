@@ -16,10 +16,7 @@ public class PointLight extends LightEmitter { //Gibt Licht ab
         this.Range = Range;
     }
     
-    //Methoden um Reichweite zu schreiben/lesen
-    public float getRange() {
-        return Range;
-    }
+    //Methode um Reichweite zu schreiben
 
     public void setRange(float newRange) {
         this.Range = newRange;

@@ -3,22 +3,22 @@ package Physics2D;
 
 public class CollisionHandler {
     public static void Collide (LivingObject Object1, PhysicsObject2D Object2) {
-        float DefaultVelocity = Object1.getVelocity();//Standard Velocity vom Object1 bekommen
-        float m1x = Object1.getPosX() + Object1.getObjLength() / 2 + Object1.Hitbox.getOffsetX();//Position der Hitboxen einlesen
-        float m2x = Object2.getPosX() + Object2.getObjLength() / 2 + Object2.Hitbox.getOffsetX();
-        float m1y = Object1.getPosY() + Object1.getObjHeight() / 2 + Object1.Hitbox.getOffsetY();
-        float m2y = Object2.getPosY() + Object2.getObjHeight() / 2 + Object2.Hitbox.getOffsetY();
+        float DefaultVelocity = Object1.Velocity;//Standard Velocity vom Object1 bekommen
+        float m1x = Object1.PosX + Object1.ObjLength / 2 + Object1.Hitbox.OffsetX;//Position der Hitboxen einlesen
+        float m2x = Object2.PosX + Object2.ObjLength / 2 + Object2.Hitbox.OffsetX;
+        float m1y = Object1.PosY + Object1.ObjHeight / 2 + Object1.Hitbox.OffsetY;
+        float m2y = Object2.PosY + Object2.ObjHeight / 2 + Object2.Hitbox.OffsetY;
         
         float distanceX = m1x - m2x;//Distance zwischen beiden Objects rausbekommen erst DistanzX und DistanzY, dann mit Satz des Pythagoras komplette Distanz
         float distanceY = m1y - m2y;
         float distance = (float)Math.sqrt(distanceX * distanceX + distanceY * distanceY);
         
-        float overlap = Object1.Hitbox.getRadius() + Object2.Hitbox.getRadius() - distance;//wie weit das Object1 overlapped
-        Object1.setPosX(Object1.getPosX() + distanceX / distance * overlap);//um den Overlap zurückschieben
-        Object1.setPosY(Object1.getPosY() + distanceY / distance * overlap);
+        float overlap = Object1.Hitbox.Radius + Object2.Hitbox.Radius - distance;//wie weit das Object1 overlapped
+        Object1.setPosX(Object1.PosX + distanceX / distance * overlap);//um den Overlap zurückschieben
+        Object1.setPosY(Object1.PosY + distanceY / distance * overlap);
         
-        float VelocityX = Object1.getDirectionX() * Object1.getVelocity();//Velocity von Object1 in VelocityX und VelocityY aufteilen
-        float VelocityY = Object1.getDirectionY() * Object1.getVelocity();
+        float VelocityX = Object1.getDirectionX() * Object1.Velocity;//Velocity von Object1 in VelocityX und VelocityY aufteilen
+        float VelocityY = Object1.getDirectionY() * Object1.Velocity;
         
         double dot = VelocityX * (distanceX / distance) + VelocityY * (distanceY / distance);//herausfinden wie stark Object1 in Object2 drückt
         if (dot < 0) {

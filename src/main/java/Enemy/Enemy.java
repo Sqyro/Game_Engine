@@ -37,9 +37,9 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
             newEnemy.setTextureID(TextureID);
             newEnemy.setVelocity(Velocity);
             newEnemy.setDirection(Direction);
-            newEnemy.Hitbox.setRadius(Hitbox.getRadius());
-            newEnemy.Hitbox.setOffsetX(Hitbox.getOffsetX());
-            newEnemy.Hitbox.setOffsetY(Hitbox.getOffsetY());
+            newEnemy.Hitbox.setRadius(Hitbox.Radius);
+            newEnemy.Hitbox.setOffsetX(Hitbox.OffsetX);
+            newEnemy.Hitbox.setOffsetY(Hitbox.OffsetY);
 
         } else {
             //Erstellt neues Enemy Object mit den reinkommenden Values, wenn kein alter recycled werden kann
@@ -50,8 +50,8 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
         Enemies.add(newEnemy);
         
         //printed Infos für den Debug, Selbsterklärend
-        System.out.println("Spawned Enemy at: " + (newEnemy.getPosX() - Camera.PosX) + ", " + (newEnemy.getPosY() - Camera.PosY));
-        System.out.println("Displaying at: " + newEnemy.getPosX() + "," + newEnemy.getPosY());
+        System.out.println("Spawned Enemy at: " + (newEnemy.PosX - Camera.PosX) + ", " + (newEnemy.PosY - Camera.PosY));
+        System.out.println("Displaying at: " + newEnemy.PosX + "," + newEnemy.PosY);
     }
     
     public void die() {

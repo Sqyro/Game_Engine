@@ -1,10 +1,10 @@
 package Physics2D;
 
 public class Hitbox {
-    private float Radius;
+    public float Radius;
     
-    private float OffsetX;
-    private float OffsetY;
+    public float OffsetX;
+    public float OffsetY;
     
     public Hitbox (float Radius, float OffsetX, float OffsetY) {
         this.Radius = Radius;
@@ -17,23 +17,11 @@ public class Hitbox {
         Radius = newRadius;
     }
     
-    public float getRadius () {
-        return Radius;
-    }
-    
     public void setOffsetX (float newOffsetX) {
         OffsetX = newOffsetX;
     }
     
-    public float getOffsetX () {
-        return OffsetX;
-    }
-    
     public void setOffsetY (float newOffsetY) {
         OffsetY = newOffsetY;
-    }
-    
-    public float getOffsetY () {
-        return OffsetY;
     }
 }

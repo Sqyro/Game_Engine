@@ -458,7 +458,7 @@ public class Grid extends JPanel {
                     int y = Yg + r * tileSizeGrid + (tileSizeGrid / 2); //berechnet die y position für die mitte des tiles
 
                     double scale = (double) tileSizeGrid / 16.0;  //skalierungsfaktor damit es den zoom breücksichtigt
-                    int radius = (int) (pointlight.getRange() * (scale / 4.0)); //berechnet den radius
+                    int radius = (int) (pointlight.Range * (scale / 4.0)); //berechnet den radius
 
                     if (radius > 0) { //pointlight benutzt werte zwischen 0.0 und 1.0 deswegen muss man die umrechnen
                         int red = Math.min(255, (int)(pointlight.getRed() * 255));

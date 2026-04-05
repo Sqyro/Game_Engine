@@ -1,27 +1,21 @@
 package Rendering;
 
 public class AnimationObject {
-    private int TextureID;
-
-    private int Columns;
-    private int Rows;
+    public int TextureID;
 
     private int FrameCountPerAnimation;
     private int currentFrame = 0;
-    private int animationColumn = 0;
+    private int animationColumn;
 
     private float TimePerFrame;
     private float Timer = 0;
 
-    private float FrameWidth;
-    private float FrameHeight;
+    public float FrameWidth;
+    public float FrameHeight;
 
     public AnimationObject(int TextureID, int Columns, int Rows, int AnimationColumn, int FrameCountPerAnimation, float TimePerFrame) { //Constructor
         //Variablen für das Objekt schreiben
         this.TextureID = TextureID;
-
-        this.Columns = Columns;
-        this.Rows = Rows;
 
         this.animationColumn = AnimationColumn;
         
@@ -68,20 +62,8 @@ public class AnimationObject {
         //Position ausgeben
         return PosOnTextureArray;
     }
-
-    public int getTextureID() {
-        return TextureID;
-    }
     
     public void setTextureID(int newTextureID) {
         TextureID = newTextureID;
     }
-    
-    public float getFrameWidth() {
-        return FrameWidth;
-    }
-
-    public float getFrameHeight() {
-        return FrameHeight;
-    }   
 }

@@ -25,7 +25,7 @@ public class Save { //Klasse um Daten zu speichern
             ObjectInputStream in = new ObjectInputStream(fileIn)) { //Stream der Bytes in Objekte zurück verwandeln kann
             PhysicsObject2D loadedObject = (PhysicsObject2D) in.readObject(); //Liest die Bytes und wandelt sie in ein PhysicsObjekt2D um
 
-            loadedObject.setTextureID(Player.Player.getTextureID()); // Setzt die Textur zurück
+            loadedObject.setTextureID(Player.Player.TextureID); // Setzt die Textur zurück
 
             System.out.println("Player data loaded!"); //Nachricht für den Debug
             return loadedObject; //Gibt das gelesene Objekt zurück

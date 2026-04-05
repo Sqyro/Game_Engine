@@ -1,13 +1,15 @@
 package Physics2D;
 
+import GameLang.Float.Vector2F;
+
 public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle Objekte die Physik haben und sich bewegen können
     
     //Variablen (transient wegen Speichern)
     //Geschwindigkeit von dem Objekt
-    public transient float Velocity = 0;
+    public transient float Velocity;
     
     //Ausrichtung von dem Objekt
-    public transient float[] Direction = {0, 0};
+    public transient float[] Direction;
     
     boolean ObjectFlippedX = false;
     private float lastDirectionY = 0;
@@ -19,20 +21,12 @@ public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle
         this.Direction = Direction;
     }
     
-    
     //Methoden um an die Variablen von jedem Objekt ranzukommen
-    public float getVelocity() {
-        return Velocity;
-    }
    
     public void setVelocity(float newVelocity) {
         Velocity = newVelocity;
     }
-   
-    public float[] getDirection() {
-        return Direction;
-    }
-   
+
     public float getDirectionX() {
         return Direction[0];
     }

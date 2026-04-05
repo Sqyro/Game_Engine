@@ -79,11 +79,15 @@ public class GameScene extends Scene {
         
         //Hört allen Tastatur Inputs zu, startet im Prinzip den Input Manager
         InputManager.ListenforGameKeys(Window);
+
+        Camera.UpdateCamera(Player.Player);
     }
 
     @Override
     public void onUnload() {
         GameRunning = false;
+
+        GUIManager.closeScreen();
 
         clearOnScreenFields();
         clearDisplayedTextQue();
@@ -140,8 +144,8 @@ public class GameScene extends Scene {
             Enemy currentEnemy = Enemy.Enemies.get(i);
             
             //Sneaked sich die ganzen Positionen in andere Variablen rein, damit man es besser lesen kann
-            float EnemyX = currentEnemy.getPosX();
-            float EnemyY = currentEnemy.getPosY();
+            float EnemyX = currentEnemy.PosX;
+            float EnemyY = currentEnemy.PosY;
             
             //Wenn dieser Enemie nicht auf dem Screen ist (Plus Minus 100, damit man es nicht merkt)
             if (EnemyX < ScreenLeft - 100 || EnemyX > ScreenRight + 100 ||EnemyY < ScreenTop - 100 || EnemyY > ScreenBottom + 100) {
@@ -149,7 +153,7 @@ public class GameScene extends Scene {
             }
             
             //Sonst fügt er den Enemy in den draw que hinzu
-            renderer.drawFull(currentEnemy.getTextureID(), EnemyX, EnemyY, currentEnemy.getObjLength(), currentEnemy.getObjHeight(), 1f, 1f, 1f);
+            renderer.drawFull(currentEnemy.TextureID, EnemyX, EnemyY, currentEnemy.ObjLength, currentEnemy.ObjHeight, 1f, 1f, 1f);
         }
         //Render Walls
         for(int i = 0; i < Wall.Walls.size(); i++) { //Liest die Walls Liste durch
@@ -157,8 +161,8 @@ public class GameScene extends Scene {
             Wall currentWall = Wall.Walls.get(i);
             
             //Sneaked sich die ganzen Positionen in andere Variablen rein, damit man es besser lesen kann
-            float WallX = currentWall.getPosX();
-            float WallY = currentWall.getPosY();
+            float WallX = currentWall.PosX;
+            float WallY = currentWall.PosY;
             
             //Wenn diese Wall nicht auf dem Screen ist (Plus Minus 100, damit man es nicht merkt)
             if (WallX < ScreenLeft - 100 || WallX > ScreenRight + 100 ||WallY < ScreenTop - 100 || WallY > ScreenBottom + 100) {
@@ -166,7 +170,7 @@ public class GameScene extends Scene {
             }
             
             //Sonst fügt er den Enemy in den draw que hinzu
-            renderer.drawFull(currentWall.getTextureID(), WallX, WallY, currentWall.getObjLength(), currentWall.getObjHeight(), 1f, 1f, 1f);
+            renderer.drawFull(currentWall.TextureID, WallX, WallY, currentWall.ObjLength, currentWall.ObjHeight, 1f, 1f, 1f);
         }
         
         //Flushed Map und Enemies unter den Spieler. Werden geshaded und gezeichnet mit dem Global Shader
@@ -177,27 +181,27 @@ public class GameScene extends Scene {
         //Macht eine Lokale Variable für den Spieler
         Player player = Player.Player;
         //Fügt den Spieler in den draw que hinzu. Liest die Werte aus der Variable
-        if(player.getVelocity() > 0) {
+        if(player.Velocity > 0) {
             if(player.getDirectionY() == 0) {
                 float[] PosOnTexture = animationManager.walkAnimation.getPosOnTextureAsArray(player.isFLipped());
-                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
+                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
             } else if(player.getDirectionY() == 1) {
                 float[] PosOnTexture = animationManager.walkDownAnimation.getPosOnTextureAsArray(false);
-                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
+                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
             } else {
                 float[] PosOnTexture = animationManager.walkUpAnimation.getPosOnTextureAsArray(false);
-                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
+                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
             }
         } else {
             if(player.getLastDirectionY() == 0) {
                 float[] PosOnTexture = animationManager.idleAnimation.getPosOnTextureAsArray(player.isFLipped());
-                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
+                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
             } else if(player.getLastDirectionY() == 1) {
                 float[] PosOnTexture = animationManager.idleDownAnimation.getPosOnTextureAsArray(false);
-                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
+                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
             } else {
                 float[] PosOnTexture = animationManager.idleUpAnimation.getPosOnTextureAsArray(false);
-                renderer.draw(player.getTextureID(), player.getPosX(), player.getPosY(), player.getObjLength(), player.getObjHeight(), PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
+                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
             }
         }
         //Flushed den Spieler später, damit er über allem drüber liegt. Er wird gashaded mit dem Global Shader und gezeichnet
@@ -209,8 +213,8 @@ public class GameScene extends Scene {
             //Moved das Momentane Hud Element in eine Lokale Variable
             HudElement currentHud = HudHandler.HudElements.get(i);
             //Sneaked sich die Werte für Position für bessere Lesbarkeit
-            int HudX = currentHud.getPosX();
-            int HudY = currentHud.getPosY();
+            int HudX = currentHud.PosX;
+            int HudY = currentHud.PosY;
             
             
             //Der Code hat mal mit ner Helfmethode für Quadrate zeichnen Funktioniert, jetzt aber nichtmehr, weil ich ja von dem Base OpenGL renderer weggegangen bin für Shader, muss das mach fixen
@@ -218,18 +222,18 @@ public class GameScene extends Scene {
                 BarElement bar = (BarElement) currentHud;
                 
                 //Farbe Holen
-                float Red = bar.getColor().getRed() / 255f;
-                float Green = bar.getColor().getGreen() / 255f;
-                float Blue = bar.getColor().getBlue() / 255f;
+                float Red = bar.BarColor.getRed() / 255f;
+                float Green = bar.BarColor.getGreen() / 255f;
+                float Blue = bar.BarColor.getBlue() / 255f;
                 
                 //Rechteck unter die Textur zeichnen
-                renderer.drawRectangle(ImageManager.BAR, HudX - Camera.PosX + bar.getBarOffsetX(), HudY - Camera.PosY + bar.getBarOffsetY(), bar.getHudLength() * bar.getBarFilledPercentage() - bar.getBarOffsetX(), bar.getHudHeight() - bar.getBarOffsetY() * 2, Red, Green, Blue);
+                renderer.drawRectangle(ImageManager.BAR, HudX - Camera.PosX + bar.BarOffsetX, HudY - Camera.PosY + bar.BarOffsetY, bar.HudLength * bar.BarFilledPercentage - bar.BarOffsetX, bar.HudHeight - bar.BarOffsetY * 2, Red, Green, Blue);
                 //Bar Extra flushen, damit es unter der Textur liegt
                 renderer.flush(hudshader, Frame.ScreenWidth, Frame.ScreenHeight);
             }
             
             //Fügt die Hud Elemente in den neuen draw que hinzu
-            renderer.drawFull(currentHud.getTextureID(), HudX - Camera.PosX, HudY - Camera.PosY, currentHud.getHudLength(), currentHud.getHudHeight(), 1f, 1f, 1f);
+            renderer.drawFull(currentHud.TextureID, HudX - Camera.PosX, HudY - Camera.PosY, currentHud.HudLength, currentHud.HudHeight, 1f, 1f, 1f);
         }
         
         //Flushed alle neuen Elemente im draw que (Nur HUD). Objekte werden mit dem HudShader geshaded und gezeichnet

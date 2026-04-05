@@ -37,8 +37,8 @@ public class LoadGameInteractableField extends GUIInteractableField {
         SceneManager.LoadScene(Frame.GameScene, Window);
         Player LoadedData = (Player) Save.Save.LoadObjectData(FieldID); //Läd Spieldateinen aus dem Speicher
         if (LoadedData != null) { //Darf nicht leer sein
-            Player.Player.setPosX(LoadedData.getPosX()); //Holt sich die Positonen aus den Daten
-            Player.Player.setPosY(LoadedData.getPosY());
+            Player.Player.setPosX(LoadedData.PosX); //Holt sich die Positonen aus den Daten
+            Player.Player.setPosY(LoadedData.PosY);
             Player.Player.inventory = LoadedData.inventory; //Holt sich das Inventar aus dem Speicher
         }
     }

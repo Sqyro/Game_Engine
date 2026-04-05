@@ -99,8 +99,8 @@ public class InputManager {
                             System.out.println("Q Pressed");
                             Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0); //Nimmt das Hud Element was auf Position 0 ist
                             BarElement bar = (BarElement) Hud; //Konvertiert das Hud Element in ne Bar, geht gerade weil ich nur ein Objekt in der GUI hab, daher ist die Bar immer auf 0
-                            if(bar.getBarFilledPercentage() * bar.getHudLength() > 0 + bar.getBarOffsetX()) { //Wenn noch was von der Bar übrig ist, damit sie nicht ins Minus gerät
-                                bar.setBarFilledPercentage(bar.getBarFilledPercentage() - 0.02f); //Damaged die Bar etwas ums zu testen
+                            if(bar.BarFilledPercentage * bar.HudLength > 0 + bar.BarOffsetX) { //Wenn noch was von der Bar übrig ist, damit sie nicht ins Minus gerät
+                                bar.setBarFilledPercentage(bar.BarFilledPercentage - 0.02f); //Damaged die Bar etwas ums zu testen
                             }
                         }
                         break;
@@ -135,8 +135,8 @@ public class InputManager {
                             System.out.println("V Pressed");
                                 Player LoadedData = (Player) Save.Save.LoadObjectData(1); //Läd Spieldateinen aus dem Speicher
                                 if (LoadedData != null) { //Darf nicht leer sein
-                                    Player.Player.setPosX(LoadedData.getPosX()); //Holt sich die Positonen aus den Daten
-                                    Player.Player.setPosY(LoadedData.getPosY());
+                                    Player.Player.setPosX(LoadedData.PosX); //Holt sich die Positonen aus den Daten
+                                    Player.Player.setPosY(LoadedData.PosY);
                                     Player.Player.inventory = LoadedData.inventory; //Holt sich das Inventar aus dem Speicher
                                 }
                         }
