@@ -14,4 +14,9 @@ public class Camera {
         PosX = -(ThisPlayer.getPosX() + Player.PlayerSizeX/2 - Frame.ScreenWidth / 2); // Kamera verfolgt den Player und wird auf dem Bildschirm Zentriert
         PosY = -(ThisPlayer.getPosY() + Player.PlayerSizeY/2 - Frame.ScreenHeight / 2);
     }
+
+    public static void resetCamera() {
+        PosX = 0;
+        PosY = 0;
+    }
 }

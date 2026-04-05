@@ -83,8 +83,12 @@ public class GameScene extends Scene {
 
     @Override
     public void onUnload() {
+        GameRunning = false;
+
         clearOnScreenFields();
         clearDisplayedTextQue();
+
+        Camera.resetCamera();
     }
 
     @Override
