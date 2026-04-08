@@ -33,7 +33,7 @@ public class ImageManager {
 
         ENEMY = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png");
         
-        for(int i = 0; i <= TileAmount-1; i++) {
+        for(int i = 0; i < TileAmount; i++) {
             int TempTileTextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/sheet" + i + ".png");
             TileTextures.add(TempTileTextureID);
         }

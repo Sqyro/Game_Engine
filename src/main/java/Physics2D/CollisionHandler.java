@@ -2,7 +2,7 @@ package Physics2D;
 
 
 public class CollisionHandler {
-    public static void Collide (LivingObject Object1, PhysicsObject2D Object2) {
+    public static void Collide (LivingObject Object1, LivingObject Object2) {
         float DefaultVelocity = Object1.Velocity;//Standard Velocity vom Object1 bekommen
         float m1x = Object1.PosX + Object1.ObjLength / 2 + Object1.Hitbox.OffsetX;//Position der Hitboxen einlesen
         float m2x = Object2.PosX + Object2.ObjLength / 2 + Object2.Hitbox.OffsetX;

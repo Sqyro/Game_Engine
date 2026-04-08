@@ -120,8 +120,8 @@ public class GameScene extends Scene {
             Camera.UpdateCamera(Player.Player);
             //Hitbox update machen
             CollisionManager.Player_Enemy();
-            CollisionManager.Player_Wall();
-            CollisionManager.Enemy_Wall();
+            //CollisionManager.Player_Wall();
+            //CollisionManager.Enemy_Wall();
         }
         
         //Der Background ist beeinflusst von dem Global light (Aber keinen Point Lights...)
@@ -160,6 +160,7 @@ public class GameScene extends Scene {
             //Sonst fügt er den Enemy in den draw que hinzu
             renderer.drawFull(currentEnemy.TextureID, EnemyX, EnemyY, currentEnemy.ObjLength, currentEnemy.ObjHeight, 1f, 1f, 1f);
         }
+        /*
         //Render Walls
         for(int i = 0; i < Wall.Walls.size(); i++) { //Liest die Walls Liste durch
             //Kopiert die momentan gelesene Wall in eine Lokale Variable
@@ -177,6 +178,7 @@ public class GameScene extends Scene {
             //Sonst fügt er den Enemy in den draw que hinzu
             renderer.drawFull(currentWall.TextureID, WallX, WallY, currentWall.ObjLength, currentWall.ObjHeight, 1f, 1f, 1f);
         }
+        */
         
         //Flushed Map und Enemies unter den Spieler. Werden geshaded und gezeichnet mit dem Global Shader
         renderer.flush(shader, Frame.ScreenWidth, Frame.ScreenHeight);

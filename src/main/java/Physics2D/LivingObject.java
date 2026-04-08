@@ -4,7 +4,12 @@ import GameLang.Float.Vector2F;
 
 import java.io.Serializable;
 
-public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle Objekte die Physik haben und sich bewegen können
+public abstract class LivingObject extends PhysicsObject2D implements Serializable { // Klasse für Alle Objekte die Physik haben und sich bewegen können
+    private static final long serialVersionUID = 1L;
+
+    //Position
+    public float PosX;
+    public float PosY;
 
     //Variablen (transient wegen Speichern)
     //Geschwindigkeit von dem Objekt
@@ -17,14 +22,24 @@ public abstract class LivingObject extends PhysicsObject2D { // Klasse für Alle
     private float lastDirectionY = 0;
     
     public LivingObject(float PosX, float PosY, float ObjLength, float ObjHeight, int TextureID, float Velocity, float[] Direction, Hitbox Hitbox) { //Constructor
-        super(PosX, PosY, ObjLength, ObjHeight, TextureID, Hitbox); //Passed alles außer Velocity und Direction an PhysicsObject2D weiter
+        super(ObjLength, ObjHeight, TextureID, Hitbox); //Passed alles außer Velocity und Direction an PhysicsObject2D weiter
         //Variablen pro Objekt setzen
+        this.PosX = PosX;
+        this.PosY = PosY;
         this.Velocity = Velocity;
         this.Direction = Direction;
     }
     
     //Methoden um an die Variablen von jedem Objekt ranzukommen
-   
+
+    public void setPosX(float newPosX) {
+        PosX = newPosX;
+    }
+
+    public void setPosY(float newPosY) {
+        PosY = newPosY;
+    }
+
     public void setVelocity(float newVelocity) {
         Velocity = newVelocity;
     }
