@@ -1,7 +1,6 @@
 package Scenes;
 
 import Enemy.Enemy;
-import GUI.GUIButton;
 import GUI.GUIInteractableField;
 import GUI.GUIManager;
 import GUI.GUIText;
@@ -22,7 +21,6 @@ import Rendering.ImageManager;
 import Shader.LightManager;
 import Shader.Shader;
 import Sounds.SoundHandler;
-import Map.Wall;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -49,7 +47,9 @@ public class GameScene extends Scene {
 
     //Liste für alle Texte die gerendert werden sollen
     public static List<GUIText> GameDisplayedText = new ArrayList<>();
-    
+
+    public static List<TimedTextEnque> TimedText = new ArrayList<>();
+
     public GameScene() {
         Map = new Map.MapHandler(); //Neues Map Objekt erstellen, gibt gerade nur eine Map, später aber vielleicht mehrere (Räume)
         
@@ -117,6 +117,7 @@ public class GameScene extends Scene {
             InputManager.updatePlayerDirection();
             VelocityHandler.calculatePosition(Player.Player, deltaTime);
             SoundHandler.updateSounds(deltaTime);
+            updateTimedText();
             Camera.UpdateCamera(Player.Player);
             //Hitbox update machen
             CollisionManager.Player_Enemy();
@@ -290,13 +291,48 @@ public class GameScene extends Scene {
         }
     }
 
+    public void updateTimedText() {
+        float currentGameTime = Gametime;
+        for (int i = 0; i < TimedText.size(); i++) {
+            TimedTextEnque ThisTimedText = TimedText.get(i);
+            if (currentGameTime - ThisTimedText.startGametime >= ThisTimedText.TextLivingTimeInMilliSeconds) {
+                removeDisplayedText(ThisTimedText.Text);
+                TimedText.remove(i);
+                i--;
+                System.out.println("Text removed");
+            }
+        }
+    }
+
     @Override
     public void addDisplayedText(GUIText addedText) {
         GameDisplayedText.add(addedText);
     }
 
+    public void removeDisplayedText(GUIText removedText) {
+        GameDisplayedText.remove(removedText);
+    }
+
     @Override
     public void clearDisplayedTextQue() {
         GameDisplayedText.clear();
+    }
+
+    public void showTextForSeconds(GUIText shownText, float TimeInSeconds) {
+        float startGametime = Gametime;
+        addDisplayedText(shownText);
+        TimedText.add(new TimedTextEnque(shownText, TimeInSeconds, startGametime));
+    }
+
+    public class TimedTextEnque {
+        public GUIText Text;
+        public float TextLivingTimeInMilliSeconds;
+        float startGametime;
+
+        public TimedTextEnque(GUIText Text, float TextLivingTimeInMilliSeconds, float startGametime) {
+            this.Text = Text;
+            this.TextLivingTimeInMilliSeconds = TextLivingTimeInMilliSeconds;
+            this.startGametime = startGametime;
+        }
     }
 }

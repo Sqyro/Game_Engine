@@ -127,7 +127,7 @@ public class InputManager {
                         if(GameScene.GameRunning) {
                             System.out.println("Y Pressed");
                             GUIText randomText = new GUIText("Skibidi Tripple T Sigma :3", 80, 80, 80, 50, ImageManager.GAMEFONT, Color.RED); //Erstellt ein neues Text Element
-                            SceneManager.ActiveScene.addDisplayedText(randomText); //Packt das Text Element in den To Be Displayed Text
+                            Frame.GameScene.showTextForSeconds(randomText, 2); //Packt das Text Element in den To Be Displayed Text
                         }
                         break;
                     case GLFW_KEY_V:

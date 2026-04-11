@@ -12,8 +12,9 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
     
     //Tote Enemies werden hier gespeichert, damit ich sie später wieder "recyclen" kann
     public static ArrayList<Enemy> EnemyPool = new ArrayList<>();
-    
-    public int HP; //Macht bisher noch nichts, move ich vermutlich auch zu Living Object
+
+    public int MAX_HP;
+    public int HP;
     
     public Enemy(float PosX, float PosY, float EnemyLength, float EnemyHeight, int TextureID, float Velocity, float[] Direction, Hitbox Hitbox) { //Constructor für einen neuen Enemy
         super(PosX, PosY, EnemyLength, EnemyHeight, TextureID, Velocity, Direction, Hitbox); //Passed einfach nur alle Values weiter an Living Object
@@ -58,13 +59,16 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
         Enemies.remove(this); //aus den angezeigten und brechneten Enemies entfernen
         EnemyPool.add(this); //in die nicht angezeigten und brechneten Enemies hinzufügen. Zwischenspeicher. Kann daraus später wieder belebt/recycled werden
     }
-    
-    //Noch Sinnlos, wie HP, move ich vermutlich auch noch
-    public int getHP() {
-        return HP;
+
+    public void setMaxHp(int newMaxHP) {
+        MAX_HP = newMaxHP;
     }
-    
-    public void setHP(int newHP) {
+
+    public void setHp(int newHP) {
         HP = newHP;
+    }
+
+    public void damagePlayer(int Damage) {
+        HP -= Damage;
     }
 }

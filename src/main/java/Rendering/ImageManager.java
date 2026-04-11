@@ -46,10 +46,10 @@ public class ImageManager {
         
         SWORD = ImageHandler.loadTexture("src/main/resources/assets/textures/item/sword.png");
         
-        System.out.println("Textures loaded"); //Nachricht für den Dabug
+        System.out.println("Game Textures loaded"); //Nachricht für den Dabug
         } catch (Exception e) { //Falls es nicht geht
 
-            System.err.println("Failed to load Textures!"); //Nachricht für den Debug
+            System.err.println("Failed to load Game Textures"); //Nachricht für den Debug
             e.printStackTrace(); //Stacktrace ausgeben auch für debugging
 
             System.exit(-1); //Programm schließen
@@ -65,10 +65,10 @@ public class ImageManager {
         
         CURSOR = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/cursor/cursor3.png");
         
-        System.out.println("Textures loaded"); //Nachricht für den Dabug
+        System.out.println("Starting Textures loaded"); //Nachricht für den Dabug
         } catch (Exception e) { //Falls es nicht geht
 
-            System.err.println("Failed to load Textures!"); //Nachricht für den Debug
+            System.err.println("Failed to load Starting Textures"); //Nachricht für den Debug
             e.printStackTrace(); //Stacktrace ausgeben auch für debugging
 
             System.exit(-1); //Programm schließen

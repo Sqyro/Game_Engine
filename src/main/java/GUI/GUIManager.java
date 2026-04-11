@@ -30,7 +30,7 @@ public class GUIManager {
     
     //Methode um Text in den draw Que hinzu zu fügen. Braucht den Text für alle Variablen und den renderer (Image Handler) um es zu enquen
     public static void renderText(GUIText guiText, ImageHandler renderer) {
-        String StringText = guiText.getText(); //Holt sich den Text als String
+        String StringText = guiText.Text; //Holt sich den Text als String
 
         //Farbe Holen
         float Red = guiText.TextColor.getRed() / 255f;
@@ -41,11 +41,11 @@ public class GUIManager {
             char CharacterAt = StringText.charAt(i); //Nimm dir den Character
 
             //Holt sich die Position für jeden Buchstaben, Y ist ja immer gleich wie Text (außer man hat Zeilenumbruch, kommt noch) und X hängt von der Stelle im Text ab, also i.
-            float LetterX = guiText.getPosX() + (i * guiText.getCharacterSpacing());
-            float LetterY = guiText.getPosY();
+            float LetterX = guiText.PosX + (i * guiText.CharacterSpacing);
+            float LetterY = guiText.PosY;
 
             //Enqued den Buchstaben
-            renderer.draw(guiText.getFontTextureID(), LetterX - Camera.PosX, LetterY - Camera.PosY, guiText.getCharacterSize(), guiText.getCharacterSize(), GUIBitmapFont.getTextureX(CharacterAt), GUIBitmapFont.getTextureY(CharacterAt), GUIBitmapFont.getWidth(), GUIBitmapFont.getHeight(), Red, Green, Blue);
+            renderer.draw(guiText.FontTextureID, LetterX - Camera.PosX, LetterY - Camera.PosY, guiText.CharacterSize, guiText.CharacterSize, GUIBitmapFont.getTextureX(CharacterAt), GUIBitmapFont.getTextureY(CharacterAt), GUIBitmapFont.getWidth(), GUIBitmapFont.getHeight(), Red, Green, Blue);
         }
     }
 }

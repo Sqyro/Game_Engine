@@ -5,15 +5,15 @@ import java.awt.Color;
 public class GUIText {
     
     //Variablen deklarieren
-    private String Text;
+    public String Text;
 
-    private float PosX;
-    private float PosY;
+    public float PosX;
+    public float PosY;
 
-    private float CharacterSize;
-    private float CharacterSpacing;
+    public float CharacterSize;
+    public float CharacterSpacing;
 
-    private int FontTextureID;
+    public int FontTextureID;
 
     public Color TextColor;
     
@@ -29,39 +29,15 @@ public class GUIText {
     }
 
     //Hilfsmethoden
-    public String getText() {
-        return Text;
-    }
-
     public void setText(String newText) {
         Text = newText;
-    }
-
-    public float getPosX() {
-        return PosX;
     }
     
     public void setPosX(float newPosX) {
         PosX = newPosX;
     }
-    
-    public float getPosY() {
-        return PosY;
-    }
 
     public void setPosY(float newPosY) {
         PosY = newPosY;
-    }
-
-    public float getCharacterSize() {
-        return CharacterSize;
-    }
-
-    public float getCharacterSpacing() {
-        return CharacterSpacing;
-    }
-
-    public int getFontTextureID() {
-        return FontTextureID;
     }
 }

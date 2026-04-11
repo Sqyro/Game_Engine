@@ -27,8 +27,9 @@ public class Player extends LivingObject implements Serializable { // Serializat
     
     //Ausrichtung, wenn der Spieler gespawned wird
     private static float[] DefaultDirection = {0, 0};
-    
-    public static int HP;
+
+    public int MAX_HP;
+    public int HP;
     
     //Variable fürs Spieler Inventar, erstellt nen neues Inventar mit der Größe 65
     public InventoryManager inventory = new InventoryManager(65);
@@ -58,12 +59,17 @@ public class Player extends LivingObject implements Serializable { // Serializat
         System.out.println("Inventory Full!");
     }
     
-    //Helfer Methoden um die HP zu bekommen/zu setzen
-    public int getHp() {
-        return HP;
+    //Helfer Methoden um die HP zu setzen
+
+    public void setMaxHp(int newMaxHP) {
+        MAX_HP = newMaxHP;
     }
-    
+
     public void setHp(int newHP) {
         HP = newHP;
+    }
+
+    public void damagePlayer(int Damage) {
+        HP -= Damage;
     }
 }
