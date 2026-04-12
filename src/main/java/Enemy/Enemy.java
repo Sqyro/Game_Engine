@@ -3,7 +3,7 @@ package Enemy;
 import Physics2D.LivingObject;
 import java.util.ArrayList;
 import Rendering.Camera;
-import Physics2D.Hitbox;
+import Physics2D.CircleCollider;
 
 public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ein sich bewegendes
     
@@ -16,12 +16,12 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
     public int MAX_HP;
     public int HP;
     
-    public Enemy(float PosX, float PosY, float EnemyLength, float EnemyHeight, int TextureID, float Velocity, float[] Direction, Hitbox Hitbox) { //Constructor für einen neuen Enemy
+    public Enemy(float PosX, float PosY, float EnemyLength, float EnemyHeight, int TextureID, float Velocity, float[] Direction, CircleCollider Hitbox) { //Constructor für einen neuen Enemy
         super(PosX, PosY, EnemyLength, EnemyHeight, TextureID, Velocity, Direction, Hitbox); //Passed einfach nur alle Values weiter an Living Object
     }
     
     //Soll einen neuen Enemy Spawnen
-    public static void Spawn(float PosX, float PosY, float EnemyLength, float EnemyHeight, int TextureID, float Velocity, float[] Direction, Hitbox Hitbox) {
+    public static void Spawn(float PosX, float PosY, float EnemyLength, float EnemyHeight, int TextureID, float Velocity, float[] Direction, CircleCollider Hitbox) {
         Enemy newEnemy; //Erstellt neue Enemy Variable
         
         //neuen Gegner erstellen, wenn keiner recycled werden kann, alten verwenden wenn noch einer da ist. 

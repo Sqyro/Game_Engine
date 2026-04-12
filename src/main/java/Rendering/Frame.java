@@ -4,7 +4,7 @@ import GUI.Mouse;
 import Physics2D.CollisionManager;
 import Scenes.*;
 import Player.Player;
-import Physics2D.Hitbox;
+import Physics2D.CircleCollider;
 
 import org.lwjgl.opengl.GL;
 import static org.lwjgl.glfw.GLFW.*;

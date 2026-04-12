@@ -6,7 +6,7 @@ import Rendering.Frame;
 import Item.Item;
 import Item.Items;
 import Item.Weapons.SwordItem;
-import Physics2D.Hitbox;
+import Physics2D.CircleCollider;
 
 import java.io.Serializable;
 
@@ -35,13 +35,13 @@ public class Player extends LivingObject implements Serializable { // Serializat
     public InventoryManager inventory = new InventoryManager(65);
     
     //Constructor vom Spieler, gibt alle Werte an LivingObject hoch
-    public Player(float PosX, float PosY, float PlayerLength, float PlayerHeight, int TextureID, float Velocity, float[] Direction, Hitbox Hitbox /*, String name, int hp*/) { //Constructor
+    public Player(float PosX, float PosY, float PlayerLength, float PlayerHeight, int TextureID, float Velocity, float[] Direction, CircleCollider Hitbox /*, String name, int hp*/) { //Constructor
         super(PosX, PosY, PlayerLength, PlayerHeight, TextureID, Velocity, Direction, Hitbox); //Passed alle Werte an LivingObject weiter
         //this.HP = HP;
     }
     
     public static void createPlayer() { // Methode um nen Spieler zu erstellen
-        Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection, new Hitbox(32, 0, 15)); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
+        Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection, new CircleCollider(32, 0, 15)); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
         //Erstellt zwei test Items wärend der Spieler erstellung, damit man das Inventar schonmal ausprobieren kann
         Player.Player.inventory.setItem(0, Items.ITEMS.getRegistry("sword"));
         Player.Player.inventory.setItem(1, Items.ITEMS.getRegistry("sword"));

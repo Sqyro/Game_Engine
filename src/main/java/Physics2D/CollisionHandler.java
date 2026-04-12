@@ -35,4 +35,24 @@ public class CollisionHandler {
             Object1.setVelocity(0);//sonst auf 0 setzen
         }
     }
+    
+    public static void Collide_Tile (LivingObject Object, BoxCollider Hitbox) {
+        float closestX = Math.max(Hitbox.PosX, Math.min(Object.PosX + Object.ObjLength / 2 + Object.Hitbox.OffsetX, Hitbox.PosX + Hitbox.Length));//nächsten Punkt herausfinden
+        float closestY = Math.max(Hitbox.PosY, Math.min(Object.PosY + Object.ObjHeight / 2 + Object.Hitbox.OffsetY, Hitbox.PosY + Hitbox.Height));
+
+        float distanceX = Object.PosX + Object.ObjLength / 2 + Object.Hitbox.OffsetX - closestX;//Differenz berechnen
+        float distanceY = Object.PosY + Object.ObjHeight / 2 + Object.Hitbox.OffsetY - closestY;
+        float distanceSq = distanceX * distanceX + distanceY * distanceY;
+
+        float distance = (float) Math.sqrt(distanceSq);//Distanz mit Satz des Phythagoras berechnen
+        
+        if (distance == 0) return;
+
+        float overlap = Object.Hitbox.Radius - distance;//overlap berechnen
+
+        Object.setPosX(Object.PosX + (distanceX / distance) * overlap);//um Overlap zurückschieben
+        Object.setPosY(Object.PosY + (distanceY / distance) * overlap);
+        
+        Object.setVelocity(0);//damit das Object nicht mehr in das Rechteck drückt setzen der Velocity auf 0
+    }
 }

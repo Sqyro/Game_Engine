@@ -1,12 +1,12 @@
 package Physics2D;
 
-public class Hitbox {
+public class CircleCollider {
     public float Radius;
     
     public float OffsetX;
     public float OffsetY;
     
-    public Hitbox (float Radius, float OffsetX, float OffsetY) {
+    public CircleCollider (float Radius, float OffsetX, float OffsetY) {
         this.Radius = Radius;
         this.OffsetX = OffsetX;
         this.OffsetY = OffsetY;

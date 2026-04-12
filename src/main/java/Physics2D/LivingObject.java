@@ -21,7 +21,7 @@ public abstract class LivingObject extends PhysicsObject2D implements Serializab
     boolean ObjectFlippedX = false;
     private float lastDirectionY = 0;
     
-    public LivingObject(float PosX, float PosY, float ObjLength, float ObjHeight, int TextureID, float Velocity, float[] Direction, Hitbox Hitbox) { //Constructor
+    public LivingObject(float PosX, float PosY, float ObjLength, float ObjHeight, int TextureID, float Velocity, float[] Direction, CircleCollider Hitbox) { //Constructor
         super(ObjLength, ObjHeight, TextureID, Hitbox); //Passed alles außer Velocity und Direction an PhysicsObject2D weiter
         //Variablen pro Objekt setzen
         this.PosX = PosX;

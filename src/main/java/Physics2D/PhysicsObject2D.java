@@ -16,9 +16,9 @@ public abstract class PhysicsObject2D implements Serializable { // Klasse für a
     public transient int TextureID; //Transient, weil Textur nicht gespeichert werden muss
     
     //Hitbox speichern
-    public transient Hitbox Hitbox;
+    public transient CircleCollider Hitbox;
     
-    public PhysicsObject2D(float ObjLength, float ObjHeight, int TextureID, Hitbox Hitbox) { //Constructor
+    public PhysicsObject2D(float ObjLength, float ObjHeight, int TextureID, CircleCollider Hitbox) { //Constructor
         //Setzt die ganzen Variablen pro Objekt
         this.ObjLength = ObjLength;
         this.ObjHeight = ObjHeight;
