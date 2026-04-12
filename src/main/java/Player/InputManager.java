@@ -69,7 +69,7 @@ public class InputManager {
                                 }
                             } else { //Wenn keiner offen ist, dann machen wir einen neuen aus
                                 if(GUIManager.currentScreen == null) {
-                                    GUIManager.openScreen(new InventoryScreen(48, 2, 2, 13, 5, 625, 502));
+                                    GUIManager.openScreen(new InventoryScreen(48, 2, 2, 13, 5, 625 * Frame.NormalizedPixelWidth, 502 * Frame.NormalizedPixelHeight));
                                 }
                             }
                         }
@@ -107,7 +107,7 @@ public class InputManager {
                     case GLFW_KEY_C:
                         if(GameScene.GameRunning) {
                             System.out.println("C Pressed");
-                            Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, Direction, new CircleCollider(22, 0, 0)); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
+                            Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, Direction, new CircleCollider(22, 0, 0), 5); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
                         }
                         break;
                     case GLFW_KEY_P:
@@ -133,7 +133,7 @@ public class InputManager {
                     case GLFW_KEY_V:
                         if(GameScene.GameRunning) {
                             System.out.println("V Pressed");
-                                Player LoadedData = (Player) Save.Save.LoadObjectData(1); //Läd Spieldateinen aus dem Speicher
+                                Player LoadedData = (Player) Save.Save.LoadPlayerData(1); //Läd Spieldateinen aus dem Speicher
                                 if (LoadedData != null) { //Darf nicht leer sein
                                     Player.Player.setPosX(LoadedData.PosX); //Holt sich die Positonen aus den Daten
                                     Player.Player.setPosY(LoadedData.PosY);

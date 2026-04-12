@@ -59,7 +59,7 @@ public class InventoryScreen extends GUIScreen {
     }
     
     //Constructor für den Inventar Screen
-    public InventoryScreen(int SlotSize, int SlotSpacingX, int SlotSpacingY, int Columns, int Rows, int SlotStartX, int SlotStartY) {
+    public InventoryScreen(int SlotSize, int SlotSpacingX, int SlotSpacingY, int Columns, int Rows, float SlotStartX, float SlotStartY) {
         //Index Variable, die angibt in welchem Slot wir jetzt insgesamt sind (Also X und Y zusammen so zu sagen)
         int SlotIndex = 0;
 

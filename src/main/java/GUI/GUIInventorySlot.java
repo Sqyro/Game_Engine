@@ -2,8 +2,8 @@ package GUI;
 
 public class GUIInventorySlot {
     //Position des Slots
-    public int PosX;
-    public int PosY;
+    public float PosX;
+    public float PosY;
     
     //Größe des Slots
     public int SlotSize;
@@ -11,7 +11,7 @@ public class GUIInventorySlot {
     //Index, also Position in der Liste
     public int SlotIndex;
 
-    public GUIInventorySlot(int PosX, int PosY, int SlotSize, int SlotIndex) { //Constructor
+    public GUIInventorySlot(float PosX, float PosY, int SlotSize, int SlotIndex) { //Constructor
         this.PosX = PosX;
         this.PosY = PosY;
         this.SlotSize = SlotSize;

@@ -70,16 +70,16 @@ public class GameScene extends Scene {
     @Override
     public void onCreation(long Window) {
         ImageManager.loadGameTextures();
-        
+
+        MapObjects.RegisterMapObjects();
+        Items.RegisterItems();
+
         //Spieler erstellen
         Player.createPlayer();
     }
     
     @Override
     public void onLoadup(long Window) {
-        MapObjects.RegisterMapObjects();
-        Items.RegisterItems();
-
         //Hört allen Tastatur Inputs zu, startet im Prinzip den Input Manager
         InputManager.ListenforGameKeys(Window);
 
@@ -254,6 +254,9 @@ public class GameScene extends Scene {
             GUIManager.currentScreen.renderScreen(renderer, Frame.ScreenWidth, Frame.ScreenHeight);
         }
 
+        //Flushed den Screen Render durch mit dem Hud Shader
+        renderer.flush(hudshader, Frame.ScreenWidth, Frame.ScreenHeight);
+
         for(GUIInteractableField CurrentField : GameInteractableFields) {
             CurrentField.drawField(renderer);
         }
@@ -261,11 +264,11 @@ public class GameScene extends Scene {
         for(GUIText guiText : GameDisplayedText) { //Für jeden Text im ToBeDisplayed Text
             GUIManager.renderText(guiText, renderer); //Fügt den Text in den Render Que hinzu
         }
-        
+
         //Einen eigenen Cursor zeichnen an der Position vom System Cursor
         renderer.drawFull(ImageManager.CURSOR, (float)GUI.Mouse.PosX - Camera.PosX, (float)GUI.Mouse.PosY - Camera.PosY, 32, 32, 1f, 1f, 1f);
-        
-        //Flushed den Screen Render durch mit dem Hud Shader
+
+        //Flushed alles andere danach, weil der Cursor sonst unter dem Inventar ist, einfach wegen der Reihenfolge in der alles geladen wird
         renderer.flush(hudshader, Frame.ScreenWidth, Frame.ScreenHeight);
     }
 

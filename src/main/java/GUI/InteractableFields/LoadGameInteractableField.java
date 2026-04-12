@@ -4,7 +4,6 @@ import GUI.GUIInteractableField;
 import GUI.GUIManager;
 import GUI.GUIText;
 import Player.Player;
-import Rendering.Camera;
 import Rendering.Frame;
 import Rendering.ImageHandler;
 import Rendering.ImageManager;
@@ -35,7 +34,7 @@ public class LoadGameInteractableField extends GUIInteractableField {
     @Override
     public void onFieldClick(long Window) {
         SceneManager.LoadScene(Frame.GameScene, Window);
-        Player LoadedData = (Player) Save.Save.LoadObjectData(FieldID); //Läd Spieldateinen aus dem Speicher
+        Player LoadedData = (Player) Save.Save.LoadPlayerData(FieldID); //Läd Spieldateinen aus dem Speicher
         if (LoadedData != null) { //Darf nicht leer sein
             Player.Player.setPosX(LoadedData.PosX); //Holt sich die Positonen aus den Daten
             Player.Player.setPosY(LoadedData.PosY);

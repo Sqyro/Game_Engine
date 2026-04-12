@@ -10,10 +10,6 @@ public abstract class GUIScreen {
     public abstract void renderScreen(ImageHandler renderer, int ScreenWidth, int ScreenHeight);
     
     //Hilfs Methoden
-    public boolean getOpenScreen() {
-        return isOpen;
-    }
-    
     public void setOpenScreen(boolean newisOpen) {
         isOpen = newisOpen;
     }

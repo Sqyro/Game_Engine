@@ -9,5 +9,7 @@ public class Items {
 
     public static void RegisterItems() {
         ITEMS.register(new SwordItem(ImageManager.SWORD, 64, 64, "sword"));
+
+        System.out.println("Items registered");
     }
 }
