@@ -6,6 +6,8 @@ import java.util.ArrayList;
 public class ImageManager {
     //Variablen Deklarieren
     public static int PLAYER;
+    public static int PLAYER_SPECIAL;
+
     public static int ENEMY;
     
     public static List<Integer> TileTextures = new ArrayList<>();
@@ -29,9 +31,10 @@ public class ImageManager {
     public static void loadGameTextures() {
         try {
         //Hier einfach alle Texturen mit .loadTextures reinschreiben die man will. Gibt den Integer für die Texture ID in OpenGL zurück
-        PLAYER = ImageHandler.loadTexture("src/main/resources/assets/textures/player/Player.png");
+        PLAYER = ImageHandler.loadTexture("src/main/resources/assets/textures/player/player.png");
+        PLAYER_SPECIAL = ImageHandler.loadTexture("src/main/resources/assets/textures/player/player_special.png");
 
-        ENEMY = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/Enemy.png");
+        ENEMY = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/enemy.png");
         
         for(int i = 0; i < TileAmount; i++) {
             int TempTileTextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/sheet" + i + ".png");

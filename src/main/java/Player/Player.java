@@ -1,8 +1,8 @@
 package Player;
 
 import Physics2D.LivingObject;
+import Physics2D.VelocityHandler;
 import Rendering.ImageManager;
-import Rendering.Frame;
 import Item.Item;
 import Item.Items;
 import Physics2D.CircleCollider;
@@ -13,15 +13,16 @@ public class Player extends LivingObject implements Serializable { // Serializat
     private static final long serialVersionUID = 1L;
     
     //Variablen deklarieren
-    //Position auf dem Bildschirm
-    public transient float LocPosX = Frame.ScreenWidth / 2;
-    public transient float LocPosY = Frame.ScreenHeight / 2;
-    
     //Größe
-    public transient static float PlayerSizeX = 100;
-    public transient static float PlayerSizeY = 100;
+    public static float PlayerSizeX = 100;
+    public static float PlayerSizeY = 100;
 
     public static int PLAYER_MAX_HP = 20;
+
+    public volatile boolean isDodging = false;
+    public static int PLAYER_DODGE_VELOCITY = 1000;
+    private float dodgeElapsedTime;
+    private float DODGE_TIME_IN_SECONDS = 0.8f;
 
     //Objekt, welche alle benutzen können um Sachen vom Spieler zu lesen
     public static Player Player;
@@ -31,7 +32,7 @@ public class Player extends LivingObject implements Serializable { // Serializat
 
     public int MAX_HP;
     public int HP;
-    
+
     //Variable fürs Spieler Inventar, erstellt nen neues Inventar mit der Größe 65
     public InventoryManager inventory = new InventoryManager(65);
     
@@ -41,7 +42,15 @@ public class Player extends LivingObject implements Serializable { // Serializat
         this.MAX_HP = MAX_HP;
         this.HP = MAX_HP;
     }
-    
+
+    public void PlayerTick(float deltaTime) {
+        InputManager.updatePlayerDirection();
+        if (isDodging) {
+            doADodgeRoll(deltaTime);
+        }
+        VelocityHandler.calculatePosition(Player, deltaTime);
+    }
+
     public static void createPlayer() { // Methode um nen Spieler zu erstellen
         Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection, new CircleCollider(32, 0, 15), PLAYER_MAX_HP); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
         //Erstellt zwei test Items wärend der Spieler erstellung, damit man das Inventar schonmal ausprobieren kann
@@ -49,7 +58,22 @@ public class Player extends LivingObject implements Serializable { // Serializat
         Player.Player.inventory.setItem(1, Items.ITEMS.getRegistry("sword"));
         System.out.println("New Player created");
     }
-    
+
+    public void doADodgeRoll(float deltaTime) {
+        if (DODGE_TIME_IN_SECONDS > dodgeElapsedTime) {
+            Player.setDirectionX(Player.getLastDirectionX());
+            Player.setDirectionY(Player.getLastDirectionY());
+            dodgeElapsedTime += deltaTime;
+            Player.Velocity = PLAYER_DODGE_VELOCITY;
+        }
+        else {
+            isDodging = false;
+            dodgeElapsedTime = 0;
+            Player.setDirectionX(0);
+            Player.setDirectionY(0);
+        }
+    }
+
     //Methode, um ein Item ins Spieler Inventar hinzu zu fügen, z.B von nem Drop
     public void addItem (Item addedItem) {
         for(int i = 0; i < inventory.getInventorySize(); i++) { //Das ganze Inventar durchgehen

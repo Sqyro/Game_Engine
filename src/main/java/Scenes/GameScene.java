@@ -8,7 +8,7 @@ import Item.Items;
 import Map.MapObjects;
 import Physics2D.CollisionManager;
 import Physics2D.VelocityHandler;
-import Player.AnimationManager;
+import Player.PlayerAnimationManager;
 import Player.InputManager;
 import Player.Player;
 import Rendering.BarElement;
@@ -22,19 +22,16 @@ import Shader.LightManager;
 import Shader.Shader;
 import Sounds.SoundHandler;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.*;
 
 public class GameScene extends Scene {
     private Shader shader;
     private Shader hudshader;
     private ImageHandler renderer;
-    private AnimationManager animationManager;
+    private PlayerAnimationManager playerAnimationManager;
     
     Map.MapHandler Map;
     
@@ -63,13 +60,13 @@ public class GameScene extends Scene {
         
         renderer = new ImageHandler(); //Ja, ich benutze gerade den Image Handler als Renderer. Ich sollte dafür ne eingene Renderer Klasse machen, hab aber das eben von meinem alten Code geported und war zu faul
     
-        animationManager = new AnimationManager();
-        animationManager.createGameAnimations();
+        playerAnimationManager = new PlayerAnimationManager();
     }
     
     @Override
     public void onCreation(long Window) {
         ImageManager.loadGameTextures();
+        playerAnimationManager.createGameAnimations();
 
         MapObjects.RegisterMapObjects();
         Items.RegisterItems();
@@ -110,12 +107,14 @@ public class GameScene extends Scene {
             }
             wasGameRunning = GameRunning; //Die was Game Running variable updaten auf das neuste
         }
+
+        //Macht eine Lokale Variable für den Spieler
+        Player player = Player.Player;
                 
         //Rechen Updates
         if(GameRunning) {
             Gametime += deltaTime;
-            InputManager.updatePlayerDirection();
-            VelocityHandler.calculatePosition(Player.Player, deltaTime);
+            player.PlayerTick(deltaTime);
             SoundHandler.updateSounds(deltaTime);
             updateTimedText();
             Camera.UpdateCamera(Player.Player);
@@ -132,7 +131,7 @@ public class GameScene extends Scene {
         
         //Animationen Updaten
         if(GameRunning) {
-            animationManager.updateGameAnimations(deltaTime);
+            playerAnimationManager.updateGameAnimations(deltaTime);
         }
         
         //Benutzt die drawMap Methode aus dem Map Handler, die die einzelnen Tiles zeichnet
@@ -185,36 +184,42 @@ public class GameScene extends Scene {
         renderer.flush(shader, Frame.ScreenWidth, Frame.ScreenHeight);
         
         //Render Player
-        
-        //Macht eine Lokale Variable für den Spieler
-        Player player = Player.Player;
+
         //Fügt den Spieler in den draw que hinzu. Liest die Werte aus der Variable
-        if(player.Velocity > 0) {
-            if(player.getDirectionY() == 0) {
-                float[] PosOnTexture = animationManager.walkAnimation.getPosOnTextureAsArray(player.isFLipped());
-                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
-            } else if(player.getDirectionY() == 1) {
-                float[] PosOnTexture = animationManager.walkDownAnimation.getPosOnTextureAsArray(false);
-                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
+
+        if (player.isDodging == false) {
+            if (player.Velocity > 0) {
+                if (player.getDirectionY() == 0) {
+                    playerAnimationManager.currentAnimation = playerAnimationManager.walkAnimation;
+                } else if (player.getDirectionY() == 1) {
+                    playerAnimationManager.currentAnimation = playerAnimationManager.walkDownAnimation;
+                } else {
+                    playerAnimationManager.currentAnimation = playerAnimationManager.walkUpAnimation;
+                }
             } else {
-                float[] PosOnTexture = animationManager.walkUpAnimation.getPosOnTextureAsArray(false);
-                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
+                if (player.getLastDirectionY() == 0) {
+                    playerAnimationManager.currentAnimation = playerAnimationManager.idleAnimation;
+                } else if (player.getLastDirectionY() == 1) {
+                    playerAnimationManager.currentAnimation = playerAnimationManager.idleDownAnimation;
+                } else {
+                    playerAnimationManager.currentAnimation = playerAnimationManager.idleUpAnimation;
+                }
             }
         } else {
-            if(player.getLastDirectionY() == 0) {
-                float[] PosOnTexture = animationManager.idleAnimation.getPosOnTextureAsArray(player.isFLipped());
-                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
-            } else if(player.getLastDirectionY() == 1) {
-                float[] PosOnTexture = animationManager.idleDownAnimation.getPosOnTextureAsArray(false);
-                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
+            if (player.getDirectionY() == 1) {
+                playerAnimationManager.currentAnimation = playerAnimationManager.dodgeRollDownAnimation;
+            } else if (player.getDirectionY() == -1) {
+                playerAnimationManager.currentAnimation = playerAnimationManager.dodgeRollUpAnimation;
             } else {
-                float[] PosOnTexture = animationManager.idleUpAnimation.getPosOnTextureAsArray(false);
-                renderer.draw(player.TextureID, player.PosX, player.PosY, player.ObjLength, player.ObjHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
+                playerAnimationManager.currentAnimation = playerAnimationManager.dodgeRollAnimation;
             }
         }
+
+        playerAnimationManager.currentAnimation.renderAnimation(player.PosX, player.PosY, player.ObjLength, player.ObjHeight, player.isFLipped(), renderer);
+
         //Flushed den Spieler später, damit er über allem drüber liegt. Er wird gashaded mit dem Global Shader und gezeichnet
         renderer.flush(shader, Frame.ScreenWidth, Frame.ScreenHeight);
-        
+
         //Render HUD
         
         for(int i = 0; i < HudHandler.HudElements.size(); i++) { //Ähnlich wie bei den Enemies, geht die Hud Elemente durch

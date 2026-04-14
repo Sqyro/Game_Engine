@@ -17,6 +17,7 @@ public abstract class LivingObject extends PhysicsObject2D implements Serializab
     public transient float[] Direction;
     
     boolean ObjectFlippedX = false;
+    private float lastDirectionX = 0;
     private float lastDirectionY = 0;
     
     public LivingObject(float PosX, float PosY, float ObjLength, float ObjHeight, int TextureID, float Velocity, float[] Direction, CircleCollider Hitbox) { //Constructor
@@ -66,8 +67,16 @@ public abstract class LivingObject extends PhysicsObject2D implements Serializab
         return lastDirectionY;
     }
 
-    public void setLastDirectionY(float dir) {
-        lastDirectionY = dir;
+    public void setLastDirectionY(float newDirectionY) {
+        lastDirectionY = newDirectionY;
+    }
+
+    public float getLastDirectionX() {
+        return lastDirectionX;
+    }
+
+    public void setLastDirectionX(float newDirectionX) {
+        lastDirectionX = newDirectionX;
     }
     
     public boolean isFLipped() {

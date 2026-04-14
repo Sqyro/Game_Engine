@@ -22,7 +22,7 @@ public class InputManager {
     private static volatile boolean aPressed = false;
     private static volatile boolean sPressed = false;
     private static volatile boolean dPressed = false;
-    
+
     private static final float[] Direction = {0, 0};
     
     //Eine Methode die ein Event Benutzt um zu hören ob vom Keyboard Inputs gemacht wurden
@@ -35,25 +35,25 @@ public class InputManager {
             
                 switch (key) {
                     case GLFW_KEY_W: // W wurde gedrückt
-                        if(GameScene.GameRunning) {
+                        if(GameScene.GameRunning && !player.isDodging) {
                             System.out.println("W Pressed"); //Nachricht für den Debug
                             wPressed = Pressed; //Wurde gerückt, also ja es wurde was gerückt hier rein schreiben für später//Schau nicht weiter (Wenn das nicht hier ist, dann wartet er bis ein Key gedrückt wurde und führt dann alles aus)
                         }
                         break;
                     case GLFW_KEY_S:
-                        if(GameScene.GameRunning) {
+                        if(GameScene.GameRunning && !player.isDodging) {
                             System.out.println("S Pressed");
                             sPressed = Pressed;
                         }
                         break;
                     case GLFW_KEY_A:
-                        if(GameScene.GameRunning) {
+                        if(GameScene.GameRunning && !player.isDodging) {
                             System.out.println("A Pressed");
                             aPressed = Pressed;
                         }
                         break;
                     case GLFW_KEY_D:
-                        if(GameScene.GameRunning) {
+                        if(GameScene.GameRunning && !player.isDodging) {
                             System.out.println("D Pressed");
                             dPressed = Pressed;
                         }
@@ -84,6 +84,16 @@ public class InputManager {
                                     GUIManager.openScreen(new PauseScreen());
                                 }
                             }
+                        }
+                        break;
+                    case GLFW_KEY_SPACE:
+                        if(action == GLFW_PRESS && !player.isDodging) {
+                            System.out.println("Space Pressed");
+                            wPressed = false;
+                            aPressed = false;
+                            sPressed = false;
+                            dPressed = false;
+                            player.isDodging = true;
                         }
                         break;
                     case GLFW_KEY_R:
@@ -265,13 +275,19 @@ public class InputManager {
         //Richtung setzen
         player.setDirectionX(DirX);
         player.setDirectionY(DirY);
-        
+
+        if (DirX != 0) {
+            player.setLastDirectionX(DirX);
+        }
+
         if(DirY != 0){ //Letzte Y Richtung speichern
             player.setLastDirectionY(DirY);
         }
         
         if (DirY == 0 && DirX != 0) { //Falls wir uns nochmal auf der X Achse bewegt haben zurücksetzen
             player.setLastDirectionY(0);
+        } else if (DirX == 0 && DirY != 0) {
+            player.setLastDirectionX(0);
         }
     }
 }

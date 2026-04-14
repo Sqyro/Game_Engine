@@ -62,6 +62,11 @@ public class AnimationObject {
         //Position ausgeben
         return PosOnTextureArray;
     }
+
+    public void renderAnimation(float PosX, float PosY, float TextureWidth, float TextureHeight, boolean isFlipped, ImageHandler renderer) {
+        float[] PosOnTexture = this.getPosOnTextureAsArray(isFlipped);
+        renderer.draw(this.TextureID, PosX, PosY, TextureWidth, TextureHeight, PosOnTexture[0], PosOnTexture[1], PosOnTexture[2], PosOnTexture[3], 1f, 1f, 1f);
+    }
     
     public void setTextureID(int newTextureID) {
         TextureID = newTextureID;
