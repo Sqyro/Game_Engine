@@ -7,7 +7,6 @@ import GUI.GUIText;
 import Item.Items;
 import Map.MapObjects;
 import Physics2D.CollisionManager;
-import Physics2D.VelocityHandler;
 import Player.PlayerAnimationManager;
 import Player.InputManager;
 import Player.Player;
@@ -21,6 +20,7 @@ import Rendering.ImageManager;
 import Shader.LightManager;
 import Shader.Shader;
 import Sounds.SoundHandler;
+import Spell.Spells;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +28,10 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.*;
 
 public class GameScene extends Scene {
-    private Shader shader;
-    private Shader hudshader;
-    private ImageHandler renderer;
-    private PlayerAnimationManager playerAnimationManager;
+    private final Shader shader;
+    private final Shader hudshader;
+    private final ImageHandler renderer;
+    private final PlayerAnimationManager playerAnimationManager;
     
     Map.MapHandler Map;
     
@@ -70,6 +70,7 @@ public class GameScene extends Scene {
 
         MapObjects.RegisterMapObjects();
         Items.RegisterItems();
+        Spells.RegisterSpells();
 
         //Spieler erstellen
         Player.createPlayer();
@@ -126,7 +127,7 @@ public class GameScene extends Scene {
         
         //Der Background ist beeinflusst von dem Global light (Aber keinen Point Lights...)
         float GlobalLight = LightManager.getGlobalLight();
-        glClearColor(1f * GlobalLight, 1f * GlobalLight, 1f * GlobalLight, 1f * GlobalLight);
+        glClearColor(GlobalLight, GlobalLight, GlobalLight, GlobalLight);
         glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Weiß setzen
         
         //Animationen Updaten
@@ -187,7 +188,7 @@ public class GameScene extends Scene {
 
         //Fügt den Spieler in den draw que hinzu. Liest die Werte aus der Variable
 
-        if (player.isDodging == false) {
+        if (!player.isDodging) {
             if (player.Velocity > 0) {
                 if (player.getDirectionY() == 0) {
                     playerAnimationManager.currentAnimation = playerAnimationManager.walkAnimation;
