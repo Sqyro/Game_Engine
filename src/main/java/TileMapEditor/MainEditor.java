@@ -14,7 +14,7 @@ public class MainEditor {
 
         frame.setLayout(new BorderLayout()); //teilt das fenster ein in "parts"
 
-        Grid grid = new Grid(128, 128, 16, 100, 100); //erstellt neues grid mit (Reihen, Zeilen, Tile Größe, verschoben X Richtung, verschoben Y Richtung)
+        Grid grid = new Grid(); //erstellt neues grid mit (Reihen, Zeilen, Tile Größe, verschoben X Richtung, verschoben Y Richtung)
         frame.add(grid, BorderLayout.CENTER); //das Grid liegt im center ungefähr
         
         //eingabefelder
@@ -73,10 +73,10 @@ public class MainEditor {
 
         int index = tabs.getSelectedIndex();
 
-        if(index == 0) grid.currentMode = 0; //tiles
-        if(index == 1) grid.currentMode = 1; //physicsobjects2D
-        if(index == 2) grid.currentMode = 2; //licht
-        if(index == 3) grid.currentMode = 3; //hitboxen
+        if(index == 0) grid.currentTab = 0; //tiles
+        if(index == 1) grid.currentTab = 1; //physicsobjects2D
+        if(index == 2) grid.currentTab = 2; //licht
+        if(index == 3) grid.currentTab = 3; //hitboxen
 
     });
         
@@ -88,13 +88,13 @@ public class MainEditor {
         
         // Zoom in
         zoomIn.addActionListener((ActionEvent e) -> {
-            grid.visibleTiles(grid.visibleRows * grid.zoom, grid.visibleCols * grid.zoom);
+            grid.visibleTiles(grid.visibleRows * grid.zoom, grid.visibleColumns * grid.zoom);
             grid.requestFocusInWindow(); //fenster fokussieren
         });
 
         // Zoom out
         zoomOut.addActionListener((ActionEvent e) -> {
-            grid.visibleTiles(grid.visibleRows / grid.zoom, grid.visibleCols / grid.zoom);
+            grid.visibleTiles(grid.visibleRows / grid.zoom, grid.visibleColumns / grid.zoom);
             grid.requestFocusInWindow(); //fenster fokussieren
         });
 

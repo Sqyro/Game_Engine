@@ -43,8 +43,8 @@ public class PhysicsObject2DSelector extends JPanel {
             int x = col * objectSize; //x position auf der objectselection
             int y = row * objectSize; //y position auf der objectselection
 
-            if (Grid.physicsObject2DTextures[i] != null) { //wenn ein bild vorhanden ist zeichne es
-                g.drawImage(Grid.physicsObject2DTextures[i], x, y, objectSize, objectSize, null);
+            if (Grid.objectTextures[i] != null) { //wenn ein bild vorhanden ist zeichne es
+                g.drawImage(Grid.objectTextures[i], x, y, objectSize, objectSize, null);
             } else { //sonst ist das feld grau
                 g.setColor(Color.GRAY);
                 g.fillRect(x, y, objectSize, objectSize);

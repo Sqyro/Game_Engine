@@ -46,8 +46,8 @@ public class TileSelector extends JPanel {
             int arrayindex = i * 4; 
 
             // Prüfen, ob der Index im Array existiert und nicht null ist
-            if (arrayindex < Grid.tiles.length && Grid.tiles[arrayindex] != null) { 
-                g.drawImage(Grid.tiles[arrayindex], x, y, tileSize, tileSize, null);
+            if (arrayindex < Grid.tileTextures.length && Grid.tileTextures[arrayindex] != null) { 
+                g.drawImage(Grid.tileTextures[arrayindex], x, y, tileSize, tileSize, null);
             } else { 
                 g.setColor(Color.GRAY);
                 g.fillRect(x, y, tileSize, tileSize);
