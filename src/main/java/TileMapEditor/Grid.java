@@ -660,7 +660,7 @@ public class Grid extends JPanel {
         int i = 0;
 
         while (true) {
-            String path = "src/main/resources/assets/textures/tiles/Sheet" + i + ".png"; //bildpfad
+            String path = "src/main/resources/assets/textures/tiles/sheet" + i + ".png"; //bildpfad
             File file = new File(path);
             if (!file.exists()) { //wir schauen ob eine file existiert wenn nicht dann macht er garnichts mehr
                 break;
