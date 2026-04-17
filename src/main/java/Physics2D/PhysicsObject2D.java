@@ -39,4 +39,7 @@ public abstract class PhysicsObject2D implements Serializable { // Klasse für a
     public void setTextureID(int newTextureID) {
         this.TextureID = newTextureID;
     }
+    
+    public abstract float getPosX ();
+    public abstract float getPosY ();
 }

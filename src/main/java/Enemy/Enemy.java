@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 import Physics2D.VelocityHandler;
 import Player.Player;
-import Registry.Registrable;
 import Rendering.Camera;
 import Physics2D.CircleCollider;
 import Rendering.Frame;
 import Scenes.GameScene;
+import Registry.IRegistrable;
 
 public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ein sich bewegendes
     public static int ENEMY_MOVEMENT_SPEED = 400;

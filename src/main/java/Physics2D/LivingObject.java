@@ -1,8 +1,9 @@
 package Physics2D;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-public abstract class LivingObject extends PhysicsObject2D implements Serializable { // Klasse für Alle Objekte die Physik haben und sich bewegen können
+public abstract class LivingObject extends PhysicsObject2D implements Serializable, ISolidCollider { // Klasse für Alle Objekte die Physik haben und sich bewegen können
     private static final long serialVersionUID = 1L;
 
     //Position
@@ -107,5 +108,28 @@ public abstract class LivingObject extends PhysicsObject2D implements Serializab
 
     public void damageObject(float Damage) {
         HP -= Damage;
+    }
+    
+    @Override 
+    public float getPosX () {
+        return PosX;
+    }
+    
+    @Override 
+    public float getPosY () {
+        return PosY;
+    }
+    
+    @Override
+    public void Collide (LivingObject Object, ArrayList List) {
+        PhysicsObject2D currentObject;
+        for (int i = 0; i < List.size(); i++) {
+            currentObject = (PhysicsObject2D) List.get(i);
+            if (((Object.PosX + Object.ObjLength / 2 + Object.Hitbox.OffsetX) - (currentObject.getPosX() + currentObject.ObjLength / 2 + currentObject.Hitbox.OffsetX)) * ((Object.PosX + Object.ObjLength / 2 + Object.Hitbox.OffsetX) - (currentObject.getPosX() + currentObject.ObjLength / 2 + currentObject.Hitbox.OffsetX)) +
+                ((Object.PosY + Object.ObjHeight / 2 + Object.Hitbox.OffsetY) - (currentObject.getPosY() + currentObject.ObjHeight / 2 + currentObject.Hitbox.OffsetY)) * ((Object.PosY + Object.ObjHeight / 2 + Object.Hitbox.OffsetY) - (currentObject.getPosY() + currentObject.ObjHeight / 2 + currentObject.Hitbox.OffsetY)) <
+                (currentObject.Hitbox.Radius + Object.Hitbox.Radius) * (currentObject.Hitbox.Radius + Object.Hitbox.Radius) == true) {
+                
+            }
+        } 
     }
 }

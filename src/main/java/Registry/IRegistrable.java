@@ -1,5 +1,5 @@
 package Registry;
 
-public interface Registrable {
+public interface IRegistrable {
     String getRegistryName();
 }

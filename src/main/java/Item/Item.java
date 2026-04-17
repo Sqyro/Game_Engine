@@ -1,10 +1,10 @@
 package Item;
 
-import Registry.Registrable;
 
 import java.io.Serializable;
+import Registry.IRegistrable;
 
-public class Item implements Registrable, Serializable {
+public class Item implements IRegistrable, Serializable {
     private static final long serialVersionUID = 1L;
     
     public int TextureID;

@@ -1,9 +1,9 @@
 package Spell;
 
-import Registry.Registrable;
 import Rendering.ImageHandler;
+import Registry.IRegistrable;
 
-public abstract class Spell implements Registrable {
+public abstract class Spell implements IRegistrable {
     public int IconTextureID;
     public float SpellIconWidth;
     public float SpellIconHeight;

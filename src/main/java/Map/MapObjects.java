@@ -1,6 +1,7 @@
 package Map;
 
 import Physics2D.CircleCollider;
+import Physics2D.ISolidCollider;
 import Registry.DeferredRegister;
 import Rendering.ImageManager;
 

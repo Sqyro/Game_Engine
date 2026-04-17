@@ -3,7 +3,7 @@ package Registry;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DeferredRegister<T extends Registrable> {
+public class DeferredRegister<T extends IRegistrable> {
     private final Map<String, T> Registered = new HashMap<>();
 
     public void register(T Object) {
