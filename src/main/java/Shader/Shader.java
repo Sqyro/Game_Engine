@@ -23,9 +23,7 @@ public class Shader {
     public int ColorLocation;
     
     public Shader(String vertexPath, String fragmentPath) {
-
         try {
-
             //Liest den Schader Code und schreibt ihn in Strings
             String VertexShaderCode = new String(Files.readAllBytes(Paths.get(vertexPath)));
             String FragmentShaderCode = new String(Files.readAllBytes(Paths.get(fragmentPath)));
@@ -37,8 +35,9 @@ public class Shader {
             //Compiled den Shader
             glCompileShader(VertexShader);
             //Schaut nach Fehlern beim compilen
-            if (glGetShaderi(VertexShader, GL_COMPILE_STATUS) == GL_FALSE)
+            if (glGetShaderi(VertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
                 throw new RuntimeException(glGetShaderInfoLog(VertexShader)); //Schmeißt ne Exception wenn was nicht geklappt hat
+            }
 
             //Macht nen Fragment Shader
             int FragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -47,8 +46,9 @@ public class Shader {
             //Compiled den Shader
             glCompileShader(FragmentShader);
             //Schaut nach Fehlern beim compilen
-            if (glGetShaderi(FragmentShader, GL_COMPILE_STATUS) == GL_FALSE)
+            if (glGetShaderi(FragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
                 throw new RuntimeException(glGetShaderInfoLog(FragmentShader)); //Schmeißt ne Exception wenn was nicht geklappt hat
+            }
 
             //Macht nen Shader Programm
             ShaderID = glCreateProgram();
@@ -58,21 +58,22 @@ public class Shader {
             //Beide Shader zusammenfügen, laufen hintereinander
             glLinkProgram(ShaderID);
             //Guckt wieder nach Errors und schmeißt entsprechend ne Exception
-            if (glGetProgrami(ShaderID, GL_LINK_STATUS) == GL_FALSE)
+            if (glGetProgrami(ShaderID, GL_LINK_STATUS) == GL_FALSE) {
                 throw new RuntimeException(glGetProgramInfoLog(ShaderID));
+            }
 
-            //Löscht die seperaten Shader, weil sie zusammengefügt wurden
+            //Löscht die separaten Shader, weil sie zusammengefügt wurden
             glDeleteShader(VertexShader);
             glDeleteShader(FragmentShader);
             
-            //Qued die Locations für OpenGL von den häufiog verwendeten Variabeln, damit sie Effizienter gesetzt werden können
-            OffsetLocation = glGetUniformLocation(ShaderID, "offset");
-            ScaleLocation = glGetUniformLocation(ShaderID, "scale");
-            ScreenSizeLocation = glGetUniformLocation(ShaderID, "screenSize");
-            ColorLocation = glGetUniformLocation(ShaderID, "color");
+            //Qued die Locations für OpenGL von den häufig verwendeten Variabeln, damit sie Effizienter gesetzt werden können
+            OffsetLocation = glGetUniformLocation(ShaderID, "Offset");
+            ScaleLocation = glGetUniformLocation(ShaderID, "Scale");
+            ScreenSizeLocation = glGetUniformLocation(ShaderID, "ScreenSize");
+            ColorLocation = glGetUniformLocation(ShaderID, "Color");
             
-            onTextureOffsetLocation = glGetUniformLocation(ShaderID, "ontextureOffset");
-            onTextureScaleLocation = glGetUniformLocation(ShaderID, "ontextureScale");
+            onTextureOffsetLocation = glGetUniformLocation(ShaderID, "onTextureOffset");
+            onTextureScaleLocation = glGetUniformLocation(ShaderID, "onTextureScale");
 
         } catch (Exception e) {
             throw new RuntimeException("Shader load failed", e); //Nachricht für den Debug
@@ -108,11 +109,6 @@ public class Shader {
     //Aktiviert den Shader
     public void bind() {
         glUseProgram(ShaderID);
-    }
-    
-    //Stopps alle Shader
-    public void unbind() {
-        glUseProgram(0);
     }
     
     //Wenn man sich die ID holen will

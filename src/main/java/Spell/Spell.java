@@ -26,7 +26,7 @@ public abstract class Spell implements Registrable {
     public abstract void onSpellTick();
 
     public void renderIcon(float PosX, float PosY, ImageHandler renderer) {
-        renderer.drawFull(IconTextureID, PosX, PosY, SpellIconWidth, SpellIconHeight, 1f, 1f, 1f);
+        renderer.drawFull(IconTextureID, PosX, PosY, SpellIconWidth, SpellIconHeight, 1f, 1f, 1f, 1f);
     }
 
     @Override

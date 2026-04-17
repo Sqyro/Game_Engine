@@ -27,7 +27,7 @@ public class LoadGameInteractableField extends GUIInteractableField {
 
     @Override
     public void drawField(ImageHandler renderer) {
-        renderer.drawFull(TextureID, PosX, PosY, FieldWidth, FieldHeight, 1f, 1f, 1f);
+        renderer.drawFull(TextureID, PosX, PosY, FieldWidth, FieldHeight, 1f, 1f, 1f, 1f);
         GUIManager.renderText(new GUIText(LoadGameFieldText,PosX + Frame.NormalizedPixelWidth * 25, PosY + Frame.NormalizedPixelHeight * 25, LoadGameFieldTextSize, LoadGameFieldTextSpacing, ImageManager.GAMEFONT, Color.WHITE), renderer);
     }
 

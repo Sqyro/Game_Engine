@@ -19,14 +19,22 @@ public abstract class LivingObject extends PhysicsObject2D implements Serializab
     boolean ObjectFlippedX = false;
     private float lastDirectionX = 0;
     private float lastDirectionY = 0;
+
+    public float Max_HP;
+    public float HP;
+
+    public boolean isAlive;
     
-    public LivingObject(float PosX, float PosY, float ObjLength, float ObjHeight, int TextureID, float Velocity, float[] Direction, CircleCollider Hitbox) { //Constructor
+    public LivingObject(float PosX, float PosY, float ObjLength, float ObjHeight, int TextureID, float Velocity, float[] Direction, CircleCollider Hitbox, float Max_HP) { //Constructor
         super(ObjLength, ObjHeight, TextureID, Hitbox); //Passed alles außer Velocity und Direction an PhysicsObject2D weiter
         //Variablen pro Objekt setzen
         this.PosX = PosX;
         this.PosY = PosY;
         this.Velocity = Velocity;
         this.Direction = Direction;
+        this.Max_HP = Max_HP;
+        this.HP = Max_HP;
+        this.isAlive = true;
     }
     
     //Methoden um an die Variablen von jedem Objekt ranzukommen
@@ -87,5 +95,17 @@ public abstract class LivingObject extends PhysicsObject2D implements Serializab
             ObjectFlippedX = false;
         }
         return ObjectFlippedX;
+    }
+
+    public void setMaxHp(float newMaxHP) {
+        Max_HP = newMaxHP;
+    }
+
+    public void setHp(float newHP) {
+        HP = newHP;
+    }
+
+    public void damageObject(float Damage) {
+        HP -= Damage;
     }
 }

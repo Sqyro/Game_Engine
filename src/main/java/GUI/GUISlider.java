@@ -48,8 +48,8 @@ public class GUISlider {
     }
     
     public void drawSlider(ImageHandler renderer) {
-        renderer.draw(TextureID, PosX - Camera.PosX, PosY - Camera.PosY, BackgroundWidth, BackgroundHeight, onTextureX, onTextureY, onTextureWidth, onTextureHeight, 1f, 1f, 1f);
-        renderer.draw(TextureID, (PosX + SliderWidth * SliderPercentageFilled) - Camera.PosX, PosY - Camera.PosY, SliderWidth, SliderHeight, SlideronTextureX, SlideronTextureY, SlideronTextureWidth, SlideronTextureHeight, 1f, 1f, 1f);
+        renderer.draw(TextureID, PosX - Camera.PosX, PosY - Camera.PosY, BackgroundWidth, BackgroundHeight, onTextureX, onTextureY, onTextureWidth, onTextureHeight, 1f, 1f, 1f, 1f);
+        renderer.draw(TextureID, (PosX + SliderWidth * SliderPercentageFilled) - Camera.PosX, PosY - Camera.PosY, SliderWidth, SliderHeight, SlideronTextureX, SlideronTextureY, SlideronTextureWidth, SlideronTextureHeight, 1f, 1f, 1f, 1f);
     }
     
     public boolean CursorClickedSlider(double CursorX, double CursorY) {

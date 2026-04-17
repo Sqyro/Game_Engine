@@ -52,15 +52,15 @@ public abstract class GUIButton extends GUIInteractableField {
 
     @Override
     public void drawField(ImageHandler renderer) {
-        renderer.draw(TextureID, PosX - Camera.PosX, PosY - Camera.PosY, FieldWidth, FieldHeight, onTextureX, onTextureY, onTextureWidth, onTextureHeight, 1f, 1f, 1f);
+        renderer.draw(TextureID, PosX - Camera.PosX, PosY - Camera.PosY, FieldWidth, FieldHeight, onTextureX, onTextureY, onTextureWidth, onTextureHeight, 1f, 1f, 1f, 1f);
         float ButtonCenterPosX = FieldWidth / 2;
         float ButtonCenterPosY = FieldHeight / 2;
         float TextTotalLengthOnScreen = (ButtonText.length() + 1) * ButtonTextSpacing;
         GUIManager.renderText(new GUIText(ButtonText, PosX + ButtonCenterPosX - TextTotalLengthOnScreen / 2, PosY + ButtonCenterPosY - ButtonTextSize / 2, ButtonTextSize, ButtonTextSpacing, ImageManager.GAMEFONT, ButtonTextColor), renderer);
         if(isHoveringOver) {
             float IndicatorOffsetX = Frame.NormalizedPixelWidth * (FieldWidth - FieldWidth/3);
-            renderer.draw(TextureID, PosX - Camera.PosX + ButtonCenterPosX - IndicatorOffsetX, PosY - Camera.PosY, FieldHeight, FieldHeight, Indicator1onTextureX, Indicator1onTextureY, Indicator1onTextureWidth, Indicator1onTextureHeight, 1f, 1f, 1f);
-            renderer.draw(TextureID, PosX - Camera.PosX + ButtonCenterPosX + IndicatorOffsetX - FieldHeight, PosY - Camera.PosY, FieldHeight, FieldHeight, Indicator2onTextureX, Indicator2onTextureY, Indicator2onTextureWidth, Indicator2onTextureHeight, 1f, 1f, 1f);
+            renderer.draw(TextureID, PosX - Camera.PosX + ButtonCenterPosX - IndicatorOffsetX, PosY - Camera.PosY, FieldHeight, FieldHeight, Indicator1onTextureX, Indicator1onTextureY, Indicator1onTextureWidth, Indicator1onTextureHeight, 1f, 1f, 1f, 1f);
+            renderer.draw(TextureID, PosX - Camera.PosX + ButtonCenterPosX + IndicatorOffsetX - FieldHeight, PosY - Camera.PosY, FieldHeight, FieldHeight, Indicator2onTextureX, Indicator2onTextureY, Indicator2onTextureWidth, Indicator2onTextureHeight, 1f, 1f, 1f, 1f);
         }
     }
     

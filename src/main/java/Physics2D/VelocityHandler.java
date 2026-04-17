@@ -16,7 +16,7 @@ public class VelocityHandler {
         //Satz des Pytagoras, ich normalisiere den Vektor wenn zwei Keys gleichzeitig gedrückt werden, weil sich sonst die Geschwindigkeit addiert
         float Normalization = (float)Math.sqrt(DirectionX * DirectionX + DirectionY * DirectionY);
 
-        if (Normalization != 0) { //Wir wollen nicht durch null teilen
+        if (Normalization != 0) { //Wir wollen nicht durch null teilen und die Richtung wird nur geupdated, wenn die normalisierte Richtung groß genug ist
             DirectionX /= Normalization; //Richtung mit Normalisierung Dividieren, damit es nicht 1 auf beiden ist, sondern halt verteilt
             DirectionY /= Normalization;
         }

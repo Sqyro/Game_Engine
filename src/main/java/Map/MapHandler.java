@@ -79,7 +79,7 @@ public class MapHandler {
                 
                 if(TILES[j][i] < ImageManager.TileTextures.size()) { // Damit falls die Textur nicht existiert das Spiel nicht abstürzt, sondern die Textur einfach nicht angezeigt wird
                     // Die Tile TextureIDs werden extra vorher in nen Array geschrieben, damit sie clean gelesen werden können
-                    renderer.drawFull(ImageManager.TileTextures.get(TILES[j][i]), PosX, PosY, TileSize, TileSize, 1f, 1f, 1f);
+                    renderer.drawFull(ImageManager.TileTextures.get(TILES[j][i]), PosX, PosY, TileSize, TileSize, 1f, 1f, 1f, 1f);
                 }
             }
         }

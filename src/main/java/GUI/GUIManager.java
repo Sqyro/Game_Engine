@@ -45,7 +45,7 @@ public class GUIManager {
             float LetterY = guiText.PosY;
 
             //Enqued den Buchstaben
-            renderer.draw(guiText.FontTextureID, LetterX - Camera.PosX, LetterY - Camera.PosY, guiText.CharacterSize, guiText.CharacterSize, GUIBitmapFont.getTextureX(CharacterAt), GUIBitmapFont.getTextureY(CharacterAt), GUIBitmapFont.getWidth(), GUIBitmapFont.getHeight(), Red, Green, Blue);
+            renderer.draw(guiText.FontTextureID, LetterX - Camera.PosX, LetterY - Camera.PosY, guiText.CharacterSize, guiText.CharacterSize, GUIBitmapFont.getTextureX(CharacterAt), GUIBitmapFont.getTextureY(CharacterAt), GUIBitmapFont.getWidth(), GUIBitmapFont.getHeight(), Red, Green, Blue, 1f);
         }
     }
 }

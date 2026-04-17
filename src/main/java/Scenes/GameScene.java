@@ -22,6 +22,7 @@ import Shader.Shader;
 import Sounds.SoundHandler;
 import Spell.Spells;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +75,7 @@ public class GameScene extends Scene {
 
         //Spieler erstellen
         Player.createPlayer();
+        Rendering.HudHandler.PlaceNewBar(100, 100, 400, 50, Rendering.ImageManager.TESTBAR, 1, 60, 4, Color.RED);
     }
     
     @Override
@@ -116,9 +118,12 @@ public class GameScene extends Scene {
         if(GameRunning) {
             Gametime += deltaTime;
             player.PlayerTick(deltaTime);
+            Enemy.UpdateAllEnemyAI(deltaTime);
             SoundHandler.updateSounds(deltaTime);
             updateTimedText();
             Camera.UpdateCamera(Player.Player);
+            //Liste an aktiven Lichtern updaten
+            //LightManager.updateVisibleLights(Frame.ScreenWidth, Frame.ScreenHeight);
             //Hitbox update machen
             CollisionManager.Player_Enemy();
             //CollisionManager.Player_Wall();
@@ -145,21 +150,18 @@ public class GameScene extends Scene {
         int ScreenBottom = ScreenTop + Frame.ScreenHeight;
         
         //Render Enemies;
-        for(int i = 0; i < Enemy.Enemies.size(); i++) { //Liest die Enemies Liste durch
-            //Kopiert den momentan gelesenen Enemy in eine Lokale Variable
-            Enemy currentEnemy = Enemy.Enemies.get(i);
-            
+        for(Enemy currentEnemy : Enemy.Enemies) { //Liest die Enemies Liste durch
             //Sneaked sich die ganzen Positionen in andere Variablen rein, damit man es besser lesen kann
-            float EnemyX = currentEnemy.PosX;
-            float EnemyY = currentEnemy.PosY;
+            float EnemyDrawX = currentEnemy.PosX - currentEnemy.ObjLength/2;
+            float EnemyDrawY = currentEnemy.PosY - currentEnemy.ObjHeight/2;
             
             //Wenn dieser Enemie nicht auf dem Screen ist (Plus Minus 100, damit man es nicht merkt)
-            if (EnemyX < ScreenLeft - 100 || EnemyX > ScreenRight + 100 ||EnemyY < ScreenTop - 100 || EnemyY > ScreenBottom + 100) {
+            if (EnemyDrawX < ScreenLeft - 100 || EnemyDrawX > ScreenRight + 100 || EnemyDrawY < ScreenTop - 100 || EnemyDrawY > ScreenBottom + 100) {
                 continue; // Skippt diesen Enemy und macht mit dem nächsten weiter
             }
             
             //Sonst fügt er den Enemy in den draw que hinzu
-            renderer.drawFull(currentEnemy.TextureID, EnemyX, EnemyY, currentEnemy.ObjLength, currentEnemy.ObjHeight, 1f, 1f, 1f);
+            renderer.drawFull(currentEnemy.TextureID, EnemyDrawX, EnemyDrawY, currentEnemy.ObjLength, currentEnemy.ObjHeight, 1f, 1f, 1f, 1f);
         }
         /*
         //Render Walls
@@ -216,21 +218,18 @@ public class GameScene extends Scene {
             }
         }
 
-        playerAnimationManager.currentAnimation.renderAnimation(player.PosX, player.PosY, player.ObjLength, player.ObjHeight, player.isFLipped(), renderer);
+        playerAnimationManager.currentAnimation.renderAnimation(player.PosX - player.ObjLength/2, player.PosY - player.ObjHeight/2, player.ObjLength, player.ObjHeight, player.isFLipped(), renderer);
 
         //Flushed den Spieler später, damit er über allem drüber liegt. Er wird gashaded mit dem Global Shader und gezeichnet
         renderer.flush(shader, Frame.ScreenWidth, Frame.ScreenHeight);
 
         //Render HUD
         
-        for(int i = 0; i < HudHandler.HudElements.size(); i++) { //Ähnlich wie bei den Enemies, geht die Hud Elemente durch
-            //Moved das Momentane Hud Element in eine Lokale Variable
-            HudElement currentHud = HudHandler.HudElements.get(i);
+        for(HudElement currentHud : HudHandler.HudElements) { //Ähnlich wie bei den Enemies, geht die Hud Elemente durch
             //Sneaked sich die Werte für Position für bessere Lesbarkeit
             int HudX = currentHud.PosX;
             int HudY = currentHud.PosY;
-            
-            
+
             //Der Code hat mal mit ner Helfmethode für Quadrate zeichnen Funktioniert, jetzt aber nichtmehr, weil ich ja von dem Base OpenGL renderer weggegangen bin für Shader, muss das mach fixen
             if(currentHud instanceof BarElement) { // Wenn es ein BarElement ist, dann zeichnet er die Farbe ("Bar darunter") mit dazu
                 BarElement bar = (BarElement) currentHud;
@@ -241,13 +240,15 @@ public class GameScene extends Scene {
                 float Blue = bar.BarColor.getBlue() / 255f;
                 
                 //Rechteck unter die Textur zeichnen
-                renderer.drawRectangle(ImageManager.BAR, HudX - Camera.PosX + bar.BarOffsetX, HudY - Camera.PosY + bar.BarOffsetY, bar.HudLength * bar.BarFilledPercentage - bar.BarOffsetX, bar.HudHeight - bar.BarOffsetY * 2, Red, Green, Blue);
+                if (bar.BarFilledPercentage > 0) {
+                    renderer.drawRectangle(ImageManager.BAR, HudX - Camera.PosX + bar.BarOffsetX, HudY - Camera.PosY + bar.BarOffsetY, bar.HudLength * bar.BarFilledPercentage - bar.BarOffsetX, bar.HudHeight - bar.BarOffsetY * 2, Red, Green, Blue, 1f);
+                }
                 //Bar Extra flushen, damit es unter der Textur liegt
                 renderer.flush(hudshader, Frame.ScreenWidth, Frame.ScreenHeight);
             }
             
             //Fügt die Hud Elemente in den neuen draw que hinzu
-            renderer.drawFull(currentHud.TextureID, HudX - Camera.PosX, HudY - Camera.PosY, currentHud.HudLength, currentHud.HudHeight, 1f, 1f, 1f);
+            renderer.drawFull(currentHud.TextureID, HudX - Camera.PosX, HudY - Camera.PosY, currentHud.HudLength, currentHud.HudHeight, 1f, 1f, 1f, 1f);
         }
         
         //Flushed alle neuen Elemente im draw que (Nur HUD). Objekte werden mit dem HudShader geshaded und gezeichnet
@@ -272,7 +273,7 @@ public class GameScene extends Scene {
         }
 
         //Einen eigenen Cursor zeichnen an der Position vom System Cursor
-        renderer.drawFull(ImageManager.CURSOR, (float)GUI.Mouse.PosX - Camera.PosX, (float)GUI.Mouse.PosY - Camera.PosY, 32, 32, 1f, 1f, 1f);
+        renderer.drawFull(ImageManager.CURSOR, (float)GUI.Mouse.PosX - Camera.PosX, (float)GUI.Mouse.PosY - Camera.PosY, 32, 32, 1f, 1f, 1f, 1f);
 
         //Flushed alles andere danach, weil der Cursor sonst unter dem Inventar ist, einfach wegen der Reihenfolge in der alles geladen wird
         renderer.flush(hudshader, Frame.ScreenWidth, Frame.ScreenHeight);

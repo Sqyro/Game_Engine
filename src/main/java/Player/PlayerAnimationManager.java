@@ -47,26 +47,12 @@ public class PlayerAnimationManager {
         ultSpellUpAnimation = new AnimationObject(ImageManager.PLAYER_SPECIAL, 7, 15, 5, 6, 0.2f);
 
         itemPickupAnimation = new AnimationObject(ImageManager.PLAYER_SPECIAL, 7, 15, 6, 15, 0.2f);
+
+        currentAnimation = idleAnimation;
     }
     
     //Methode um alle Animationen auf einmal up-zu daten, wenn Animationen später für Lag sorgen, dann vermutlich wegen dieser Methode. Du musst einfach machen, dass nur die Momentan angezeigte Animation geupdated wird. Habs noch nicht gemacht, weil ich noch nicht weiß wie später animationen aussehen, wenn noch Enemies welche haben
     public void updateGameAnimations(float deltaTime) {
-        idleAnimation.UpdateAnimation(deltaTime);
-        idleDownAnimation.UpdateAnimation(deltaTime);
-        idleUpAnimation.UpdateAnimation(deltaTime);
-
-        walkAnimation.UpdateAnimation(deltaTime);
-        walkDownAnimation.UpdateAnimation(deltaTime);
-        walkUpAnimation.UpdateAnimation(deltaTime);
-
-        dodgeRollAnimation.UpdateAnimation(deltaTime);
-        dodgeRollDownAnimation.UpdateAnimation(deltaTime);
-        dodgeRollUpAnimation.UpdateAnimation(deltaTime);
-
-        ultSpellAnimation.UpdateAnimation(deltaTime);
-        ultSpellDownAnimation.UpdateAnimation(deltaTime);
-        ultSpellUpAnimation.UpdateAnimation(deltaTime);
-
-        itemPickupAnimation.UpdateAnimation(deltaTime);
+        currentAnimation.UpdateAnimation(deltaTime);
     }
 }

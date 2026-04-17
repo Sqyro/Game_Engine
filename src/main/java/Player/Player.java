@@ -2,6 +2,7 @@ package Player;
 
 import Physics2D.LivingObject;
 import Physics2D.VelocityHandler;
+import Rendering.BarElement;
 import Rendering.ImageManager;
 import Item.Item;
 import Item.Items;
@@ -20,7 +21,7 @@ public class Player extends LivingObject implements Serializable { // Serializat
     public static int PLAYER_MAX_HP = 20;
 
     public volatile boolean isDodging = false;
-    public static int PLAYER_DODGE_VELOCITY = 1000;
+    public static int PLAYER_DODGE_VELOCITY = 900;
     private float dodgeElapsedTime;
     private float DODGE_TIME_IN_SECONDS = 0.8f;
 
@@ -30,30 +31,36 @@ public class Player extends LivingObject implements Serializable { // Serializat
     //Ausrichtung, wenn der Spieler gespawned wird
     private static float[] DefaultDirection = {0, 0};
 
-    public int MAX_HP;
-    public int HP;
-
     //Variable fürs Spieler Inventar, erstellt nen neues Inventar mit der Größe 65
     public InventoryManager inventory = new InventoryManager(65);
     
     //Constructor vom Spieler, gibt alle Werte an LivingObject hoch
-    public Player(float PosX, float PosY, float PlayerLength, float PlayerHeight, int TextureID, float Velocity, float[] Direction, CircleCollider Hitbox, int MAX_HP) { //Constructor
-        super(PosX, PosY, PlayerLength, PlayerHeight, TextureID, Velocity, Direction, Hitbox); //Passed alle Werte an LivingObject weiter
-        this.MAX_HP = MAX_HP;
-        this.HP = MAX_HP;
+    public Player(float PosX, float PosY, float PlayerLength, float PlayerHeight, int TextureID, float Velocity, float[] Direction, CircleCollider Hitbox, int Max_HP) { //Constructor
+        super(PosX, PosY, PlayerLength, PlayerHeight, TextureID, Velocity, Direction, Hitbox, Max_HP); //Passed alle Werte an LivingObject weiter
     }
 
     public void PlayerTick(float deltaTime) {
-        InputManager.updatePlayerDirection();
-        if (isDodging) {
-            doADodgeRoll(deltaTime);
+        if (isAlive) {
+            InputManager.updatePlayerDirection();
+            if (isDodging) {
+                doADodgeRoll(deltaTime);
+            }
+            VelocityHandler.calculatePosition(Player, deltaTime);
+            System.out.println(HP);
+            Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0);
+            BarElement bar = (BarElement) Hud;
+            if(bar.BarFilledPercentage * bar.HudLength > 0 + bar.BarOffsetX) {
+                bar.setBarFilledPercentage(HP/Max_HP);
+            }
+            if (HP <= 0) {
+                die();
+            }
         }
-        VelocityHandler.calculatePosition(Player, deltaTime);
     }
 
     public static void createPlayer() { // Methode um nen Spieler zu erstellen
         Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection, new CircleCollider(32, 0, 15), PLAYER_MAX_HP); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
-        //Erstellt zwei test Items wärend der Spieler erstellung, damit man das Inventar schonmal ausprobieren kann
+        //Erstellt zwei test Items während der Spieler erstellung, damit man das Inventar schon mal ausprobieren kann
         Player.Player.inventory.setItem(0, Items.ITEMS.getRegistry("sword"));
         Player.Player.inventory.setItem(1, Items.ITEMS.getRegistry("sword"));
         System.out.println("New Player created");
@@ -85,18 +92,17 @@ public class Player extends LivingObject implements Serializable { // Serializat
         //Falls alle Slots belegt sind, dann sagen, dass das Inventar voll ist
         System.out.println("Inventory Full!");
     }
-    
-    //Helfer Methoden um die HP zu setzen
 
-    public void setMaxHp(int newMaxHP) {
-        MAX_HP = newMaxHP;
+    public void die() {
+        isAlive = false;
+        System.out.println("Player died");
     }
 
-    public void setHp(int newHP) {
-        HP = newHP;
-    }
-
-    public void damagePlayer(int Damage) {
-        HP -= Damage;
+    public void respawn(float PosX, float PosY) {
+        HP = Max_HP;
+        this.PosX = PosX;
+        this.PosY = PosY;
+        isAlive = true;
+        System.out.println("Player respawned");
     }
 }

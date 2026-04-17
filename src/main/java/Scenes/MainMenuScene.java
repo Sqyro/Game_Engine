@@ -78,7 +78,7 @@ public class MainMenuScene extends Scene {
         }
 
         //Einen eigenen Cursor zeichnen an der Position vom System Cursor
-        renderer.drawFull(ImageManager.CURSOR, (float)GUI.Mouse.PosX - Camera.PosX, (float)GUI.Mouse.PosY - Camera.PosY, 32, 32, 1f, 1f, 1f);
+        renderer.drawFull(ImageManager.CURSOR, (float)GUI.Mouse.PosX - Camera.PosX, (float)GUI.Mouse.PosY - Camera.PosY, 32, 32, 1f, 1f, 1f, 1f);
 
         //Flushed den Screen Render durch mit dem Hud Shader
         renderer.flush(mainMenuShader, Frame.ScreenWidth, Frame.ScreenHeight);

@@ -4,6 +4,7 @@ import GUI.*;
 import GUI.Screens.InventoryScreen;
 import GUI.Screens.PauseScreen;
 import Rendering.BarElement;
+import Rendering.Camera;
 import Rendering.ImageManager;
 import Shader.LightEmitters.PointLight;
 import Shader.LightManager;
@@ -35,25 +36,25 @@ public class InputManager {
             
                 switch (key) {
                     case GLFW_KEY_W: // W wurde gedrückt
-                        if(GameScene.GameRunning && !player.isDodging) {
+                        if(GameScene.GameRunning && !player.isDodging && player.isAlive) {
                             System.out.println("W Pressed"); //Nachricht für den Debug
                             wPressed = Pressed; //Wurde gerückt, also ja es wurde was gerückt hier rein schreiben für später//Schau nicht weiter (Wenn das nicht hier ist, dann wartet er bis ein Key gedrückt wurde und führt dann alles aus)
                         }
                         break;
                     case GLFW_KEY_S:
-                        if(GameScene.GameRunning && !player.isDodging) {
+                        if(GameScene.GameRunning && !player.isDodging && player.isAlive) {
                             System.out.println("S Pressed");
                             sPressed = Pressed;
                         }
                         break;
                     case GLFW_KEY_A:
-                        if(GameScene.GameRunning && !player.isDodging) {
+                        if(GameScene.GameRunning && !player.isDodging && player.isAlive) {
                             System.out.println("A Pressed");
                             aPressed = Pressed;
                         }
                         break;
                     case GLFW_KEY_D:
-                        if(GameScene.GameRunning && !player.isDodging) {
+                        if(GameScene.GameRunning && !player.isDodging && player.isAlive) {
                             System.out.println("D Pressed");
                             dPressed = Pressed;
                         }
@@ -87,7 +88,7 @@ public class InputManager {
                         }
                         break;
                     case GLFW_KEY_SPACE:
-                        if(action == GLFW_PRESS && !player.isDodging) {
+                        if(action == GLFW_PRESS && !player.isDodging && player.isAlive) {
                             System.out.println("Space Pressed");
                             wPressed = false;
                             aPressed = false;
@@ -117,7 +118,7 @@ public class InputManager {
                     case GLFW_KEY_C:
                         if(GameScene.GameRunning) {
                             System.out.println("C Pressed");
-                            Enemy.Enemy.Spawn(40, 40, 50, 50, ImageManager.ENEMY, 0, Direction, new CircleCollider(22, 0, 0), 5); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
+                            Enemy.Enemy.Spawn((float)Mouse.PosX - Camera.PosX, (float)Mouse.PosY - Camera.PosY, 50, 50, ImageManager.ENEMY, 0, Direction, new CircleCollider(22, 0, 0), 5); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
                         }
                         break;
                     case GLFW_KEY_P:
@@ -129,7 +130,7 @@ public class InputManager {
                     case GLFW_KEY_I:
                         if(GameScene.GameRunning) {
                             System.out.println("I Pressed");
-                            PointLight pointLight = new PointLight(670, 670, 1f, 1f, 1f, 300f); //Erstellt ein neues Point Light bei 670, 670 mit den RGB Werten von 1, 1, 1 und der Reichweite von 300
+                            PointLight pointLight = new PointLight((float)Mouse.PosX - Camera.PosX, (float)Mouse.PosY - Camera.PosY, 1f, 1f, 1f, 300f); //Erstellt ein neues Point Light bei der MausPos auf der Kamera mit den RGB Werten von 1, 1, 1 und der Reichweite von 300
                             LightManager.addLight(pointLight); //Frügt das Light in die Liste für Lights hinzu
                         }
                         break;
