@@ -3,10 +3,13 @@ package Player;
 import Physics2D.LivingObject;
 import Physics2D.VelocityHandler;
 import Rendering.BarElement;
+import Rendering.ImageHandler;
 import Rendering.ImageManager;
 import Item.Item;
 import Item.Items;
 import Physics2D.CircleCollider;
+import Spell.Spell;
+import Spell.Spells;
 
 import java.io.Serializable;
 
@@ -32,21 +35,21 @@ public class Player extends LivingObject implements Serializable { // Serializat
     private static float[] DefaultDirection = {0, 0};
 
     //Variable fürs Spieler Inventar, erstellt nen neues Inventar mit der Größe 65
-    public InventoryManager inventory = new InventoryManager(65);
-    
+    public InventoryManager inventory = new InventoryManager(65, 10, 1);
+
     //Constructor vom Spieler, gibt alle Werte an LivingObject hoch
     public Player(float PosX, float PosY, float PlayerLength, float PlayerHeight, int TextureID, float Velocity, float[] Direction, CircleCollider Hitbox, int Max_HP) { //Constructor
         super(PosX, PosY, PlayerLength, PlayerHeight, TextureID, Velocity, Direction, Hitbox, Max_HP); //Passed alle Werte an LivingObject weiter
     }
 
-    public void PlayerTick(float deltaTime) {
+    public void PlayerTick(float deltaTime, ImageHandler renderer) {
         if (isAlive) {
             InputManager.updatePlayerDirection();
             if (isDodging) {
                 doADodgeRoll(deltaTime);
             }
             VelocityHandler.calculatePosition(Player, deltaTime);
-            System.out.println(HP);
+            //System.out.println(HP);
             Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0);
             BarElement bar = (BarElement) Hud;
             if(bar.BarFilledPercentage * bar.HudLength > 0 + bar.BarOffsetX) {
@@ -55,14 +58,25 @@ public class Player extends LivingObject implements Serializable { // Serializat
             if (HP <= 0) {
                 die();
             }
+            for (int i = 0; i < inventory.getSpellSize(); i++) {
+                Spell CurrentSpell = inventory.getSpell(i);
+                if (CurrentSpell != null) {
+                    if (CurrentSpell.passedTime >= CurrentSpell.SpellCooldownInSeconds) {
+                        CurrentSpell.passedTime = 0;
+                        CurrentSpell.onCast(0, 0);
+                    }
+                    CurrentSpell.onSpellTick(deltaTime, renderer);
+                }
+            }
         }
     }
 
     public static void createPlayer() { // Methode um nen Spieler zu erstellen
         Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection, new CircleCollider(32, 0, 15), PLAYER_MAX_HP); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
         //Erstellt zwei test Items während der Spieler erstellung, damit man das Inventar schon mal ausprobieren kann
-        Player.Player.inventory.setItem(0, Items.ITEMS.getRegistry("sword"));
-        Player.Player.inventory.setItem(1, Items.ITEMS.getRegistry("sword"));
+        Player.inventory.setItem(0, Items.ITEMS.getRegistry("sword"));
+        Player.inventory.setItem(1, Items.ITEMS.getRegistry("sword"));
+        Player.inventory.setSpell(0, Spells.SPELLS.getRegistry("basic"));
         System.out.println("New Player created");
     }
 

@@ -16,6 +16,6 @@ public class QuitToMainMenuButton extends GUIButton {
     public void onButtonClick(long Window) {
         System.out.println("Quit Button Works");
         SceneManager.LoadScene(Frame.MainMenuScene, Window);
-        Save.Save.SaveObjectData(Player.Player, "/Playerdata/Player.ser", 1); //Speichert Daten vom Spieler
+        Save.Save.SavePlayerData(Player.Player, "/Playerdata/Player.ser", 1); //Speichert Daten vom Spieler
     }
 }

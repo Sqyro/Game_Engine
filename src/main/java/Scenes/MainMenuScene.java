@@ -4,6 +4,7 @@ import GUI.*;
 import GUI.Buttons.ExitGameButton;
 import GUI.Buttons.LoadGameButton;
 import Player.InputManager;
+import Player.PlayerAnimationManager;
 import Rendering.Camera;
 import Rendering.Frame;
 import Rendering.ImageHandler;
@@ -17,11 +18,13 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.*;
 
 public class MainMenuScene extends Scene {
-
     private Shader mainMenuShader;
     private ImageHandler renderer;
+    private BackgroundAnimationManager backgroundAnimationManager;
 
     public List<GUIInteractableField> MainMenuInteractableFields = new ArrayList<>();
+
+    private final float ButtonYOffset = -150;
 
     private final float ExitButtonWidth = 300;
     private final float ExitButtonHeight = 50;
@@ -42,20 +45,24 @@ public class MainMenuScene extends Scene {
         mainMenuShader = new Shader("src/main/resources/shaders/hudshader.vsh",
                 "src/main/resources/shaders/hudshader.fsh");
         renderer = new ImageHandler();
+
+        backgroundAnimationManager = new BackgroundAnimationManager();
     }
     
     @Override
     public void onCreation(long Window) {
         //Alle nötigen Texturen laden
         ImageManager.loadStartTextures();
+
+        backgroundAnimationManager.createBackgroundAnimations();
     }
     
     @Override
     public void onLoadup(long Window) {
         InputManager.ListenforMainMenuKeys(Window);
 
-        MainMenuInteractableFields.add(new LoadGameButton(Frame.ScreenWidth /2 - LoadGameButtonWidth/2, Frame.ScreenHeight /2 - LoadGameButtonHeight/2 - Frame.NormalizedPixelHeight * ExitButtonHeight, LoadGameButtonWidth, LoadGameButtonHeight, LoadGameButtonText, LoadGameButtonTextSpacing, LoadGameButtonTextSize, Color.WHITE));
-        MainMenuInteractableFields.add(new ExitGameButton(Frame.ScreenWidth /2 - ExitButtonWidth/2, Frame.ScreenHeight /2 - ExitButtonHeight/2, ExitButtonWidth, ExitButtonHeight, ExitButtonText, ExitButtonTextSpacing, ExitButtonTextSize, Color.WHITE));
+        MainMenuInteractableFields.add(new LoadGameButton(Frame.ScreenWidth /2 - LoadGameButtonWidth/2, Frame.ScreenHeight /2 - LoadGameButtonHeight/2 - Frame.NormalizedPixelHeight * ExitButtonHeight - ButtonYOffset, LoadGameButtonWidth, LoadGameButtonHeight, LoadGameButtonText, LoadGameButtonTextSpacing, LoadGameButtonTextSize, Color.WHITE));
+        MainMenuInteractableFields.add(new ExitGameButton(Frame.ScreenWidth /2 - ExitButtonWidth/2, Frame.ScreenHeight /2 - ExitButtonHeight/2 - ButtonYOffset, ExitButtonWidth, ExitButtonHeight, ExitButtonText, ExitButtonTextSpacing, ExitButtonTextSize, Color.WHITE));
     }
 
     @Override
@@ -68,6 +75,11 @@ public class MainMenuScene extends Scene {
     public void onUpdate(float deltaTime) {
         glClearColor(0f, 0f, 0f, 1f);
         glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Schwarz setzen
+
+        backgroundAnimationManager.updateBackgroundAnimation(deltaTime);
+
+        backgroundAnimationManager.currentAnimation = backgroundAnimationManager.MainMenuAnimation;
+        backgroundAnimationManager.currentAnimation.renderAnimation(0, 0, Frame.ScreenWidth, Frame.ScreenHeight, false, renderer);
 
         for(GUIInteractableField CurrentField : MainMenuInteractableFields) {
             CurrentField.drawField(renderer);

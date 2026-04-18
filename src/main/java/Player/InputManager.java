@@ -97,24 +97,6 @@ public class InputManager {
                             player.isDodging = true;
                         }
                         break;
-                    case GLFW_KEY_R:
-                        if(GameScene.GameRunning) {
-                            System.out.println("R Pressed");
-                            if(Rendering.HudHandler.HudElements.isEmpty()) {
-                                Rendering.HudHandler.PlaceNewBar(100, 100, 400, 50, Rendering.ImageManager.TESTBAR, 1, 60, 4, Color.RED); //Erstellt eine Bar auf der GUI
-                            }
-                        }
-                        break;
-                    case GLFW_KEY_Q:
-                        if(GameScene.GameRunning) {
-                            System.out.println("Q Pressed");
-                            Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0); //Nimmt das Hud Element was auf Position 0 ist
-                            BarElement bar = (BarElement) Hud; //Konvertiert das Hud Element in ne Bar, geht gerade weil ich nur ein Objekt in der GUI hab, daher ist die Bar immer auf 0
-                            if(bar.BarFilledPercentage * bar.HudLength > 0 + bar.BarOffsetX) { //Wenn noch was von der Bar übrig ist, damit sie nicht ins Minus gerät
-                                bar.setBarFilledPercentage(bar.BarFilledPercentage - 0.02f); //Damaged die Bar etwas ums zu testen
-                            }
-                        }
-                        break;
                     case GLFW_KEY_C:
                         if(GameScene.GameRunning) {
                             System.out.println("C Pressed");
@@ -139,23 +121,6 @@ public class InputManager {
                             System.out.println("Y Pressed");
                             GUIText randomText = new GUIText("Skibidi Tripple T Sigma :3", 80, 80, 80, 50, ImageManager.GAMEFONT, Color.RED); //Erstellt ein neues Text Element
                             Frame.GameScene.showTextForSeconds(randomText, 2); //Packt das Text Element in den To Be Displayed Text
-                        }
-                        break;
-                    case GLFW_KEY_V:
-                        if(GameScene.GameRunning) {
-                            System.out.println("V Pressed");
-                                Player LoadedData = (Player) Save.Save.LoadPlayerData(1); //Läd Spieldateinen aus dem Speicher
-                                if (LoadedData != null) { //Darf nicht leer sein
-                                    Player.Player.setPosX(LoadedData.PosX); //Holt sich die Positonen aus den Daten
-                                    Player.Player.setPosY(LoadedData.PosY);
-                                    Player.Player.inventory = LoadedData.inventory; //Holt sich das Inventar aus dem Speicher
-                                }
-                        }
-                        break;
-                    case GLFW_KEY_X:
-                        if(GameScene.GameRunning) {
-                            System.out.println("X Pressed");
-                            Save.Save.SaveObjectData(Player.Player, "/Playerdata/Player.ser", 1); //Speichert Daten vom Spieler
                         }
                         break;
                 }

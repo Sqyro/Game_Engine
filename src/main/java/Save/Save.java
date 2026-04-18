@@ -4,8 +4,12 @@ import java.io.*;
 
 import Item.Item;
 import Item.Items;
+import Physics2D.CircleCollider;
 import Physics2D.LivingObject;
 import Player.Player;
+import Rendering.ImageManager;
+import Spell.Spell;
+import Spell.Spells;
 
 public class Save { //Klasse um Daten zu speichern
     public static void SaveObjectData(LivingObject livingObject, String PATH, int SaveID) {
@@ -23,38 +27,82 @@ public class Save { //Klasse um Daten zu speichern
             e.printStackTrace();
         }
     }
-    
-    public static LivingObject LoadPlayerData(int SaveID) {
-        try (FileInputStream fileIn = new FileInputStream("gamesession/Save" + SaveID + "/Playerdata/Player.ser"); //Öffnet die Datei um Bytes davon zu lesen
-            ObjectInputStream in = new ObjectInputStream(fileIn)) { //Stream der Bytes in Objekte zurück verwandeln kann
-            LivingObject loadedObject = (LivingObject) in.readObject(); //Liest die Bytes und wandelt sie in ein LivingObject um
 
-            loadedObject.setTextureID(Player.Player.TextureID); // Setzt die Textur zurück
+    public static void SavePlayerData(Player player, String PATH, int SaveID) {
+        PlayerSaveData PlayerData = createSaveData(player);
 
-            Player Player = (Player) loadedObject;
+        String FullPath = "gamesession/Save" + SaveID + PATH;
+        File SaveFile = new File(FullPath);
+        File ParentDirectory = SaveFile.getParentFile();
+        if (!ParentDirectory.exists()) {
+            ParentDirectory.mkdirs();
+        }
 
-            //Die Items haben vorher immer ihre Textur verloren, wenn man geladen hat
-            for (int i = 0; i < Player.inventory.getInventorySize(); i++) { // Geht das gesamte Inventar vom Spieler durch
-                Item ThisItem = Player.inventory.getItem(i);
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(SaveFile))) {
+            out.writeObject(PlayerData);
+            System.out.println("Player data saved!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-                if (ThisItem != null) { //Wenn an diesem Slot ein Item ist
-                    //Die Registry holen von diesem Item
-                    String ThisItemRegistryName = ThisItem.getRegistryName();
-                    Item ThisItemsRegistry = Items.ITEMS.getRegistry(ThisItemRegistryName);
+    public static Player LoadPlayerData(int SaveID) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("gamesession/Save" + SaveID + "/Playerdata/Player.ser"))) {
+            PlayerSaveData PlayerData = (PlayerSaveData) in.readObject();
 
-                    //TexturID, sowie Breite und Höhe richtig setzen
-                    ThisItem.setTextureID(ThisItemsRegistry.TextureID);
-                    ThisItem.setTextureWidth(ThisItemsRegistry.TextureWidth);
-                    ThisItem.setTextureHeight(ThisItemsRegistry.TextureHeight);
+            Player player = new Player(
+                    PlayerData.PosX,
+                    PlayerData.PosY,
+                    Player.PlayerSizeX,
+                    Player.PlayerSizeY,
+                    ImageManager.PLAYER,
+                    0,
+                    new float[]{0,0},
+                    new CircleCollider(32, 0, 15),
+                    Player.PLAYER_MAX_HP
+            );
+
+            player.HP = PlayerData.HP;
+
+            for (int i = 0; i < PlayerData.Items.size(); i++) {
+                String name = PlayerData.Items.get(i);
+                if (name != null) {
+                    player.inventory.setItem(i, Items.ITEMS.getRegistry(name));
                 }
             }
 
-            System.out.println("Player data loaded!"); //Nachricht für den Debug
-            return loadedObject; //Gibt das gelesene Objekt zurück
+            for (int i = 0; i < PlayerData.Spells.size(); i++) {
+                String name = PlayerData.Spells.get(i);
+                if (name != null) {
+                    player.inventory.setSpell(i, Spells.SPELLS.getRegistry(name));
+                }
+            }
 
-        } catch (IOException | ClassNotFoundException e) { //Wenn er die Klasse nicht findet, dann gib nen Stacktrace aus und gibt nichts zurück
+            return player;
+
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static PlayerSaveData createSaveData(Player player) {
+        PlayerSaveData PlayerData = new PlayerSaveData();
+
+        PlayerData.PosX = player.PosX;
+        PlayerData.PosY = player.PosY;
+        PlayerData.HP = player.HP;
+
+        for (int i = 0; i < player.inventory.getInventorySize(); i++) {
+            Item item = player.inventory.getItem(i);
+            PlayerData.Items.add(item != null ? item.getRegistryName() : null);
+        }
+
+        for (int i = 0; i < player.inventory.getSpellSize(); i++) {
+            Spell spell = player.inventory.getSpell(i);
+            PlayerData.Spells.add(spell != null ? spell.getRegistryName() : null);
+        }
+
+        return PlayerData;
     }
 }

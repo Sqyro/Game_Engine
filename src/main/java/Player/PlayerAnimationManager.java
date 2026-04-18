@@ -27,7 +27,7 @@ public class PlayerAnimationManager {
     public AnimationObject itemPickupAnimation;
     
     //Methode um alle Animationen auf einmal am Anfang zu erstellen
-    public void createGameAnimations() {
+    public void createPlayerAnimations() {
         //Idle Animationen
         //Texturen Horizontal (auf dem Sheet), TexturenVertical (auf dem Sheet), Horizontale Position auf dem Sheet, Anzahl der Frames dieser Animation, Zeit pro Frame in Sekunden
         idleAnimation = new AnimationObject(ImageManager.PLAYER, 6, 6, 0, 6, 0.2f);
@@ -52,7 +52,7 @@ public class PlayerAnimationManager {
     }
     
     //Methode um alle Animationen auf einmal up-zu daten, wenn Animationen später für Lag sorgen, dann vermutlich wegen dieser Methode. Du musst einfach machen, dass nur die Momentan angezeigte Animation geupdated wird. Habs noch nicht gemacht, weil ich noch nicht weiß wie später animationen aussehen, wenn noch Enemies welche haben
-    public void updateGameAnimations(float deltaTime) {
+    public void updatePlayerAnimation(float deltaTime) {
         currentAnimation.UpdateAnimation(deltaTime);
     }
 }

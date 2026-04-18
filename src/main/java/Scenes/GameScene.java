@@ -67,7 +67,7 @@ public class GameScene extends Scene {
     @Override
     public void onCreation(long Window) {
         ImageManager.loadGameTextures();
-        playerAnimationManager.createGameAnimations();
+        playerAnimationManager.createPlayerAnimations();
 
         MapObjects.RegisterMapObjects();
         Items.RegisterItems();
@@ -117,7 +117,7 @@ public class GameScene extends Scene {
         //Rechen Updates
         if(GameRunning) {
             Gametime += deltaTime;
-            player.PlayerTick(deltaTime);
+            player.PlayerTick(deltaTime, renderer);
             Enemy.UpdateAllEnemyAI(deltaTime);
             SoundHandler.updateSounds(deltaTime);
             updateTimedText();
@@ -137,7 +137,7 @@ public class GameScene extends Scene {
         
         //Animationen Updaten
         if(GameRunning) {
-            playerAnimationManager.updateGameAnimations(deltaTime);
+            playerAnimationManager.updatePlayerAnimation(deltaTime);
         }
         
         //Benutzt die drawMap Methode aus dem Map Handler, die die einzelnen Tiles zeichnet
