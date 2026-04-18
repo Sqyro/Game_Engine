@@ -36,7 +36,7 @@ public class PhysicsObject2DSelector extends JPanel {
     private void loadPhysicsObject2DTextures() {
 
         for (int i = 0; i < objectCount; i++) {
-            String path = "src/main/resources/assets/textures/physicsObject2D/Object" + i + ".png"; //bildpfad
+            String path = "src/main/resources/assets/textures/mapObjects/Object" + i + ".png"; //bildpfad
             grid.ObjectTextures[i] = new ImageIcon(path).getImage();
         }
     }
