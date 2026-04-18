@@ -359,6 +359,13 @@ public class Grid extends JPanel {
                         placePhysicsObject2D(mousePosX, mousePosY, currentObject); //wenn linksklick platziert er das object
                     }
                 }
+                else if (currentTab == 3) { //Hitbox modus
+                    if (SwingUtilities.isRightMouseButton(e)) {
+                        placeHitbox(mousePosX, mousePosY, -1); //wenn rechtsklick löscht er das hitbox
+                    } else {
+                        placeHitbox(mousePosX, mousePosY, currentHitbox); //wenn linksklick platziert er das hitbox
+                    }
+                }
                 repaint();
             }
         });
@@ -497,9 +504,10 @@ public class Grid extends JPanel {
                 if (worldRow < mapRows && worldCol < mapColumns && boxHitboxen[worldRow][worldCol] != null) { //prüft ob an der stelle ein licht existiert
                     BoxCollider boxCollider = boxHitboxen[worldRow][worldCol];
 
-                    int x = bigMapOffsetPosX + c * tileSizeGrid; //berechnet die x position für die mitte des tiles
-                    int y = bigMapOffsetPosY + r * tileSizeGrid; //berechnet die y position für die mitte des tiles
-
+                    float offsetX = boxCollider.PosX - (int)boxCollider.PosX;
+                    float offsetY = boxCollider.PosY - (int)boxCollider.PosY;
+                    int x = bigMapOffsetPosX + c * tileSizeGrid + (int)(offsetX * tileSizeGrid);
+                    int y = bigMapOffsetPosY + r * tileSizeGrid + (int)(offsetY * tileSizeGrid);
                     int w = (int)(boxCollider.Length * tileSizeGrid);
                     int h = (int)(boxCollider.Height * tileSizeGrid);
 
@@ -773,7 +781,8 @@ public class Grid extends JPanel {
                     boxHitboxen[worldRow][worldCol] = null;
                 } else {
                     float[] size = getHitboxSize(currentHitboxId);
-                    boxHitboxen[worldRow][worldCol] = new BoxCollider(worldCol + 0.5f, worldRow + 0.5f, size[0], size[1]);
+                    BoxCollider newBox = new BoxCollider(worldCol + size[2], worldRow + size[3], size[0], size[1]);
+                    boxHitboxen[worldRow][worldCol] = newBox;
                 }
                 repaint();
             }
@@ -781,17 +790,18 @@ public class Grid extends JPanel {
     }
 
     private float[] getHitboxSize(int index) {
+        // {height, length, offsetX, offsetY}
         switch (index) {
-            case 4: return new float[]{1f, 1f};     //ganzes
-            case 1: return new float[]{0.5f, 1f};   //oben
-            case 7: return new float[]{0.5f, 1f};   //unten
-            case 3: return new float[]{1f, 0.5f};   //links
-            case 5: return new float[]{1f, 0.5f};   //rechts
-            case 0: return new float[]{0.5f, 0.5f}; //oben links
-            case 2: return new float[]{0.5f, 0.5f}; //oben rechts
-            case 6: return new float[]{0.5f, 0.5f}; //unten links
-            case 8: return new float[]{0.5f, 0.5f}; //unten rechts
-            default: return new float[]{1f, 1f};
+            case 0: return new float[]{0.5f,   0.5f,   0.5f,   0.5f};
+            case 1: return new float[]{0.5f, 1f,   0f,   0.5f};
+            case 2: return new float[]{0.5f, 0.5f, 0f, 0.5f};
+            case 3: return new float[]{1f,   0.5f, 0.5f,   0f};
+            case 4: return new float[]{1f,   1f,   0f,   0f};
+            case 5: return new float[]{1f,   0.5f, 0f, 0f};
+            case 6: return new float[]{0.5f, 0.5f, 0.5f,   0f};
+            case 7: return new float[]{0.5f, 1f,   0f,   0f};
+            case 8: return new float[]{0.5f, 0.5f, 0f, 0f};
+            default: return new float[]{0f, 0f, 0f, 0f};
         }
     }
     
