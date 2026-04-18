@@ -25,16 +25,16 @@ public class MainEditor {
         JButton zoomIn = new JButton("+");
         JButton zoomOut = new JButton("-");
         JButton print = new JButton("Print Map");
-        JButton importm = new JButton("Import");
-        JButton exportm = new JButton("Export");
+        JButton importmap = new JButton("Import");
+        JButton exportmap = new JButton("Export");
         JButton resizeMap = new JButton("Resize Map");
 
         //panels für die buttons und labels
         //buttonPanel.add(zoomIn);
         //buttonPanel.add(zoomOut);
         //buttonPanel.add(print);
-        buttonPanel.add(importm);
-        buttonPanel.add(exportm);
+        buttonPanel.add(importmap);
+        buttonPanel.add(exportmap);
         buttonPanel.add(new JLabel("Map Size:"));
         buttonPanel.add(sizeInput);
         buttonPanel.add(resizeMap);
@@ -47,25 +47,29 @@ public class MainEditor {
         //tile selctor tab
         TileSelector tileSelector = new TileSelector(grid); //erstellt die Tileauswahlliste rechts vom fenster
         JScrollPane tileScroll = new JScrollPane(tileSelector); //diese ist auch scrollbar
-        tileScroll.setPreferredSize(new Dimension(530, 1250)); //und das ist die größe
+        tileScroll.getVerticalScrollBar().setUnitIncrement(20);
+        tileScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tileScroll.setPreferredSize(new Dimension(530, 900)); //und das ist die größe
         tabs.addTab("tiles", tileScroll); //addet es auch zum tab
         
         //physiscsObject2D selctor tab
         PhysicsObject2DSelector objectSelector = new PhysicsObject2DSelector(grid); //erstellt die Tileauswahlliste rechts vom fenster
         JScrollPane objectScroll = new JScrollPane(objectSelector); //diese ist auch scrollbar
-        objectScroll.setPreferredSize(new Dimension(530, 1250)); //und das ist die größe
+        objectScroll.getVerticalScrollBar().setUnitIncrement(20);
+        objectScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        objectScroll.setPreferredSize(new Dimension(530, 900)); //und das ist die größe
         tabs.addTab("objects", objectScroll); //addet es auch zum tab
         
         //licht selector tab
         LightSelector lightSelector = new LightSelector(grid); 
         JScrollPane lightScroll = new JScrollPane(lightSelector);
-        lightScroll.setPreferredSize(new Dimension(530, 1250));
+        lightScroll.setPreferredSize(new Dimension(530, 900));
         tabs.addTab("light", lightScroll); //addet es auch zum tab
         
         //licht selector tab
         HitboxenSelector hitboxenSelector = new HitboxenSelector(grid); 
         JScrollPane hitboxenScroll = new JScrollPane(hitboxenSelector);
-        hitboxenScroll.setPreferredSize(new Dimension(530, 1250));
+        hitboxenScroll.setPreferredSize(new Dimension(530, 900));
         tabs.addTab("hitboxen", hitboxenScroll); //addet es auch zum tab
         
         //tab wechsel
@@ -81,6 +85,7 @@ public class MainEditor {
     });
         
         frame.add(tabs, BorderLayout.EAST); //tab rechts machen
+
         
         //ActionListener:
         //alles besitzen ein grid.requestFocusInWindow(); ,weil nachdem ich buttons drücke konnte man nicht mehr tiles platzieren
@@ -105,13 +110,13 @@ public class MainEditor {
         });
 
         //imported map
-        importm.addActionListener((ActionEvent e) -> {
+        importmap.addActionListener((ActionEvent e) -> {
             grid.importMap();
             grid.requestFocusInWindow(); //fenster fokussieren
         });
 
         //exported map
-        exportm.addActionListener((ActionEvent e) -> {
+        exportmap.addActionListener((ActionEvent e) -> {
             grid.exportMap();
             grid.requestFocusInWindow(); //fenster fokussieren
         });
@@ -120,11 +125,11 @@ public class MainEditor {
         resizeMap.addActionListener((ActionEvent e) -> {
             try {
                 int newSize = Integer.parseInt(sizeInput.getText());
-                if (newSize >= 32 && newSize <= 670) {
+                if (newSize >= 67 && newSize <= 1000) {
                     grid.resizeMap(newSize);
                     grid.updateMinimap();
                 } else { //fehlermeldung wenn man was falsches eingetippt hat
-                    JOptionPane.showMessageDialog(frame, "Zahl zwischen 32 bis 512");
+                    JOptionPane.showMessageDialog(frame, "Zahl zwischen 67 bis 1000");
                 }
             } catch (NumberFormatException ex) { //fehlermeldung wenn man was falsches eingetippt hat
                 JOptionPane.showMessageDialog(frame, "Wie kann man so reinkacken");

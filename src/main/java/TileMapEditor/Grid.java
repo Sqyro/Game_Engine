@@ -1,7 +1,6 @@
 package TileMapEditor;
     
 import javax.swing.*;
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -19,7 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import java.util.Arrays;
-import Physics2D.CircleCollider;
+import Physics2D.*;
 
 public class Grid extends JPanel {
 
@@ -45,9 +44,9 @@ public class Grid extends JPanel {
     public static Image[] tileTextures; //Array, es speichert alle Bilder von den Tiles als bestimmten Wert
     
     private int[][] mapObjects; //2D Array, es speichert auf welcher Position der Object ist
-    public static Image[] objectTextures; //Array, es speichert alle Bilder von den Objects als bestimmten Wert
-    
-    private CircleCollider[][] hitboxen; //speichert die hitboxen
+    public static Image[] ObjectTextures; //Array, es speichert alle Bilder von den Objects als bestimmten Wert
+
+    private BoxCollider[][] boxHitboxen; //speichert die hitboxen
     public static Image[] hitboxTextures;
     
     private PointLight[][] light; //speichert die lights 
@@ -57,13 +56,13 @@ public class Grid extends JPanel {
     private int currentTileRotation = 0; //aktuelle rotation (0-3)
     
     public int currentObject = 0; //aktuell ausgewähltes object
-    
-    private int currentHitbox = 0; //welche hitbox ausgewählt ist
-    private int currentHitboxRange = 50;
+
+    public int currentHitbox = 4;
     
     private int currentLight = 100; //welches licht ausgewählt ist     ///note an mich currentLight und currentLightRange zu seperieren
-    
-    private long timer = 0; //timer für die minimap
+
+    private long timerBigMap = 0; //timer für die minimap
+    private long timerMiniMap = 0; //timer für die minimap
     
     private int mousePosX = -100; //mausposition x
     private int mousePosY = -100; //mausposition y
@@ -88,8 +87,8 @@ public class Grid extends JPanel {
     private Stack<int[][]> redoObjects = new Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie wiederherzustellen wenn man etwas rückgangig gemacht hat
     private java.util.Stack<java.util.List<PointLight>> undoLights = new java.util.Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie umzukehren
     private java.util.Stack<java.util.List<PointLight>> redoLights = new java.util.Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie wiederherzustellen wenn man etwas rückgangig gemacht hat
-    private java.util.Stack<java.util.List<CircleCollider>> undoHitboxen = new java.util.Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie umzukehren
-    private java.util.Stack<java.util.List<CircleCollider>> redoHitboxen = new java.util.Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie wiederherzustellen wenn man etwas rückgangig gemacht hat
+    private java.util.Stack<BoxCollider[][]> undoHitboxen = new java.util.Stack<>();
+    private java.util.Stack<BoxCollider[][]> redoHitboxen = new java.util.Stack<>();
     private final int maximumStacks = 67; //maximaler speicher der aktionen
     
     public void setSelectedTile(int id) { //methode um das aktuelle tile zu ändern
@@ -102,14 +101,9 @@ public class Grid extends JPanel {
         currentObject = id;
         repaint();
     }
-    
-    public void setSelectedHitbox(int id) { //methode um das aktuelle hitbox zu ändern
+
+    public void setSelectedHitbox(int id) { //methode um das aktuelle object zu ändern
         currentHitbox = id;
-        repaint();
-    }
-    
-    public void setSelectedLight(int id) { //methode um das aktuelle licht zu ändern
-        currentLight = id;
         repaint();
     }
 
@@ -124,21 +118,18 @@ public class Grid extends JPanel {
         for(int r = 0; r < mapRows; r++)
             for(int c = 0; c < mapColumns; c++)
                 mapObjects[r][c] = -1; //default object id (was die ganze map painted)
-        
-        hitboxen = new CircleCollider[mapRows][mapColumns]; //erstellt ein Array mit der größe der Reihen x Spalten
-        for(int r = 0; r < mapRows; r++)
-            for(int c = 0; c < mapColumns; c++)
-                hitboxen[r][c] = null; //default object id (was die ganze map painted)
-        
+
         light = new PointLight[mapRows][mapColumns]; 
         for(int r = 0; r < mapRows; r++) {
             for(int c = 0; c < mapColumns; c++) {
                 light[r][c] = null; //default light(was die ganze map painted)
             }
         }
-        
-        loadTiles(); //tile bilder laden
-        loadPhysicsObject2DTextures(); //physicsobject bilder laden
+
+        boxHitboxen = new BoxCollider[mapRows][mapColumns]; //erstellt ein Array mit der größe der Reihen x Spalten
+        for(int r = 0; r < mapRows; r++)
+            for(int c = 0; c < mapColumns; c++)
+                boxHitboxen[r][c] = null; //default object id (was die ganze map painted)
         
         //TestMap(); //Test Map, aber gerade auskommentiert, weil ich sie jetzt nicht brauche
 
@@ -161,11 +152,9 @@ public class Grid extends JPanel {
                 if (e.getKeyCode() == KeyEvent.VK_D) {
                     Camera(5, 0);
                 }
-                
-                if (e.getKeyCode() == KeyEvent.VK_R) {
+                if (e.getKeyCode() == KeyEvent.VK_R && currentTab == 0) {
                     currentTileRotation = (currentTileRotation + 1) % 4;
-                    }
-
+                }
                 if (e.getKeyCode() == KeyEvent.VK_Q) {
                     currentTileRotation = (currentTileRotation + 3) % 4;
                 }
@@ -237,11 +226,8 @@ public class Grid extends JPanel {
                                 replace = currentTile * 4 + currentTileRotation; //wenn linksklick platziert er das tile
                             }
                             bucketFill(worldRow, worldCol, tileid, replace); //methode damit er jetzt alles fillen muss
-                            
-                            if(System.currentTimeMillis() - timer > 1) {
+
                             repaint(); //repaint um map neu zu zeichnen
-                            timer = System.currentTimeMillis();
-                            }
                             return;
                         }
                         
@@ -270,7 +256,7 @@ public class Grid extends JPanel {
                             repaint();
                             return;
                         }
-                        
+
                         break;
 
                     case 2: //Lichtmodus
@@ -283,9 +269,23 @@ public class Grid extends JPanel {
                         }   
                         break;
 
-                    default:
-                        break;
+                    case 3:
 
+                        if (currentTool == 0) {
+                            saveState();
+
+                            if (SwingUtilities.isRightMouseButton(e)) {
+                                placeHitbox(mousePosX, mousePosY, -1);
+                            } else {
+                                placeHitbox(mousePosX, mousePosY, currentHitbox);
+                            }
+                        }
+                        if (currentTool == 2) { //Pipette
+                            pickHitbox(mousePosX, mousePosY);
+                            repaint();
+                            break;
+                        }
+                        break;
                 }
                 repaint(bigMapOffsetPosX + mcols * tileSizeGrid, bigMapOffsetPosY + mrows * tileSizeGrid, tileSizeGrid, tileSizeGrid);
             } 
@@ -317,13 +317,6 @@ public class Grid extends JPanel {
                         int radiuslight = (int) (currentLight * (lightScale / 4.0)) + 5; //radius
                         repaint(oldMousePosX - radiuslight, oldMousePosY - radiuslight, radiuslight * 2, radiuslight * 2); //erster repaint löscht den alten Kreis
                         repaint(mousePosX - radiuslight, mousePosY - radiuslight, radiuslight * 2, radiuslight * 2); //zweiter repaint fügt den neuen Kreis hinzu
-                        break;
-                    case 3:
-                        int tileSizehitboxpreview = bigMapSize / visibleColumns; //hier berechne ich die größe eines Tiles
-                        double hitboxScale = (double) tileSizehitboxpreview / 16.0; //skalierung um den zoom zu berücksichtigen
-                        int radiushitbox = (int) (currentHitboxRange * (hitboxScale / 4.0)) + 5; //radius
-                        repaint(oldMousePosX - radiushitbox, oldMousePosY - radiushitbox, radiushitbox * 2, radiushitbox * 2); //erster repaint löscht den alten Kreis
-                        repaint(mousePosX - radiushitbox, mousePosY - radiushitbox, radiushitbox * 2, radiushitbox * 2); //zweiter repaint fügt den neuen Kreis hinzu
                         break;
                     default:
                         repaint(oldMousePosX + previewOffset - 5, oldMousePosY + previewOffset - 5, previewSize + 10, previewSize + 10); //erster repaint löscht das alte preview
@@ -379,17 +372,6 @@ public class Grid extends JPanel {
                 } //kreis darf nicht kleiner als indem fall 10 sein
                 if (currentLight > 200) {
                     currentLight = 200;
-                } //kreis darf nicht größer als indem fall 200 sein
-                
-                repaint();
-            } else if (currentTab == 3) { //lichtmodus
-                currentHitboxRange -= e.getWheelRotation() * 10; //vergrößert den kreis pro wheel spin um 10 oder verringert ihn um 10
-                
-                if (currentHitboxRange < 10) {
-                    currentHitboxRange = 10;
-                } //kreis darf nicht kleiner als indem fall 10 sein
-                if (currentHitboxRange > 100) {
-                    currentHitboxRange = 100;
                 } //kreis darf nicht größer als indem fall 200 sein
                 
                 repaint();
@@ -453,8 +435,8 @@ public class Grid extends JPanel {
 
                 int objectID = mapObjects[worldRow][worldCol];
 
-                if (objectID >= 0 && objectID < objectTextures.length && objectTextures[objectID] != null) { //prüft die object id (muss ein object sein, das object muss im array liegen und es muss ein bild haben)
-                    Image img = objectTextures[objectID];
+                if (objectID >= 0 && objectID < ObjectTextures.length && ObjectTextures[objectID] != null) { //prüft die object id (muss ein object sein, das object muss im array liegen und es muss ein bild haben)
+                    Image img = ObjectTextures[objectID];
                     
                     double scale = (double) tileSizeGrid / (double) tileSize; //berechnung wie groß ein "pixeltile" ist
                     
@@ -506,6 +488,27 @@ public class Grid extends JPanel {
             }
         }
 
+        for (int r = 0; r < visibleRows; r++) {
+            for (int c = 0; c < visibleColumns; c++) {
+
+                int worldCol = cameraColumns + c; //gesamtspalten
+                int worldRow = cameraRows + r; //gesamtreihen
+
+                if (worldRow < mapRows && worldCol < mapColumns && boxHitboxen[worldRow][worldCol] != null) { //prüft ob an der stelle ein licht existiert
+                    BoxCollider boxCollider = boxHitboxen[worldRow][worldCol];
+
+                    int x = bigMapOffsetPosX + c * tileSizeGrid; //berechnet die x position für die mitte des tiles
+                    int y = bigMapOffsetPosY + r * tileSizeGrid; //berechnet die y position für die mitte des tiles
+
+                    int w = (int)(boxCollider.Length * tileSizeGrid);
+                    int h = (int)(boxCollider.Height * tileSizeGrid);
+
+                    g2.setColor(Color.RED);
+                    g2.drawRect(x, y, w, h);
+                }
+            }
+        }
+
         //außenrahmen
         g.setColor(Color.BLACK); //farbe des rahmens ist schwarz
         g.drawRect(bigMapOffsetPosX, bigMapOffsetPosY, bigMapSize, bigMapSize); //zeichent den äußeren Rahmen des gesamten großen Grids
@@ -549,8 +552,8 @@ public class Grid extends JPanel {
             case 1:
                 //PhysicsObjects2D
                 int objectIndex = currentObject; //ausgewähltes object
-                if(objectIndex >= 0 && objectIndex < objectTextures.length && objectTextures[objectIndex] != null) { //prüft die object id (muss ein tile sein, das object muss im array liegen und es muss ein bild haben)
-                    g.drawImage(objectTextures[objectIndex], previewX, previewY, previewSize, previewSize, null); //object preview zeichnen
+                if(objectIndex >= 0 && objectIndex < ObjectTextures.length && ObjectTextures[objectIndex] != null) { //prüft die object id (muss ein tile sein, das object muss im array liegen und es muss ein bild haben)
+                    g.drawImage(ObjectTextures[objectIndex], previewX, previewY, previewSize, previewSize, null); //object preview zeichnen
                 }   break;
             case 2:
                 Graphics2D g2d = (Graphics2D) g;
@@ -561,10 +564,10 @@ public class Grid extends JPanel {
                 g2d.fillOval(mousePosX - radius, mousePosY - radius, radius * 2, radius * 2); //zeichnet den previewkreis auf der maus
                 break;
             case 3:
-                double scalehitbox = (double) tileSizeGrid / 16.0;
-                int radiushitbox = (int) (currentHitboxRange * (scalehitbox / 4.0));
-                g.setColor(Color.RED);
-                g.drawOval(mousePosX - radiushitbox, mousePosY - radiushitbox, radiushitbox * 2, radiushitbox * 2);
+                g.drawImage(hitboxTextures[currentHitbox], previewX, previewY, previewSize, previewSize, null);
+                g.setColor(Color.BLACK);
+                g.drawRect(previewX, previewY, previewSize, previewSize);
+                break;
             default:
                 break;
         }      
@@ -644,63 +647,17 @@ public class Grid extends JPanel {
 
             }
         }
-    } 
-   
-   private void loadTiles() {
-        int tileSizeloadTiles = 16;
-        int[][] mapsheet = { //Tabelle für die sheets
-            {5, 9, 13, 6, 1},   // Reihe 1
-            {16, 17, 18, 10, 2}, // Reihe 2
-            {12, 20, 19, 14, 3}, // Reihe 3
-            {8, 15, 11, 7, 4}    // Reihe 4
-        };
-
-        tileTextures = new Image[400];
-        int counter = 0; //zählt wie viele tiles bereits genommen wurden
-        int i = 0;
-
-        while (true) {
-            String path = "src/main/resources/assets/textures/tiles/sheet" + i + ".png"; //bildpfad
-            File file = new File(path);
-            if (!file.exists()) { //wir schauen ob eine file existiert wenn nicht dann macht er garnichts mehr
-                break;
-            }
-
-            try {
-                BufferedImage sheet = ImageIO.read(file);
-
-                for (int t = 1; t <= 20; t++) { //wir schauen ob t an der stelle in mapsheet liegt wenn ja ist das das nächste tile und so weiter
-                    for (int r = 0; r < 4; r++) {
-                        for (int c = 0; c < 5; c++) {
-                            if (mapsheet[r][c] == t) {
-                                int x = c * tileSizeloadTiles;
-                                int y = r * tileSizeloadTiles;
-
-                                tileTextures[counter] = sheet.getSubimage(x, y, tileSizeloadTiles, tileSizeloadTiles);
-                                counter++;
-                            }
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                System.err.println("tatütata fehler: " + path);
-            }
-            i++; //erhöht i also das nächste sheet
-        }
-        TileSelector.tileCount = counter; //updatet einfach den tileCounter von dem tileselector
-        updateMinimap();
-        repaint();
     }
 
    private void loadPhysicsObject2DTextures() {
             int numObjects = 67; //anzahl der insgesamten objects
             
-            objectTextures = new Image[numObjects];  //gesamtanzahl der objects indem fall 67
+            ObjectTextures = new Image[numObjects];  //gesamtanzahl der objects indem fall 67
 
             for (int i = 0; i < numObjects; i++) {
                 String path = "src/main/resources/assets/textures/physicsObject2D/Object" + i + ".png"; //bildpfad
                 
-                objectTextures[i] = new ImageIcon(path).getImage();
+                ObjectTextures[i] = new ImageIcon(path).getImage();
             }
         }
    
@@ -724,14 +681,14 @@ public class Grid extends JPanel {
                     int paintX = bigMapOffsetPosX + mcols * tileSizeGridTile;
                     int paintY = bigMapOffsetPosY + mrows * tileSizeGridTile;
                     
-                    if(System.currentTimeMillis() - timer > 1) {
-                    repaint(paintX, paintY, tileSizeGridTile, tileSizeGridTile); //repaint um map neu zu zeichnen
-                    timer = System.currentTimeMillis();
+                    if(System.currentTimeMillis() - timerBigMap > 50) {
+                        repaint(paintX, paintY, tileSizeGridTile, tileSizeGridTile); //repaint um map neu zu zeichnen
+                        timerBigMap = System.currentTimeMillis();
                     }
-                    if(System.currentTimeMillis() - timer > 1) { //repaint mit timer sonst kommt es einfach zu laggs
+                    if(System.currentTimeMillis() - timerMiniMap > 50) { //repaint mit timer sonst kommt es einfach zu laggs
                         updateMinimap();
                         repaint(getWidth() - 467, 67, 400, 400);
-                        timer = System.currentTimeMillis();
+                        timerMiniMap = System.currentTimeMillis();
                     }
                 }
             }
@@ -756,14 +713,14 @@ public class Grid extends JPanel {
                     int paintX = bigMapOffsetPosX + mcol * tileSizeGridObject;
                     int paintY = bigMapOffsetPosY + mrow * tileSizeGridObject;
                     
-                    if(System.currentTimeMillis() - timer > 1) {
+                    if(System.currentTimeMillis() - timerBigMap > 50) {
                     repaint(paintX, paintY, tileSizeGridObject, tileSizeGridObject); //repaint um map neu zu zeichnen
-                    timer = System.currentTimeMillis();
+                    timerBigMap = System.currentTimeMillis();
                     }
-                    if(System.currentTimeMillis() - timer > 50) { //repaint mit timer sonst kommt es einfach zu laggs
+                    if(System.currentTimeMillis() - timerMiniMap > 50) { //repaint mit timer sonst kommt es einfach zu laggs
                         updateMinimap();
                         repaint(getWidth() - 467, 67, 400, 400);
-                        timer = System.currentTimeMillis();
+                        timerMiniMap = System.currentTimeMillis();
                     }
                 }
             }
@@ -798,6 +755,45 @@ public class Grid extends JPanel {
             }
         }
     }
+
+    private void placeHitbox(int mouseX, int mouseY, int currentHitboxId) {
+
+        int tileSizeGridLight = bigMapSize / visibleColumns; //hier berechne ich die größe eines Tiles
+
+        int mcol = (mouseX - bigMapOffsetPosX) / tileSizeGridLight; //hier wird berechnet auf welcher Spalte die maus geklickt hat
+        int mrow = (mouseY - bigMapOffsetPosY) / tileSizeGridLight; //hier wird berechnet auf welcher Reihe die maus geklickt hat
+
+        if (mcol >= 0 && mcol < visibleColumns && mrow >= 0 && mrow < visibleRows) { //prüfung ob die maus überhaupt auf dem großen grid geklickt hat
+            int worldCol = cameraColumns + mcol; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die spalte auf der man geklickt hat
+            int worldRow = cameraRows + mrow; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die reihe auf der man geklickt hat
+
+            if (worldCol >= 0 && worldCol < mapColumns && worldRow >= 0 && worldRow < mapRows) { //prüfung ob die position valide ist
+
+                if (currentHitboxId == -1) {
+                    boxHitboxen[worldRow][worldCol] = null;
+                } else {
+                    float[] size = getHitboxSize(currentHitboxId);
+                    boxHitboxen[worldRow][worldCol] = new BoxCollider(worldCol + 0.5f, worldRow + 0.5f, size[0], size[1]);
+                }
+                repaint();
+            }
+        }
+    }
+
+    private float[] getHitboxSize(int index) {
+        switch (index) {
+            case 4: return new float[]{1f, 1f};     //ganzes
+            case 1: return new float[]{0.5f, 1f};   //oben
+            case 7: return new float[]{0.5f, 1f};   //unten
+            case 3: return new float[]{1f, 0.5f};   //links
+            case 5: return new float[]{1f, 0.5f};   //rechts
+            case 0: return new float[]{0.5f, 0.5f}; //oben links
+            case 2: return new float[]{0.5f, 0.5f}; //oben rechts
+            case 6: return new float[]{0.5f, 0.5f}; //unten links
+            case 8: return new float[]{0.5f, 0.5f}; //unten rechts
+            default: return new float[]{1f, 1f};
+        }
+    }
     
     public void exportMap() {
         JFileChooser chooser = new JFileChooser(); //öffnet ein Fenster für die auswahl
@@ -821,6 +817,9 @@ public class Grid extends JPanel {
                 try (FileWriter writer = new FileWriter(new File(folder, "lights.json"))) { //Speichern der lichter
                     gson.toJson(LightManager.AllPointLights, writer); //gesamte liste von allpointlights wird in die json file geschrieben
                 }
+                try (FileWriter writer = new FileWriter(new File(folder, "hitboxen.json"))) {
+                    gson.toJson(boxHitboxen, writer);
+                }
                 System.out.println("exportiert :)"); //hier schaue ich nur ob es funktioniert hat
             } catch (JsonIOException | IOException e) {}
         }
@@ -838,6 +837,7 @@ public class Grid extends JPanel {
                 mapTiles = gson.fromJson(new FileReader(new File(folder, "tiles.json")), int[][].class); //liest die datei und wandelt sie in einen array um wieder
                 mapObjects = gson.fromJson(new FileReader(new File(folder, "objects.json")), int[][].class); //liest die datei und wandelt sie in einen array um wieder
                 PointLight[] lights = gson.fromJson(new FileReader(new File(folder, "lights.json")), PointLight[].class); //gson erkennt keine liste deswegen speichern wir sie erstmal in ein normales array
+                BoxCollider[][] hitboxen = gson.fromJson(new FileReader(new File(folder, "hitboxen.json")), BoxCollider[][].class);
 
                 for (int r=0; r<mapRows; r++) { //hier wird erstmal die ganze alte Liste geleert
                     Arrays.fill(light[r], null);
@@ -856,6 +856,10 @@ public class Grid extends JPanel {
                     if (row >= 0 && row < mapRows && col >= 0 && col < mapColumns) { //prüfen ob es valide ist
                         light[row][col] = pointlight; //und hier setzen wir das licht an die richtige stelle im array
                     }
+                }
+
+                if (hitboxen != null) {
+                    boxHitboxen = hitboxen;
                 }
                 updateMinimap();
                 repaint();
@@ -888,15 +892,15 @@ public class Grid extends JPanel {
                 }
             }
         }
-        
-        CircleCollider[][] newhitboxenMap = new CircleCollider[newSize][newSize]; //neues array für die map erstellen
+
+        BoxCollider[][] newBoxHitboxenMap = new BoxCollider[newSize][newSize]; //neues array für die map erstellen
 
         for (int r = 0; r < newSize; r++) { //alte map hitboxen ids kopieren
-            for (int c = 0; c < newSize; c++) { 
+            for (int c = 0; c < newSize; c++) {
                 if (r < mapRows && c < mapColumns) {
-                    newhitboxenMap[r][c] = hitboxen[r][c];
+                    newBoxHitboxenMap[r][c] = boxHitboxen[r][c];
                 } else {
-                    newhitboxenMap[r][c] = null;
+                    newBoxHitboxenMap[r][c] = null;
                 }
             }
         }
@@ -915,7 +919,7 @@ public class Grid extends JPanel {
 
         mapTiles = newMap; //ersetzt alte map durch die neue
         mapObjects = newobjectMap; //ersetzt alte object map durch die neue
-        hitboxen = newhitboxenMap; //ersetzt alte map durch die neue
+        boxHitboxen = newBoxHitboxenMap; //ersetzt alte map durch die neue
         light = newlightMap; //ersetzt alte map durch die neue
         mapRows = newSize; //die reihen aktualiesieren
         mapColumns = newSize; //die spalten aktualisieren
@@ -949,8 +953,8 @@ public class Grid extends JPanel {
                 }
 
                 int objId = mapObjects[r][c]; //object id auf einer bestimmten position
-                if(objId >= 0 && objId < objectTextures.length && objectTextures[objId] != null) { //prüft die object id (muss ein tile sein, das object muss im array liegen und es muss ein bild haben)
-                    g.drawImage(objectTextures[objId], (int)(c * miniTileBreite), (int)(r * miniTileHoehe), (int)miniTileBreite + 1, (int)miniTileHoehe + 1, null); //zeichnet das object auf der map 
+                if(objId >= 0 && objId < ObjectTextures.length && ObjectTextures[objId] != null) { //prüft die object id (muss ein tile sein, das object muss im array liegen und es muss ein bild haben)
+                    g.drawImage(ObjectTextures[objId], (int)(c * miniTileBreite), (int)(r * miniTileHoehe), (int)miniTileBreite + 1, (int)miniTileHoehe + 1, null); //zeichnet das object auf der map
                 }
             }
         }
@@ -1035,10 +1039,44 @@ public class Grid extends JPanel {
             }
         }
     }
+    private void pickHitbox(int mouseX, int mouseY) {
+        int tileSizepick = bigMapSize / visibleColumns;
+
+        int mcols = (mouseX - bigMapOffsetPosX) / tileSizepick;
+        int mrows = (mouseY - bigMapOffsetPosY) / tileSizepick;
+
+        int worldCol = cameraColumns + mcols;
+        int worldRow = cameraRows + mrows;
+
+        if (worldCol >= 0 && worldCol < mapColumns && worldRow >= 0 && worldRow < mapRows) {
+            if (boxHitboxen[worldRow][worldCol] != null) {
+                BoxCollider picked = boxHitboxen[worldRow][worldCol];
+                for (int i = 1; i <= 9; i++) {
+                    float[] size = getHitboxSize(i);
+                    if (size[0] == picked.Height && size[1] == picked.Length) {
+                        currentHitbox = i;
+                        break;
+                    }
+                }
+            }
+        }
+    }
     private int[][] copyMap(int[][] original) {
         int[][] copy = new int[original.length][original[0].length]; //erstellt ein leeres array mit der größe des originalem
         for (int i = 0; i < original.length; i++) { //alles wird kopiert vom originalem zum kopiertem array
             System.arraycopy(original[i], 0, copy[i], 0, original[i].length);
+        }
+        return copy;
+    }
+    private BoxCollider[][] copyHitboxMap(BoxCollider[][] original) {
+        BoxCollider[][] copy = new BoxCollider[original.length][original[0].length];
+        for (int r = 0; r < original.length; r++) {
+            for (int c = 0; c < original[0].length; c++) {
+                if (original[r][c] != null) {
+                    BoxCollider b = original[r][c];
+                    copy[r][c] = new BoxCollider(b.PosX, b.PosY, b.Height, b.Length);
+                }
+            }
         }
         return copy;
     }
@@ -1047,16 +1085,19 @@ public class Grid extends JPanel {
         undoTiles.push(copyMap(mapTiles)); 
         undoObjects.push(copyMap(mapObjects));
         undoLights.push(new java.util.ArrayList<>(LightManager.AllPointLights));
+        undoHitboxen.push(copyHitboxMap(boxHitboxen));
 
         //redo wird gelöscht wenn man etwas neu zeichnet
         redoTiles.clear();
         redoObjects.clear();
         redoLights.clear();
+        redoHitboxen.clear();
 
         if (undoTiles.size() > maximumStacks) { //wenn maximum erreicht wird wird das unterste im stapel gelöscht
             undoTiles.remove(0);
             undoObjects.remove(0);
             undoLights.remove(0);
+            undoHitboxen.remove(0);
         }
     }
 
@@ -1067,14 +1108,15 @@ public class Grid extends JPanel {
             redoTiles.push(copyMap(mapTiles));
             redoObjects.push(copyMap(mapObjects));
             redoLights.push(new java.util.ArrayList<>(LightManager.AllPointLights));
+            redoHitboxen.push(copyHitboxMap(boxHitboxen));
 
             //der letzte zustand von dem stapel nehmen  
             mapTiles = undoTiles.pop();
             mapObjects = undoObjects.pop();
+            boxHitboxen = undoHitboxen.pop();
 
             LightManager.AllPointLights.clear(); //liste wird komplett entfernt
             LightManager.AllPointLights.addAll(undoLights.pop()); //nimmt alle lichter von dem letzten zustand und fügt sie ein
-
             
             for (int r = 0; r < mapRows; r++) { //setzt jedes feld vom array auf null
                 java.util.Arrays.fill(light[r], null);
@@ -1100,10 +1142,12 @@ public class Grid extends JPanel {
             undoTiles.push(copyMap(mapTiles));
             undoObjects.push(copyMap(mapObjects));
             undoLights.push(new java.util.ArrayList<>(LightManager.AllPointLights));
+            undoHitboxen.push(copyHitboxMap(boxHitboxen));
 
             //der zukunfts zustand von dem stapel nehmen 
             mapTiles = redoTiles.pop();
             mapObjects = redoObjects.pop();
+            boxHitboxen = redoHitboxen.pop();
 
             LightManager.AllPointLights.clear(); //liste wird komplett entfernt
             LightManager.AllPointLights.addAll(redoLights.pop()); //nimmt alle lichter von dem zukunfts zustand und fügt sie ein
