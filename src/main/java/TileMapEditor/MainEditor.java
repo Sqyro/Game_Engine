@@ -53,7 +53,7 @@ public class MainEditor {
         tabs.addTab("tiles", tileScroll); //addet es auch zum tab
         
         //physiscsObject2D selctor tab
-        PhysicsObject2DSelector objectSelector = new PhysicsObject2DSelector(grid); //erstellt die Tileauswahlliste rechts vom fenster
+        MapObjectsSelector objectSelector = new MapObjectsSelector(grid); //erstellt die Tileauswahlliste rechts vom fenster
         JScrollPane objectScroll = new JScrollPane(objectSelector); //diese ist auch scrollbar
         objectScroll.getVerticalScrollBar().setUnitIncrement(20);
         objectScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

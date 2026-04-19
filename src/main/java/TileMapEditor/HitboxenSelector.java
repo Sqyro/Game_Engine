@@ -20,7 +20,7 @@ public class HitboxenSelector extends JPanel {
         this.grid = grid;
         grid.hitboxTextures = new Image[9]; //9 hitboxen
         loadHitboxen();
-        setPreferredSize(new Dimension(530,900));
+        setPreferredSize(new Dimension(520,900));
 
         addMouseListener(new MouseAdapter() {
             @Override

@@ -5,16 +5,16 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class PhysicsObject2DSelector extends JPanel {
+public class MapObjectsSelector extends JPanel {
     private Grid grid; //Referenz
     private int objectSize = 64; //größe eines tiles in der objectselection
     private int columns = 8; //anzahl der spalten pro reihe
     public int objectCount = 100;
 
-    public PhysicsObject2DSelector(Grid grid) {
+    public MapObjectsSelector(Grid grid) {
         this.grid = grid; //speichert das grid
         grid.ObjectTextures = new Image[objectCount];  //gesamtanzahl der objects indem fall 100
-        loadPhysicsObject2DTextures();
+        loadObjectsTextures();
         this.setPreferredSize(new Dimension(530, 900));
 
         addMouseListener(new MouseAdapter() { //Maus Listener / schaut an welches object ich auf der objectselection gedrückt habe
@@ -33,7 +33,7 @@ public class PhysicsObject2DSelector extends JPanel {
         });
     }
 
-    private void loadPhysicsObject2DTextures() {
+    private void loadObjectsTextures() {
 
         for (int i = 0; i < objectCount; i++) {
             String path = "src/main/resources/assets/textures/mapObjects/Object" + i + ".png"; //bildpfad
