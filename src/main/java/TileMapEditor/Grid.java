@@ -2,22 +2,19 @@ package TileMapEditor;
     
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Stack;
+import java.util.*;
+import java.util.List;
 import Shader.LightManager;
 import Shader.LightEmitters.PointLight;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
-import java.util.Arrays;
 import Physics2D.*;
 
 public class Grid extends JPanel {
@@ -51,6 +48,8 @@ public class Grid extends JPanel {
     
     private PointLight[][] light; //speichert die lights 
     public static Image[] lightTextures;
+
+    public static Image[] randomizationTexture;
     
     private int currentTile = 0; //welches tile ausgewählt ist
     private int currentTileRotation = 0; //aktuelle rotation (0-3)
@@ -68,7 +67,10 @@ public class Grid extends JPanel {
     private int mousePosY = -100; //mausposition y
 
     private int oldMousePosX = -100; //alte mausposition x
-    private int oldMousePosY = -100; //alte mausposition x 
+    private int oldMousePosY = -100; //alte mausposition x
+
+    private int lastRow = -1;
+    private int lastCol = -1;
 
     private int previewSize = 64; //größe des previews unten rechts von der maus
     private int previewOffset = 20; //offset für das preview
@@ -80,15 +82,18 @@ public class Grid extends JPanel {
     private Color currentColor = Color.WHITE; //standardfarbe für das Licht
     
     private int currentTool = 0; //das gerade ausgewählte tool
+
+    private boolean randomization = false;
+    Random r = new Random();
     
     private Stack<int[][]> undoTiles = new Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie umzukehren
     private Stack<int[][]> redoTiles = new Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie wiederherzustellen wenn man etwas rückgangig gemacht hat
     private Stack<int[][]> undoObjects = new Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie umzukehren
     private Stack<int[][]> redoObjects = new Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie wiederherzustellen wenn man etwas rückgangig gemacht hat
-    private java.util.Stack<java.util.List<PointLight>> undoLights = new java.util.Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie umzukehren
-    private java.util.Stack<java.util.List<PointLight>> redoLights = new java.util.Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie wiederherzustellen wenn man etwas rückgangig gemacht hat
-    private java.util.Stack<BoxCollider[][]> undoHitboxen = new java.util.Stack<>();
-    private java.util.Stack<BoxCollider[][]> redoHitboxen = new java.util.Stack<>();
+    private Stack<List<PointLight>> undoLights = new Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie umzukehren
+    private Stack<List<PointLight>> redoLights = new Stack<>(); //das ist sozusagen ein Stapel, wo er die letzten indem fall 67 aktionen speichert, um sie wiederherzustellen wenn man etwas rückgangig gemacht hat
+    private Stack<BoxCollider[][]> undoHitboxen = new Stack<>();
+    private Stack<BoxCollider[][]> redoHitboxen = new Stack<>();
     private final int maximumStacks = 67; //maximaler speicher der aktionen
     
     public void setSelectedTile(int id) { //methode um das aktuelle tile zu ändern
@@ -130,8 +135,6 @@ public class Grid extends JPanel {
         for(int r = 0; r < mapRows; r++)
             for(int c = 0; c < mapColumns; c++)
                 boxHitboxen[r][c] = null; //default object id (was die ganze map painted)
-        
-        //TestMap(); //Test Map, aber gerade auskommentiert, weil ich sie jetzt nicht brauche
 
         setPreferredSize(new Dimension(bigMapSize, bigMapSize)); //panelgröße
         setFocusable(true); //damit keylistener funktioniert
@@ -140,51 +143,57 @@ public class Grid extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
 
-                if (e.getKeyCode() == KeyEvent.VK_W) {
+                int c = e.getKeyCode();
+
+                if (c == KeyEvent.VK_W) {
                     Camera(0, -5);
                 }
-                if (e.getKeyCode() == KeyEvent.VK_S) {
+                if (c == KeyEvent.VK_S) {
                     Camera(0, 5);
                 }
-                if (e.getKeyCode() == KeyEvent.VK_A) {
+                if (c == KeyEvent.VK_A) {
                     Camera(-5, 0);
                 }
-                if (e.getKeyCode() == KeyEvent.VK_D) {
+                if (c == KeyEvent.VK_D) {
                     Camera(5, 0);
                 }
-                if (e.getKeyCode() == KeyEvent.VK_R && currentTab == 0) {
+
+                if (c == KeyEvent.VK_E && currentTab == 0) {
                     currentTileRotation = (currentTileRotation + 1) % 4;
                 }
-                if (e.getKeyCode() == KeyEvent.VK_Q) {
+                if (c == KeyEvent.VK_Q) {
                     currentTileRotation = (currentTileRotation + 3) % 4;
                 }
-                if (e.getKeyCode() == KeyEvent.VK_F) { //Taste für den COlorChooser um Farbe des lichtes zu ändern
+                if (c == KeyEvent.VK_F) { //Taste für den COlorChooser um Farbe des lichtes zu ändern
                     chooseColor();
                 }
-                if (e.getKeyCode() == KeyEvent.VK_P) { //Taste für Pencil
+                if (c == KeyEvent.VK_P) { //Taste für Pencil
                     currentTool = 0;
                     CursorManager.updateCursor(currentTool);
                 }
-                if (e.getKeyCode() == KeyEvent.VK_B) { //Taste für Bucket
+                if (c == KeyEvent.VK_B) { //Taste für Bucket
                     currentTool = 1;
                     CursorManager.updateCursor(currentTool);
                 } 
-                if (e.getKeyCode() == KeyEvent.VK_C) { //Taste für Pipette
+                if (c == KeyEvent.VK_C) { //Taste für Pipette
                     currentTool = 2;
                     CursorManager.updateCursor(currentTool);
                 }
-                if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z) { //STRG+Z für undo
+                if (e.isControlDown() && c == KeyEvent.VK_Z) { //STRG+Z für undo
                     undo();
                 }
-
-                if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Y) { //STRG+Y für redo
+                if (e.isControlDown() && c == KeyEvent.VK_Y) { //STRG+Y für redo
                     redo();
+                }
+                if (c == KeyEvent.VK_R) {
+                    randomization = !randomization;
+                    System.out.println(randomization);
                 }
                 repaint();
             }
         });
         
-        addMouseListener(new java.awt.event.MouseAdapter() { //Maus Listener / für das löschen und platzieren von Tiles mit der Maus
+        addMouseListener(new MouseAdapter() { //Maus Listener / für das löschen und platzieren von Tiles mit der Maus
             @Override
             public void mousePressed(MouseEvent e) {
                 mousePosX = e.getX(); //aktuelle maus x speichern
@@ -291,7 +300,7 @@ public class Grid extends JPanel {
             } 
             
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
+            public void mouseEntered(MouseEvent e) {
                 //sobald die maus ins fenster kommt sofort koordinaten setzen
                 mousePosX = e.getX();
                 mousePosY = e.getY();
@@ -301,27 +310,24 @@ public class Grid extends JPanel {
             }
         });
 
-        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() { //Mausbewegung Listener / das ist einfach dazu da das man nicht jedes einzelne Tile alleine platzieren muss, sondern auch gedrückt halten kann um mehrere zu platzieren
+        addMouseMotionListener(new MouseMotionAdapter() { //Mausbewegung Listener / das ist einfach dazu da das man nicht jedes einzelne Tile alleine platzieren muss, sondern auch gedrückt halten kann um mehrere zu platzieren
             
             @Override
-            public void mouseMoved(java.awt.event.MouseEvent e) { //fürs preview
+            public void mouseMoved(MouseEvent e) { //fürs preview
 
                 oldMousePosX = mousePosX; //speichert vorherige x position
                 oldMousePosY = mousePosY; //speichert vorherige y position
                 mousePosX = e.getX(); //aktuelle maus x speichern
                 mousePosY = e.getY(); //aktuelle maus x speichern
-                switch (currentTab) {
-                    case 2:
-                        int tileSizelightpreview = bigMapSize / visibleColumns; //hier berechne ich die größe eines Tiles
-                        double lightScale = (double) tileSizelightpreview / 16.0; //skalierung um den zoom zu berücksichtigen
-                        int radiuslight = (int) (currentLight * (lightScale / 4.0)) + 5; //radius
-                        repaint(oldMousePosX - radiuslight, oldMousePosY - radiuslight, radiuslight * 2, radiuslight * 2); //erster repaint löscht den alten Kreis
-                        repaint(mousePosX - radiuslight, mousePosY - radiuslight, radiuslight * 2, radiuslight * 2); //zweiter repaint fügt den neuen Kreis hinzu
-                        break;
-                    default:
-                        repaint(oldMousePosX + previewOffset - 5, oldMousePosY + previewOffset - 5, previewSize + 10, previewSize + 10); //erster repaint löscht das alte preview
-                        repaint(mousePosX + previewOffset - 5, mousePosY + previewOffset - 5, previewSize + 10, previewSize + 10); //zweiter repaint fügt das neue preview hinzu
-                        break;
+                if (currentTab == 2) {
+                    int tileSizelightpreview = bigMapSize / visibleColumns; //hier berechne ich die größe eines Tiles
+                    double lightScale = (double) tileSizelightpreview / 16.0; //skalierung um den zoom zu berücksichtigen
+                    int radiuslight = (int) (currentLight * (lightScale / 4.0)) + 5; //radius
+                    repaint(oldMousePosX - radiuslight, oldMousePosY - radiuslight, radiuslight * 2, radiuslight * 2); //erster repaint löscht den alten Kreis
+                    repaint(mousePosX - radiuslight, mousePosY - radiuslight, radiuslight * 2, radiuslight * 2); //zweiter repaint fügt den neuen Kreis hinzu
+                } else {
+                    repaint(oldMousePosX + previewOffset - 5, oldMousePosY + previewOffset - 5, previewSize + 10, previewSize + 10); //erster repaint löscht das alte preview
+                    repaint(mousePosX + previewOffset - 5, mousePosY + previewOffset - 5, previewSize + 10, previewSize + 10); //zweiter repaint fügt das neue preview hinzu
                 }
                 
                 CursorManager.updateMouse(e.getX(), e.getY()); //hier wird einfach updateMouse aufgerufen was einfach die mausposition speichert und ändert
@@ -330,26 +336,34 @@ public class Grid extends JPanel {
             }
 
             @Override
-            public void mouseDragged(java.awt.event.MouseEvent e) {
+            public void mouseDragged(MouseEvent e) {
                 
                 mousePosX = e.getX(); //aktuelle maus x speichern
                 mousePosY = e.getY(); //aktuelle maus x speichern
                 CursorManager.updateMouse(mousePosX, mousePosY); //hier wird einfach updateMouse aufgerufen was einfach die mausposition speichert und ändert
-                repaint();
-                
-                if (currentTool != 0) { //nur der Stift darf draggen
-                    return;
-                }              
+
+                int tileSizeGridLight = bigMapSize / visibleColumns; //hier berechne ich die größe eines Tiles
+                int mcol = (mousePosX - bigMapOffsetPosX) / tileSizeGridLight; //hier wird berechnet auf welcher Spalte die maus geklickt hat
+                int mrow = (mousePosY - bigMapOffsetPosY) / tileSizeGridLight; //hier wird berechnet auf welcher Reihe die maus geklickt hat
                 
                 mousePosX = e.getX(); //aktuelle maus x speichern
                 mousePosY = e.getY(); //aktuelle maus x speichern
                 CursorManager.updateMouse(mousePosX, mousePosY); //hier wird einfach updateMouse aufgerufen was einfach die mausposition speichert und ändert
                 
                 if (currentTab == 0) { //Tilemodus
-                    if (SwingUtilities.isRightMouseButton(e)) {
-                        placeTile(mousePosX, mousePosY, -1); //wenn rechtsklick löscht er das tile
-                    } else {
-                        placeTile(mousePosX, mousePosY, currentTile * 4 + currentTileRotation); //wenn linksklick platziert er das tile
+                    if (mcol >= 0 && mcol < visibleColumns && mrow >= 0 && mrow < visibleRows) { //prüfung ob die maus überhaupt auf dem großen grid geklickt hat
+                        int worldCol = cameraColumns + mcol; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die spalte auf der man geklickt hat
+                        int worldRow = cameraRows + mrow; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die reihe auf der man geklickt hat
+
+                        if (worldRow != lastRow || worldCol != lastCol) {
+                            if (SwingUtilities.isRightMouseButton(e)) {
+                                placeTile(mousePosX, mousePosY, -1); //wenn rechtsklick löscht er das tile
+                            } else {
+                                placeTile(mousePosX, mousePosY, currentTile * 4 + currentTileRotation); //wenn linksklick platziert er das tile
+                            }
+                            lastRow = worldRow;
+                            lastCol = worldCol;
+                        }
                     }
                 } 
                 else if (currentTab == 1) { //PhysicsObjects2d modus
@@ -399,12 +413,12 @@ public class Grid extends JPanel {
     @Override
     protected void paintComponent(Graphics g) { //eine methode die alles auf ein panel zeichnet
         super.paintComponent(g);
-        
+
         int tileSizeGrid = bigMapSize / visibleColumns; //hier berechne ich die größe eines Tiles für das zoomen
-        
-        
+
+
         //Main Grid (große Grid)
-        
+
         //tiles auf dem grid
         for (int r = 0; r < visibleRows; r++) {
             for (int c = 0; c < visibleColumns; c++) {
@@ -428,8 +442,8 @@ public class Grid extends JPanel {
                 g.drawRect(x, y, tileSizeGrid, tileSizeGrid); //rahmen um jedes tile
             }
         }
-        
-        
+
+
         //physicsObjects auf dem Grid
         for (int r = 0; r < visibleRows; r++) {
             for (int c = 0; c < visibleColumns; c++) {
@@ -444,19 +458,19 @@ public class Grid extends JPanel {
 
                 if (objectID >= 0 && objectID < ObjectTextures.length && ObjectTextures[objectID] != null) { //prüft die object id (muss ein object sein, das object muss im array liegen und es muss ein bild haben)
                     Image img = ObjectTextures[objectID];
-                    
+
                     double scale = (double) tileSizeGrid / (double) tileSize; //berechnung wie groß ein "pixeltile" ist
-                    
+
                     int scaledWidth = (int) (img.getWidth(null) * scale); //berechnung der "echten" breite von dem object mit scale
                     int scaledHeight = (int) (img.getHeight(null) * scale); //berechnung der "echten" höhe von dem object mit scale
-                    
+
                     int drawX = x - (scaledWidth - tileSizeGrid) / 2; //berechnung von x und y wo er es platzieren soll indem Fall mitte unten
 
                     int drawY = y - (scaledHeight - tileSizeGrid);
-                    
+
                     g.drawImage(img, drawX, drawY, scaledWidth, scaledHeight, null);//hier zeichnet er das bild auf das jeweilige Tile
                 }
-                
+
             }
         }
 
@@ -479,9 +493,9 @@ public class Grid extends JPanel {
                     int radius = (int) (pointlight.Range * (scale / 4.0)); //berechnet den radius
 
                     if (radius > 0) { //pointlight benutzt werte zwischen 0.0 und 1.0 deswegen muss man die umrechnen
-                        int red = Math.min(255, (int)(pointlight.getRed() * 255));
-                        int green = Math.min(255, (int)(pointlight.getGreen() * 255));
-                        int blue = Math.min(255, (int)(pointlight.getBlue() * 255));
+                        int red = Math.min(255, (int) (pointlight.getRed() * 255));
+                        int green = Math.min(255, (int) (pointlight.getGreen() * 255));
+                        int blue = Math.min(255, (int) (pointlight.getBlue() * 255));
 
                         g2.setColor(new Color(red, green, blue, 80)); //transparent ausgefüllt damit man noch was unter dem licht sieht
                         g2.fillOval(x - radius, y - radius, radius * 2, radius * 2);
@@ -504,12 +518,12 @@ public class Grid extends JPanel {
                 if (worldRow < mapRows && worldCol < mapColumns && boxHitboxen[worldRow][worldCol] != null) { //prüft ob an der stelle ein licht existiert
                     BoxCollider boxCollider = boxHitboxen[worldRow][worldCol];
 
-                    float offsetX = boxCollider.PosX - (int)boxCollider.PosX;
-                    float offsetY = boxCollider.PosY - (int)boxCollider.PosY;
-                    int x = bigMapOffsetPosX + c * tileSizeGrid + (int)(offsetX * tileSizeGrid);
-                    int y = bigMapOffsetPosY + r * tileSizeGrid + (int)(offsetY * tileSizeGrid);
-                    int w = (int)(boxCollider.Length * tileSizeGrid);
-                    int h = (int)(boxCollider.Height * tileSizeGrid);
+                    float offsetX = boxCollider.PosX - (int) boxCollider.PosX;
+                    float offsetY = boxCollider.PosY - (int) boxCollider.PosY;
+                    int x = bigMapOffsetPosX + c * tileSizeGrid + (int) (offsetX * tileSizeGrid);
+                    int y = bigMapOffsetPosY + r * tileSizeGrid + (int) (offsetY * tileSizeGrid);
+                    int w = (int) (boxCollider.Length * tileSizeGrid);
+                    int h = (int) (boxCollider.Height * tileSizeGrid);
 
                     g2.setColor(Color.RED);
                     g2.drawRect(x, y, w, h);
@@ -520,8 +534,8 @@ public class Grid extends JPanel {
         //außenrahmen
         g.setColor(Color.BLACK); //farbe des rahmens ist schwarz
         g.drawRect(bigMapOffsetPosX, bigMapOffsetPosY, bigMapSize, bigMapSize); //zeichent den äußeren Rahmen des gesamten großen Grids
-        
-        
+
+
         //Mini Grid
         int miniBreite = 400; //breite der minimap
         int miniHoehe = 400; //höhe der minimap
@@ -537,32 +551,40 @@ public class Grid extends JPanel {
 
         g.setColor(Color.BLACK); //farbe des rahmens ist scharz
         g.drawRect(miniX, miniY, miniBreite, miniHoehe); //rahmen um die minimap
-        
-        
+
+
         //Kamera Rahmen auf Mini Grid
         g.setColor(Color.BLUE); //farbe des rahmens ist blau
-        g.drawRect(miniX + (int)(cameraColumns * miniTileBreite), miniY + (int)(cameraRows * miniTileHoehe), (int)(visibleColumns * miniTileBreite), (int)(visibleRows * miniTileHoehe) //berechnet die x und y position auf der minimap sowie die höhe und die breite
-);
-        
-        
+        g.drawRect(miniX + (int) (cameraColumns * miniTileBreite), miniY + (int) (cameraRows * miniTileHoehe), (int) (visibleColumns * miniTileBreite), (int) (visibleRows * miniTileHoehe) //berechnet die x und y position auf der minimap sowie die höhe und die breite
+        );
+
+
         // Preview zeichnen
         int previewX = mousePosX + previewOffset; //x position der preview
         int previewY = mousePosY + previewOffset; //y position der preview
         switch (currentTab) {
             case 0:
+                randomizationTexture = new Image[1];
+                String pfad = "src/main/resources/assets/textures/gui/randomIcon.png"; //pfad von dem bild gerade nur sword weil ich noch keins habe
+                randomizationTexture[0] = new ImageIcon(pfad).getImage(); //laden des bildes
                 //Tile
                 int tileIndex = currentTile * 4 + currentTileRotation; //ausgewähltes tile eventuell mit rotierung
-                if(tileIndex >= 0 && tileIndex < tileTextures.length && tileTextures[tileIndex] != null) { //prüft die tile id (muss ein tile sein, das tile muss im array liegen und es muss ein bild haben)
+                if (tileIndex >= 0 && tileIndex < tileTextures.length && tileTextures[tileIndex] != null) { //prüft die tile id (muss ein tile sein, das tile muss im array liegen und es muss ein bild haben)
                     g.drawImage(tileTextures[tileIndex], previewX, previewY, previewSize, previewSize, null); //tile preview zeichnen
                     g.setColor(Color.BLACK); //scharzer rahmen um das preview
                     g.drawRect(previewX, previewY, previewSize, previewSize);
-                }   break;
+                }
+                if (randomization){
+                    g.drawImage(randomizationTexture[0], previewX, previewY, previewSize, previewSize, null);
+                }
+                break;
             case 1:
                 //PhysicsObjects2D
                 int objectIndex = currentObject; //ausgewähltes object
-                if(objectIndex >= 0 && objectIndex < ObjectTextures.length && ObjectTextures[objectIndex] != null) { //prüft die object id (muss ein tile sein, das object muss im array liegen und es muss ein bild haben)
+                if (objectIndex >= 0 && objectIndex < ObjectTextures.length && ObjectTextures[objectIndex] != null) { //prüft die object id (muss ein tile sein, das object muss im array liegen und es muss ein bild haben)
                     g.drawImage(ObjectTextures[objectIndex], previewX, previewY, previewSize, previewSize, null); //object preview zeichnen
-                }   break;
+                }
+                break;
             case 2:
                 Graphics2D g2d = (Graphics2D) g;
                 Color previewColor = new Color(currentColor.getRed(), currentColor.getGreen(), currentColor.getBlue(), 100); //zeichnet eine preview mit der transparenz 100 und der currentcolor
@@ -578,39 +600,33 @@ public class Grid extends JPanel {
                 break;
             default:
                 break;
-        }      
+        }
         CursorManager.draw(g); //methode für cursormanager damit sich die maus repainted beim bewegen sowie tool switchen
     }
     
-    public void Camera(int cx, int cy) { //Kamera Movemnet für den Rahmen
+    public void Camera(int cameraX, int cameraY) { //Kamera Movemnet für den Rahmen
         
-    cameraColumns += cx; //verschiebt die Kamera horizontal
-    cameraRows += cy; //verschiebt die Kamera vertikal
+    cameraColumns += cameraX; //verschiebt die Kamera horizontal
+    cameraRows += cameraY; //verschiebt die Kamera vertikal
 
     //hier wird einfach nur geschaut ob die Kamera außerhalb der Map geht wenn ja resettet sie sich zurück auf die psotion auf die sie vorher war
     if (cameraColumns < 0) {
-        
         cameraColumns = 0;
     }
     
     if (cameraColumns > mapColumns - visibleColumns) {
-        
         cameraColumns = mapColumns - visibleColumns;
     }
 
-
     if (cameraRows < 0) {
-        
         cameraRows = 0;   
     }
     
     if (cameraRows > mapRows - visibleRows) {
-        
         cameraRows = mapRows - visibleRows;
     }
-    
-    repaint(); //und repaint damit das Grid neu gezeichnet wird nachdem sich die Kamera bewegt hat   
-    
+
+    repaint(); //und repaint damit das Grid neu gezeichnet wird nachdem sich die Kamera bewegt hat
     }
     
     
@@ -656,18 +672,6 @@ public class Grid extends JPanel {
             }
         }
     }
-
-   private void loadPhysicsObject2DTextures() {
-            int numObjects = 67; //anzahl der insgesamten objects
-            
-            ObjectTextures = new Image[numObjects];  //gesamtanzahl der objects indem fall 67
-
-            for (int i = 0; i < numObjects; i++) {
-                String path = "src/main/resources/assets/textures/physicsObject2D/Object" + i + ".png"; //bildpfad
-                
-                ObjectTextures[i] = new ImageIcon(path).getImage();
-            }
-        }
    
     private void placeTile(int mouseX, int mouseY, int tilenum) {
 
@@ -683,12 +687,17 @@ public class Grid extends JPanel {
 
             if (worldCol >= 0 && worldCol < mapColumns && worldRow >= 0 && worldRow < mapRows) { //prüfung ob die position valide ist
 
-                if(mapTiles[worldRow][worldCol] != tilenum) { //setzt das Tile an diese stelle
-                    mapTiles[worldRow][worldCol] = tilenum;
-                    
+                    if (randomization){
+                        int randomrotation = r.nextInt(4);
+                        int randomtilenum = tilenum + randomrotation;
+                        mapTiles[worldRow][worldCol] = randomtilenum;
+                    } else {
+                        mapTiles[worldRow][worldCol] = tilenum;
+                    }
+
                     int paintX = bigMapOffsetPosX + mcols * tileSizeGridTile;
                     int paintY = bigMapOffsetPosY + mrows * tileSizeGridTile;
-                    
+
                     if(System.currentTimeMillis() - timerBigMap > 50) {
                         repaint(paintX, paintY, tileSizeGridTile, tileSizeGridTile); //repaint um map neu zu zeichnen
                         timerBigMap = System.currentTimeMillis();
@@ -698,7 +707,6 @@ public class Grid extends JPanel {
                         repaint(getWidth() - 467, 67, 400, 400);
                         timerMiniMap = System.currentTimeMillis();
                     }
-                }
             }
         }
     }
@@ -790,16 +798,16 @@ public class Grid extends JPanel {
     }
 
     private float[] getHitboxSize(int index) {
-        // {height, length, offsetX, offsetY}
+        //height, length, offsetX, offsetY
         switch (index) {
-            case 0: return new float[]{0.5f,   0.5f,   0.5f,   0.5f};
-            case 1: return new float[]{0.5f, 1f,   0f,   0.5f};
+            case 0: return new float[]{0.5f, 0.5f, 0.5f, 0.5f};
+            case 1: return new float[]{0.5f, 1f, 0f, 0.5f};
             case 2: return new float[]{0.5f, 0.5f, 0f, 0.5f};
-            case 3: return new float[]{1f,   0.5f, 0.5f,   0f};
-            case 4: return new float[]{1f,   1f,   0f,   0f};
-            case 5: return new float[]{1f,   0.5f, 0f, 0f};
-            case 6: return new float[]{0.5f, 0.5f, 0.5f,   0f};
-            case 7: return new float[]{0.5f, 1f,   0f,   0f};
+            case 3: return new float[]{1f, 0.5f, 0.5f, 0f};
+            case 4: return new float[]{1f, 1f, 0f, 0f};
+            case 5: return new float[]{1f, 0.5f, 0f, 0f};
+            case 6: return new float[]{0.5f, 0.5f, 0.5f, 0f};
+            case 7: return new float[]{0.5f, 1f, 0f, 0f};
             case 8: return new float[]{0.5f, 0.5f, 0f, 0f};
             default: return new float[]{0f, 0f, 0f, 0f};
         }
@@ -810,10 +818,7 @@ public class Grid extends JPanel {
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); //man kann nur ordner auswählen
 
         if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) { //wenn man auf speichern drückt
-            File folder = chooser.getSelectedFile(); 
-            if (!folder.exists()) { //falls der ordner noch nicht existiert wird ein neuer erstellt
-                folder.mkdirs();
-            }
+            File folder = chooser.getSelectedFile();
 
             Gson gson = new GsonBuilder().setPrettyPrinting().create(); //Gson objekt wird erstellt / PrettyPrinting sorgt dafür das die Json datei lesbar ist
 
@@ -831,7 +836,7 @@ public class Grid extends JPanel {
                     gson.toJson(boxHitboxen, writer);
                 }
                 System.out.println("exportiert :)"); //hier schaue ich nur ob es funktioniert hat
-            } catch (JsonIOException | IOException e) {}
+            } catch (JsonIOException | IOException ignored) {}
         }
     }
 
@@ -854,7 +859,7 @@ public class Grid extends JPanel {
                 }
                 LightManager.AllPointLights.clear(); //hier wird AllPointLights geleert
 
-                for (int i = 0; i < lights.length; i++) { 
+                for (int i = 0; i < lights.length; i++) {
 
                     PointLight pointlight = lights[i]; //hier wird das aktuelle licht an der bestimmten stelle geholt
 
@@ -873,7 +878,7 @@ public class Grid extends JPanel {
                 }
                 updateMinimap();
                 repaint();
-            } catch (JsonIOException | IOException e) {}
+            } catch (JsonIOException | IOException ignored) {}
         }
     }
     
@@ -987,7 +992,7 @@ public class Grid extends JPanel {
             return;
         }
 
-        java.util.Stack<Point> stack = new java.util.Stack<>(); //erstellen des Stacks 
+        Stack<Point> stack = new Stack<>(); //erstellen des Stacks
         stack.push(new Point(startRow, startCol)); //das tile was wir angeklickt haben wird zum startpunkt unseres Stacks(Stapels)
 
         while (!stack.isEmpty()) { //es wird solange ausgeführt bis es keine Punkte mehr auf dem stapel gibt
@@ -1094,7 +1099,7 @@ public class Grid extends JPanel {
         //alles kopieren auf die undo Stapeln
         undoTiles.push(copyMap(mapTiles)); 
         undoObjects.push(copyMap(mapObjects));
-        undoLights.push(new java.util.ArrayList<>(LightManager.AllPointLights));
+        undoLights.push(new ArrayList<>(LightManager.AllPointLights));
         undoHitboxen.push(copyHitboxMap(boxHitboxen));
 
         //redo wird gelöscht wenn man etwas neu zeichnet
@@ -1117,7 +1122,7 @@ public class Grid extends JPanel {
             //der jetzige zustand wird in redo gesichert
             redoTiles.push(copyMap(mapTiles));
             redoObjects.push(copyMap(mapObjects));
-            redoLights.push(new java.util.ArrayList<>(LightManager.AllPointLights));
+            redoLights.push(new ArrayList<>(LightManager.AllPointLights));
             redoHitboxen.push(copyHitboxMap(boxHitboxen));
 
             //der letzte zustand von dem stapel nehmen  
@@ -1129,7 +1134,7 @@ public class Grid extends JPanel {
             LightManager.AllPointLights.addAll(undoLights.pop()); //nimmt alle lichter von dem letzten zustand und fügt sie ein
             
             for (int r = 0; r < mapRows; r++) { //setzt jedes feld vom array auf null
-                java.util.Arrays.fill(light[r], null);
+                Arrays.fill(light[r], null);
             }
             
             for (int i = 0; i < LightManager.AllPointLights.size(); i++) { //jetzt gehen wir durch AllPointlights hindurch
@@ -1151,7 +1156,7 @@ public class Grid extends JPanel {
             //der jetzige zustand wird in undo gesichert
             undoTiles.push(copyMap(mapTiles));
             undoObjects.push(copyMap(mapObjects));
-            undoLights.push(new java.util.ArrayList<>(LightManager.AllPointLights));
+            undoLights.push(new ArrayList<>(LightManager.AllPointLights));
             undoHitboxen.push(copyHitboxMap(boxHitboxen));
 
             //der zukunfts zustand von dem stapel nehmen 
@@ -1164,7 +1169,7 @@ public class Grid extends JPanel {
 
             
             for (int r = 0; r < mapRows; r++) { //setzt jedes feld vom array auf null
-                java.util.Arrays.fill(light[r], null);
+                Arrays.fill(light[r], null);
             }
             for (int i = 0; i < LightManager.AllPointLights.size(); i++) { //jetzt gehen wir durch AllPointlights hindurch
                 PointLight pointlight = LightManager.AllPointLights.get(i); //und holen das licht objekt an dieser bestimmten stelle
