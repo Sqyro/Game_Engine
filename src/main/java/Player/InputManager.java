@@ -157,8 +157,10 @@ public class InputManager {
                     case GLFW_KEY_ESCAPE:
                         if(action == GLFW_PRESS) {
                             System.out.println("Escape Pressed");
-                            SceneManager.LoadScene(Frame.GameScene, Window);
-                            GUIManager.openScreen(new PauseScreen());
+                            SceneManager.LoadScene(SceneManager.PreviousScene, Window);
+                            if (SceneManager.ActiveScene instanceof GameScene) {
+                                GUIManager.openScreen(new PauseScreen());
+                            }
                         }
                         break;
                 }
@@ -186,7 +188,7 @@ public class InputManager {
                 case GLFW_KEY_ESCAPE:
                     if(action == GLFW_PRESS) {
                         System.out.println("Escape Pressed");
-                        SceneManager.LoadScene(Frame.MainMenuScene, Window);
+                        SceneManager.LoadScene(SceneManager.PreviousScene, Window);
                     }
                     break;
             }

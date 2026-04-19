@@ -1,7 +1,9 @@
 package Scenes;
 
+import GUI.GUIInteractableField;
 import GUI.GUIManager;
 import GUI.GUIText;
+import GUI.Screens.VideoSettingsScreen;
 import Player.InputManager;
 import Rendering.Camera;
 import Rendering.Frame;
@@ -21,6 +23,8 @@ public class SettingsScene extends Scene {
     private Shader settingsShader;
     private ImageHandler renderer;
 
+    public List<GUIInteractableField> SettingsInteractableFields = new ArrayList<>();
+
     //Liste für alle Texte die gerendert werden sollen
     public static List<GUIText> SettingsDisplayedText = new ArrayList<>();
 
@@ -38,10 +42,13 @@ public class SettingsScene extends Scene {
     @Override
     public void onLoadup(long Window) {
         InputManager.ListenforSettingsKeys(Window);
+        GUIManager.openScreen(new VideoSettingsScreen());
     }
 
     @Override
     public void onUnload() {
+        GUIManager.closeScreen();
+
         clearOnScreenFields();
         clearDisplayedTextQue();
     }
@@ -50,7 +57,15 @@ public class SettingsScene extends Scene {
     public void onUpdate(float deltaTime) {
         glClearColor(0f, 0f, 0f, 0f);
         glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Schwarz setzen
-        
+
+        if(GUIManager.isScreenOpen()) {
+            GUIManager.currentScreen.renderScreen(renderer, Frame.ScreenWidth, Frame.ScreenHeight);
+        }
+
+        for(GUIInteractableField CurrentField : SettingsInteractableFields) {
+            CurrentField.drawField(renderer);
+        }
+
         for(GUIText guiText : SettingsDisplayedText) { //Für jeden Text im ToBeDisplayed Text
             GUIManager.renderText(guiText, renderer); //Fügt den Text in den Render Que hinzu
         }
@@ -64,17 +79,24 @@ public class SettingsScene extends Scene {
 
     @Override
     public void clearOnScreenFields() {
-
+        SettingsInteractableFields.clear();
     }
 
     @Override
     public void handleClick(long Window, double CursorX, double CursorY) {
-
+        for(GUIInteractableField CurrentField : SettingsInteractableFields) {
+            if(CurrentField.CursorHoveringOver(CursorX, CursorY)) {
+                CurrentField.onFieldClick(Window);
+                break;
+            }
+        }
     }
 
     @Override
     public void handleHovering(double CursorX, double CursorY) {
-
+        for(GUIInteractableField CurrentField : SettingsInteractableFields) {
+            CurrentField.CursorHoveringOver(CursorX, CursorY);
+        }
     }
 
     @Override

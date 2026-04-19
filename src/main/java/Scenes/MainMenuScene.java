@@ -3,6 +3,7 @@ package Scenes;
 import GUI.*;
 import GUI.Buttons.ExitGameButton;
 import GUI.Buttons.LoadGameButton;
+import GUI.Buttons.SettingsButton;
 import Player.InputManager;
 import Player.PlayerAnimationManager;
 import Rendering.Camera;
@@ -31,6 +32,12 @@ public class MainMenuScene extends Scene {
     private final String ExitButtonText = "Exit";
     private final float ExitButtonTextSpacing = 15;
     private final float ExitButtonTextSize = 30;
+
+    private final float SettingsButtonWidth = 300;
+    private final float SettingsButtonHeight = 50;
+    private final String SettingsButtonText = "Settings";
+    private final float SettingsButtonTextSpacing = 15;
+    private final float SettingsButtonTextSize = 30;
 
     private final float LoadGameButtonWidth = 300;
     private final float LoadGameButtonHeight = 50;
@@ -61,7 +68,8 @@ public class MainMenuScene extends Scene {
     public void onLoadup(long Window) {
         InputManager.ListenforMainMenuKeys(Window);
 
-        MainMenuInteractableFields.add(new LoadGameButton(Frame.ScreenWidth /2 - LoadGameButtonWidth/2, Frame.ScreenHeight /2 - LoadGameButtonHeight/2 - Frame.NormalizedPixelHeight * ExitButtonHeight - ButtonYOffset, LoadGameButtonWidth, LoadGameButtonHeight, LoadGameButtonText, LoadGameButtonTextSpacing, LoadGameButtonTextSize, Color.WHITE));
+        MainMenuInteractableFields.add(new LoadGameButton(Frame.ScreenWidth /2 - LoadGameButtonWidth/2, Frame.ScreenHeight /2 - LoadGameButtonHeight/2 - (Frame.NormalizedPixelHeight * SettingsButtonHeight + Frame.NormalizedPixelHeight * ExitButtonHeight) - ButtonYOffset, LoadGameButtonWidth, LoadGameButtonHeight, LoadGameButtonText, LoadGameButtonTextSpacing, LoadGameButtonTextSize, Color.WHITE));
+        MainMenuInteractableFields.add(new SettingsButton(Frame.ScreenWidth /2 - SettingsButtonWidth/2, Frame.ScreenHeight /2 - SettingsButtonHeight/2 - Frame.NormalizedPixelHeight * ExitButtonHeight - ButtonYOffset, SettingsButtonWidth, SettingsButtonHeight, SettingsButtonText, SettingsButtonTextSpacing, SettingsButtonTextSize, Color.WHITE));
         MainMenuInteractableFields.add(new ExitGameButton(Frame.ScreenWidth /2 - ExitButtonWidth/2, Frame.ScreenHeight /2 - ExitButtonHeight/2 - ButtonYOffset, ExitButtonWidth, ExitButtonHeight, ExitButtonText, ExitButtonTextSpacing, ExitButtonTextSize, Color.WHITE));
     }
 
