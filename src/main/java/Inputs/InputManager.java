@@ -1,62 +1,101 @@
-package Player;
+package Inputs;
 
 import GUI.*;
 import GUI.Screens.InventoryScreen;
 import GUI.Screens.PauseScreen;
-import Rendering.BarElement;
-import Rendering.Camera;
-import Rendering.ImageManager;
-import Shader.LightEmitters.PointLight;
-import Shader.LightManager;
-import Rendering.Frame;
+import Inputs.Actions.*;
 import Scenes.SceneManager;
 import Scenes.GameScene;
-import Physics2D.CircleCollider;
 
-import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class InputManager {
     //Variablen Deklarieren
-    private static volatile boolean wPressed = false;
-    private static volatile boolean aPressed = false;
-    private static volatile boolean sPressed = false;
-    private static volatile boolean dPressed = false;
 
     private static final float[] Direction = {0, 0};
-    
+
+    private static WalkAction UpAction = new WalkAction(WalkDirection.UP);
+    private static WalkAction DownAction = new WalkAction(WalkDirection.DOWN);
+    private static WalkAction LeftAction = new WalkAction(WalkDirection.LEFT);
+    private static WalkAction RightAction = new WalkAction(WalkDirection.RIGHT);
+
+    private static DashAction DashAction = new DashAction();
+
+    private static InventoryAction InventoryAction = new InventoryAction();
+
+    private static EscapeAction EscapeAction = new EscapeAction();
+
+    private static List<KeyAction> GameKeys = new ArrayList<>();
+
+    public static void init() {
+        for (int i = 0; i < 512; i++) {
+            GameKeys.add(null);
+        }
+        GameKeys.set(32, DashAction);
+        GameKeys.set(65, LeftAction);
+        GameKeys.set(68, RightAction);
+        GameKeys.set(69, InventoryAction);
+        GameKeys.set(83, DownAction);
+        GameKeys.set(87, UpAction);
+        GameKeys.set(256, EscapeAction);
+    }
+
     //Eine Methode die ein Event Benutzt um zu hören ob vom Keyboard Inputs gemacht wurden
     public static void ListenforGameKeys(long Window) {
         glfwSetKeyCallback(Window, (win, key, scancode, action, mods) -> { //Event
-                //Spieler Objekt aus der Spieler Klasse. Ich weiß die Namen von den Methoden und klassen könnten besser sein (Nicht alle Player)
-                Player player = Player.Player;
-            
-                boolean Pressed = action != GLFW_RELEASE; //ist was gedrückt worden?
-            
+            boolean Pressed = action != GLFW_RELEASE; //ist was gedrückt worden?
+
+            if (GameKeys.get(key) != null) {
+                if (Pressed) {
+                    GameKeys.get(key).onPress();
+                    System.out.println(key + " Key Pressed");
+                } else {
+                    GameKeys.get(key).onRelease();
+                }
+            }
+                /*
                 switch (key) {
-                    case GLFW_KEY_W: // W wurde gedrückt
-                        if(GameScene.GameRunning && !player.isDodging && player.isAlive) {
-                            System.out.println("W Pressed"); //Nachricht für den Debug
-                            wPressed = Pressed; //Wurde gerückt, also ja es wurde was gerückt hier rein schreiben für später//Schau nicht weiter (Wenn das nicht hier ist, dann wartet er bis ein Key gedrückt wurde und führt dann alles aus)
-                        }
-                        break;
-                    case GLFW_KEY_S:
-                        if(GameScene.GameRunning && !player.isDodging && player.isAlive) {
-                            System.out.println("S Pressed");
-                            sPressed = Pressed;
-                        }
-                        break;
                     case GLFW_KEY_A:
-                        if(GameScene.GameRunning && !player.isDodging && player.isAlive) {
+                        if (Pressed) {
+                            GameKeys.get(0).onPress();
                             System.out.println("A Pressed");
-                            aPressed = Pressed;
+                        } else {
+                            GameKeys.get(0).onRelease();
                         }
                         break;
                     case GLFW_KEY_D:
-                        if(GameScene.GameRunning && !player.isDodging && player.isAlive) {
+                        if (Pressed) {
+                            GameKeys.get(3).onPress();
                             System.out.println("D Pressed");
-                            dPressed = Pressed;
+                        } else {
+                            GameKeys.get(3).onRelease();
+                        }
+                        break;
+                    case GLFW_KEY_S:
+                        if (Pressed) {
+                            GameKeys.get(18).onPress();
+                            System.out.println("S Pressed");
+                        } else {
+                            GameKeys.get(18).onRelease();
+                        }
+                        break;
+                    case GLFW_KEY_W: // W wurde gedrückt
+                        if (Pressed) {
+                            GameKeys.get(22).onPress();
+                            System.out.println("W Pressed"); //Nachricht für den Debug
+                        } else {
+                            GameKeys.get(22).onRelease();
+                        }
+                        break;
+                    case GLFW_KEY_SPACE:
+                        if (Pressed) {
+                            GameKeys.get(26).onPress();
+                            System.out.println("Space Pressed");
+                        } else {
+                            GameKeys.get(26).onRelease();
                         }
                         break;
                     case GLFW_KEY_E:
@@ -87,16 +126,6 @@ public class InputManager {
                             }
                         }
                         break;
-                    case GLFW_KEY_SPACE:
-                        if(action == GLFW_PRESS && !player.isDodging && player.isAlive) {
-                            System.out.println("Space Pressed");
-                            wPressed = false;
-                            aPressed = false;
-                            sPressed = false;
-                            dPressed = false;
-                            player.isDodging = true;
-                        }
-                        break;
                     case GLFW_KEY_C:
                         if(GameScene.GameRunning) {
                             System.out.println("C Pressed");
@@ -123,16 +152,7 @@ public class InputManager {
                             Frame.GameScene.showTextForSeconds(randomText, 2); //Packt das Text Element in den To Be Displayed Text
                         }
                         break;
-                }
-            
-                if(GameScene.GameRunning) {
-                    // Wir callen Move jedes mal wenn irgendeiner von den Movement Keys jetzt gerade gedrückt wird und wenn nicht, dann stoppen wir
-                    if (wPressed || aPressed || sPressed || dPressed) {
-                        InputHandler.Move(player);
-                    } else {
-                        InputHandler.Stop(player);
-                    }
-                }
+                } */
         });
         
         //Mouse Event, für Mouse related Dinge
@@ -225,37 +245,5 @@ public class InputManager {
                 SceneManager.ActiveScene.handleClick(Window, Mouse.PosX, Mouse.PosY);
             }
         });
-    }
-    
-    public static void updatePlayerDirection() { // Hab den Direction Skript von oben hier runter gemoved und ihn flüssig gemacht, vorher hat der so gestottert, weil Direction für eine Frame 0 war (nach W-S oder A-D)
-        //Immer vorher auf 0 setzen
-        float DirX = 0;
-        float DirY = 0;
-        
-        Player player = Player.Player;
-        
-        //Wenn die Keys gedrückt wurden dann addieren/Subtrahieren (nicht setzen, sonst buggt das wenn man zwei Keys gleichzeitig drückt)
-        if (aPressed) DirX -= 1;
-        if (dPressed) DirX += 1;
-        if (wPressed) DirY -= 1;
-        if (sPressed) DirY += 1;
-        
-        //Richtung setzen
-        player.setDirectionX(DirX);
-        player.setDirectionY(DirY);
-
-        if (DirX != 0) {
-            player.setLastDirectionX(DirX);
-        }
-
-        if(DirY != 0){ //Letzte Y Richtung speichern
-            player.setLastDirectionY(DirY);
-        }
-        
-        if (DirY == 0 && DirX != 0) { //Falls wir uns nochmal auf der X Achse bewegt haben zurücksetzen
-            player.setLastDirectionY(0);
-        } else if (DirX == 0 && DirY != 0) {
-            player.setLastDirectionX(0);
-        }
     }
 }

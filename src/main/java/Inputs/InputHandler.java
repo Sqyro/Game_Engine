@@ -1,5 +1,6 @@
-package Player;
+package Inputs;
 
+import Player.Player;
 import Sounds.SoundManager;
 
 public class InputHandler {

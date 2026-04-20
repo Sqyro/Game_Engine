@@ -1,5 +1,7 @@
 package Player;
 
+import Inputs.Actions.WalkAction;
+import Inputs.InputManager;
 import Physics2D.LivingObject;
 import Physics2D.VelocityHandler;
 import Rendering.BarElement;
@@ -44,7 +46,7 @@ public class Player extends LivingObject implements Serializable { // Serializat
 
     public void PlayerTick(float deltaTime, ImageHandler renderer) {
         if (isAlive) {
-            InputManager.updatePlayerDirection();
+            WalkAction.updatePlayerDirection();
             if (isDodging) {
                 doADodgeRoll(deltaTime);
             }

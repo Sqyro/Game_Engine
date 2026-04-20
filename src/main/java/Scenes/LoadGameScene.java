@@ -4,7 +4,7 @@ import GUI.GUIInteractableField;
 import GUI.GUIManager;
 import GUI.GUIText;
 import GUI.InteractableFields.LoadGameInteractableField;
-import Player.InputManager;
+import Inputs.InputManager;
 import Rendering.Camera;
 import Rendering.Frame;
 import Rendering.ImageHandler;

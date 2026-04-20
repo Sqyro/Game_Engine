@@ -8,7 +8,7 @@ import Item.Items;
 import Map.MapObjects;
 import Physics2D.CollisionManager;
 import Player.PlayerAnimationManager;
-import Player.InputManager;
+import Inputs.InputManager;
 import Player.Player;
 import Rendering.BarElement;
 import Rendering.Camera;
@@ -75,6 +75,7 @@ public class GameScene extends Scene {
 
         //Spieler erstellen
         Player.createPlayer();
+        InputManager.init();
         Rendering.HudHandler.PlaceNewBar(100, 100, 400, 50, Rendering.ImageManager.TESTBAR, 1, 60, 4, Color.RED);
     }
     
