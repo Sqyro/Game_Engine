@@ -70,7 +70,7 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
 
     public static void UpdateAllEnemyAI(float deltaTime) {
         float TargetPosX = Player.Player.PosX;
-        float TargetPosY = Player.Player.PosY + Player.PLAYER_HITBOX_OFFSET_Y / 2;
+        float TargetPosY = Player.Player.PosY + Player.PLAYER_HITBOX_OFFSET_Y;
 
         for (Enemy currentEnemy : Enemies) {
             float DistanceX = TargetPosX - currentEnemy.PosX;
