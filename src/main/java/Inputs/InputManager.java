@@ -58,78 +58,10 @@ public class InputManager {
             }
                 /*
                 switch (key) {
-                    case GLFW_KEY_A:
-                        if (Pressed) {
-                            GameKeys.get(0).onPress();
-                            System.out.println("A Pressed");
-                        } else {
-                            GameKeys.get(0).onRelease();
-                        }
-                        break;
-                    case GLFW_KEY_D:
-                        if (Pressed) {
-                            GameKeys.get(3).onPress();
-                            System.out.println("D Pressed");
-                        } else {
-                            GameKeys.get(3).onRelease();
-                        }
-                        break;
-                    case GLFW_KEY_S:
-                        if (Pressed) {
-                            GameKeys.get(18).onPress();
-                            System.out.println("S Pressed");
-                        } else {
-                            GameKeys.get(18).onRelease();
-                        }
-                        break;
-                    case GLFW_KEY_W: // W wurde gedrückt
-                        if (Pressed) {
-                            GameKeys.get(22).onPress();
-                            System.out.println("W Pressed"); //Nachricht für den Debug
-                        } else {
-                            GameKeys.get(22).onRelease();
-                        }
-                        break;
-                    case GLFW_KEY_SPACE:
-                        if (Pressed) {
-                            GameKeys.get(26).onPress();
-                            System.out.println("Space Pressed");
-                        } else {
-                            GameKeys.get(26).onRelease();
-                        }
-                        break;
-                    case GLFW_KEY_E:
-                        if(action == GLFW_PRESS) { // Nur ausführen wenn der Key gedrückt wird, sonst wird das hier beim loslassen nochmal ausgeführt und der Screen schließt sich
-                            System.out.println("E Pressed");
-                            if(GUIManager.isScreenOpen()) { //Wenn der Bildschirm schon offen ist
-                                if(GUIManager.currentScreen instanceof InventoryScreen) { //Wenn der Momentane Screen ein Inventar ist
-                                    InventoryScreen Inventory = (InventoryScreen) GUIManager.currentScreen; //Screen holen
-                                    Inventory.returnHeldItem(); //Die Methode callen, um das festgeahltene Item in seinen vorherigen Slot zu legen
-                                    GUIManager.closeScreen(); //Bildschirm schließen
-                                }
-                            } else { //Wenn keiner offen ist, dann machen wir einen neuen aus
-                                if(GUIManager.currentScreen == null) {
-                                    GUIManager.openScreen(new InventoryScreen(48, 2, 2, 13, 5, 625 * Frame.NormalizedPixelWidth, 502 * Frame.NormalizedPixelHeight));
-                                }
-                            }
-                        }
-                        break;
-                    case GLFW_KEY_ESCAPE:
-                        if(action == GLFW_PRESS) {
-                            System.out.println("Escape Pressed");
-                            if(GUIManager.isScreenOpen()) {
-                                GUIManager.closeScreen();
-                            } else {
-                                if(GUIManager.currentScreen == null) {
-                                    GUIManager.openScreen(new PauseScreen());
-                                }
-                            }
-                        }
-                        break;
                     case GLFW_KEY_C:
                         if(GameScene.GameRunning) {
                             System.out.println("C Pressed");
-                            Enemy.Enemy.Spawn((float)Mouse.PosX - Camera.PosX, (float)Mouse.PosY - Camera.PosY, 50, 50, ImageManager.ENEMY, 0, Direction, new CircleCollider(22, 0, 0), 5); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
+                            Enemy.Enemy.Spawn((float)Mouse.PosX - Camera.PosX, (float)Mouse.PosY - Camera.PosY, 50, 50, ImageManager.ENEMY, 0, Direction, new CircleCollider(Enemy.ENEMY_HITBOX_RADIUS, 0, 0), 5); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
                         }
                         break;
                     case GLFW_KEY_P:

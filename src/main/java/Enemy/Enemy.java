@@ -10,6 +10,8 @@ import Physics2D.CircleCollider;
 import Scenes.GameScene;
 
 public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ein sich bewegendes
+    public static float ENEMY_HITBOX_RADIUS = 22;
+
     public static int ENEMY_MOVEMENT_SPEED = 400;
     public static float ENEMY_MAX_DETECTION_RANGE = 600;
     public static int ENEMY_ATTACK_RANGE = 5;
@@ -68,7 +70,7 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
 
     public static void UpdateAllEnemyAI(float deltaTime) {
         float TargetPosX = Player.Player.PosX;
-        float TargetPosY = Player.Player.PosY + 7.5f;
+        float TargetPosY = Player.Player.PosY + Player.PLAYER_HITBOX_OFFSET_Y;
 
         for (Enemy currentEnemy : Enemies) {
             float DistanceX = TargetPosX - currentEnemy.PosX;
@@ -76,13 +78,13 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
 
             double totalDistance = Math.sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
 
-            if (totalDistance <= ENEMY_MAX_DETECTION_RANGE && totalDistance > 32+22) {
+            if (totalDistance <= ENEMY_MAX_DETECTION_RANGE && totalDistance > Player.PLAYER_HITBOX_RADIUS + ENEMY_HITBOX_RADIUS) {
                 currentEnemy.setVelocity(ENEMY_MOVEMENT_SPEED);
                 currentEnemy.setDirectionX(DistanceX);
                 currentEnemy.setDirectionY(DistanceY);
                 VelocityHandler.calculatePosition(currentEnemy, deltaTime);
             } else {
-                if (totalDistance <= 32+22+ENEMY_ATTACK_RANGE && Player.Player.isAlive && GameScene.Gametime - currentEnemy.lastDamageTime >= ENEMY_ATTACK_COOLDOWN) {
+                if (totalDistance <= Player.PLAYER_HITBOX_RADIUS + ENEMY_HITBOX_RADIUS + ENEMY_ATTACK_RANGE && Player.Player.isAlive && GameScene.Gametime - currentEnemy.lastDamageTime >= ENEMY_ATTACK_COOLDOWN) {
                     Player.Player.damageObject(ENEMY_ATTACK_DAMAGE);
                     currentEnemy.lastDamageTime = GameScene.Gametime;
                 }

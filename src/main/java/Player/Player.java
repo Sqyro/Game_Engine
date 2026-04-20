@@ -23,6 +23,10 @@ public class Player extends LivingObject implements Serializable { // Serializat
     public static float PlayerSizeX = 100;
     public static float PlayerSizeY = 100;
 
+    public static float PLAYER_HITBOX_RADIUS = 32;
+    public static float PLAYER_HITBOX_OFFSET_X = 0;
+    public static float PLAYER_HITBOX_OFFSET_Y = 16;
+
     public static int PLAYER_MAX_HP = 20;
 
     public volatile boolean isDodging = false;
@@ -74,7 +78,7 @@ public class Player extends LivingObject implements Serializable { // Serializat
     }
 
     public static void createPlayer() { // Methode um nen Spieler zu erstellen
-        Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection, new CircleCollider(32, 0, 15), PLAYER_MAX_HP); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
+        Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection, new CircleCollider(PLAYER_HITBOX_RADIUS, PLAYER_HITBOX_OFFSET_X, PLAYER_HITBOX_OFFSET_Y), PLAYER_MAX_HP); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
         //Erstellt zwei test Items während der Spieler erstellung, damit man das Inventar schon mal ausprobieren kann
         Player.inventory.setItem(0, Items.ITEMS.getRegistry("sword"));
         Player.inventory.setItem(1, Items.ITEMS.getRegistry("sword"));
