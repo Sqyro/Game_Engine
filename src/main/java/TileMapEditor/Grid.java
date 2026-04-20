@@ -337,7 +337,7 @@ public class Grid extends JPanel {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                
+
                 mousePosX = e.getX(); //aktuelle maus x speichern
                 mousePosY = e.getY(); //aktuelle maus x speichern
                 CursorManager.updateMouse(mousePosX, mousePosY); //hier wird einfach updateMouse aufgerufen was einfach die mausposition speichert und ändert
@@ -351,27 +351,38 @@ public class Grid extends JPanel {
                 CursorManager.updateMouse(mousePosX, mousePosY); //hier wird einfach updateMouse aufgerufen was einfach die mausposition speichert und ändert
                 
                 if (currentTab == 0) { //Tilemodus
-                    if (mcol >= 0 && mcol < visibleColumns && mrow >= 0 && mrow < visibleRows) { //prüfung ob die maus überhaupt auf dem großen grid geklickt hat
-                        int worldCol = cameraColumns + mcol; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die spalte auf der man geklickt hat
-                        int worldRow = cameraRows + mrow; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die reihe auf der man geklickt hat
+                    if (currentTool == 0) {
+                        if (mcol >= 0 && mcol < visibleColumns && mrow >= 0 && mrow < visibleRows) { //prüfung ob die maus überhaupt auf dem großen grid geklickt hat
+                            int worldCol = cameraColumns + mcol; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die spalte auf der man geklickt hat
+                            int worldRow = cameraRows + mrow; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die reihe auf der man geklickt hat
 
-                        if (worldRow != lastRow || worldCol != lastCol) {
-                            if (SwingUtilities.isRightMouseButton(e)) {
-                                placeTile(mousePosX, mousePosY, -1); //wenn rechtsklick löscht er das tile
-                            } else {
-                                placeTile(mousePosX, mousePosY, currentTile * 4 + currentTileRotation); //wenn linksklick platziert er das tile
+                            if (worldRow != lastRow || worldCol != lastCol) {
+                                if (SwingUtilities.isRightMouseButton(e)) {
+                                    placeTile(mousePosX, mousePosY, -1); //wenn rechtsklick löscht er das tile
+                                } else {
+                                    placeTile(mousePosX, mousePosY, currentTile * 4 + currentTileRotation); //wenn linksklick platziert er das tile
+                                }
+                                lastRow = worldRow;
+                                lastCol = worldCol;
                             }
-                            lastRow = worldRow;
-                            lastCol = worldCol;
                         }
                     }
                 } 
                 else if (currentTab == 1) { //PhysicsObjects2d modus
-                    if (SwingUtilities.isRightMouseButton(e)) {
-                        placePhysicsObject2D(mousePosX, mousePosY, -1); //wenn rechtsklick löscht er das object
-                    } else {
-                        placePhysicsObject2D(mousePosX, mousePosY, currentObject); //wenn linksklick platziert er das object
-                    }
+                    if (mcol >= 0 && mcol < visibleColumns && mrow >= 0 && mrow < visibleRows) { //prüfung ob die maus überhaupt auf dem großen grid geklickt hat
+                            int worldCol = cameraColumns + mcol; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die spalte auf der man geklickt hat
+                            int worldRow = cameraRows + mrow; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die reihe auf der man geklickt hat
+
+                            if (worldRow != lastRow || worldCol != lastCol) {
+                                if (SwingUtilities.isRightMouseButton(e)) {
+                                    placePhysicsObject2D(mousePosX, mousePosY, -1); //wenn rechtsklick löscht er das object
+                                } else {
+                                    placePhysicsObject2D(mousePosX, mousePosY, currentObject); //wenn linksklick platziert er das object
+                                }
+                                lastRow = worldRow;
+                                lastCol = worldCol;
+                            }
+                        }
                 }
                 else if (currentTab == 3) { //Hitbox modus
                     if (SwingUtilities.isRightMouseButton(e)) {
@@ -415,7 +426,6 @@ public class Grid extends JPanel {
         super.paintComponent(g);
 
         int tileSizeGrid = bigMapSize / visibleColumns; //hier berechne ich die größe eines Tiles für das zoomen
-
 
         //Main Grid (große Grid)
 
@@ -689,7 +699,8 @@ public class Grid extends JPanel {
 
                     if (randomization){
                         int randomrotation = r.nextInt(4);
-                        int randomtilenum = tilenum + randomrotation;
+                        int tile = tilenum - tilenum % 4;
+                        int randomtilenum = tile + randomrotation;
                         mapTiles[worldRow][worldCol] = randomtilenum;
                     } else {
                         mapTiles[worldRow][worldCol] = tilenum;
@@ -726,8 +737,8 @@ public class Grid extends JPanel {
                 if (mapObjects[worldRow][worldCol] != objectNum) { //setzt das object an diese stelle
                     mapObjects[worldRow][worldCol] = objectNum;
 
-                    int paintX = bigMapOffsetPosX + mcol * tileSizeGridObject;
-                    int paintY = bigMapOffsetPosY + mrow * tileSizeGridObject;
+                    int paintX = mcol * tileSizeGridObject;
+                    int paintY = mrow * tileSizeGridObject;
                     
                     if(System.currentTimeMillis() - timerBigMap > 50) {
                     repaint(paintX, paintY, tileSizeGridObject, tileSizeGridObject); //repaint um map neu zu zeichnen
@@ -1007,8 +1018,15 @@ public class Grid extends JPanel {
             if (mapTiles[row][col] != tileid) { //wenn ein tile schon das neue tile ist oder es ein anderes ist wir das ignoriert
                 continue;
             } 
-
-            mapTiles[row][col] = replace; //hier wird das tile ersetzt mit dem tile was wir wollten
+                if (randomization){
+                    int randomrotation = r.nextInt(4);
+                    int tile = replace - replace % 4;
+                    int randomtilenum = tile + randomrotation;
+                    mapTiles[row][col] = randomtilenum;
+                } else {
+                    mapTiles[row][col] = replace; //hier wird das tile ersetzt mit dem tile was wir wollten
+                }
+            
 
             //hier werden die nachbarn zum stack hinzugefügt damit die nochmal angeschaut werden
             stack.push(new Point(row + 1, col));
