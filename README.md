@@ -18,6 +18,5 @@ Read the Comments, too lazy to tell you. Writing the Comments already took hours
 
 ## License
 
-This project is licensed under my favourite license: <br /> 
-Hiring a Hitman © <br /> 
-Just kidding this code is fully open source under MIT and can be used in any way or form, I don't really care. I'm just trying to pass Computer Science class
+This Project is licensed under CC-BY-NC-SA ©
+Commercial destribution of the source code is not permitted
