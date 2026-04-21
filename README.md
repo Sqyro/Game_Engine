@@ -18,5 +18,5 @@ Read the Comments, too lazy to tell you. Writing the Comments already took hours
 
 ## License
 
-This Project is licensed under CC-BY-NC-SA ©
-Commercial destribution of the source code is not permitted
+This Project is licensed under CC-BY-NC-SA ©  <br /> 
+Commercial distribution of the source code is not permitted
