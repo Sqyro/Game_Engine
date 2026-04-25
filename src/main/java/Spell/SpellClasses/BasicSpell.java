@@ -1,5 +1,6 @@
 package Spell.SpellClasses;
 
+import Enemy.Enemy;
 import Physics2D.CircleCollider;
 import Physics2D.VelocityHandler;
 import Player.Player;
@@ -12,8 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BasicSpell extends Spell {
-    public static float BASIC_SPELL_SPEED = 1000;
-    public static float BASIC_SPELL_MAX_TRAVEL_DISTANCE = 300;
+    public static float BASIC_SPELL_DAMAGE = 10;
+    public static float BASIC_SPELL_SPEED = 1200;
+    public static float BASIC_SPELL_MAX_TRAVEL_DISTANCE = 600;
 
     public transient List<Projectile> LivingProjectiles;
 
@@ -41,14 +43,27 @@ public class BasicSpell extends Spell {
     public void onSpellTick(float deltaTime, ImageHandler renderer) {
         passedTime += deltaTime;
         spellAnimationManager.updateSpellAnimation(deltaTime);
-        for (int i = 0; i < LivingProjectiles.size(); i++) {
+        for (int i = LivingProjectiles.size() - 1; i >= 0; i--) {
             Projectile ThisProjectile = LivingProjectiles.get(i);
             VelocityHandler.calculatePosition(ThisProjectile, deltaTime);
-            if (Math.sqrt((ThisProjectile.PosX - ThisProjectile.StartPosX) * (ThisProjectile.PosX - ThisProjectile.StartPosX) + (ThisProjectile.PosY - ThisProjectile.StartPosY) * (ThisProjectile.PosY - ThisProjectile.StartPosY)) >= BASIC_SPELL_MAX_TRAVEL_DISTANCE) {
-                LivingProjectiles.remove(ThisProjectile);
-                i--;
-            } else {
-                spellAnimationManager.currentAnimation.renderAnimation(ThisProjectile.PosX, ThisProjectile.PosY, ThisProjectile.ObjLength, ThisProjectile.ObjHeight, false, renderer);
+
+            boolean removed = false;
+
+            for (Enemy CurrentEnemy : Enemy.Enemies) {
+                if (CurrentEnemy.PosX <= ThisProjectile.PosX && CurrentEnemy.PosX + CurrentEnemy.ObjLength >= ThisProjectile.PosX && CurrentEnemy.PosY <= ThisProjectile.PosY && CurrentEnemy.PosY + CurrentEnemy.ObjHeight >= ThisProjectile.PosY) {
+                    CurrentEnemy.damageObject(BASIC_SPELL_DAMAGE);
+                    System.out.println("Enemy Hit");
+                    LivingProjectiles.remove(i);
+                    removed = true;
+                    break;
+                }
+            }
+            if (!removed) {
+                if (Math.sqrt((ThisProjectile.PosX - ThisProjectile.StartPosX) * (ThisProjectile.PosX - ThisProjectile.StartPosX) + (ThisProjectile.PosY - ThisProjectile.StartPosY) * (ThisProjectile.PosY - ThisProjectile.StartPosY)) >= BASIC_SPELL_MAX_TRAVEL_DISTANCE) {
+                    LivingProjectiles.remove(i);
+                } else {
+                    spellAnimationManager.currentAnimation.renderAnimation(ThisProjectile.PosX, ThisProjectile.PosY, ThisProjectile.ObjLength, ThisProjectile.ObjHeight, false, renderer);
+                }
             }
         }
     }

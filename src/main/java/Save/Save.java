@@ -50,19 +50,7 @@ public class Save { //Klasse um Daten zu speichern
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("gamesession/Save" + SaveID + "/Playerdata/Player.ser"))) {
             PlayerSaveData PlayerData = (PlayerSaveData) in.readObject();
 
-            Player player = new Player(
-                    PlayerData.PosX,
-                    PlayerData.PosY,
-                    Player.PlayerSizeX,
-                    Player.PlayerSizeY,
-                    ImageManager.PLAYER,
-                    0,
-                    new float[]{0,0},
-                    new CircleCollider(32, 0, 15),
-                    Player.PLAYER_MAX_HP
-            );
-
-            player.HP = PlayerData.HP;
+            Player player = new Player(PlayerData.PosX, PlayerData.PosY, Player.PlayerSizeX, Player.PlayerSizeY, ImageManager.PLAYER, 0, new float[]{0,0}, new CircleCollider(32, 0, 15), Player.PLAYER_MAX_HP);
 
             for (int i = 0; i < PlayerData.Items.size(); i++) {
                 String name = PlayerData.Items.get(i);
@@ -91,7 +79,6 @@ public class Save { //Klasse um Daten zu speichern
 
         PlayerData.PosX = player.PosX;
         PlayerData.PosY = player.PosY;
-        PlayerData.HP = player.HP;
 
         for (int i = 0; i < player.inventory.getInventorySize(); i++) {
             Item item = player.inventory.getItem(i);

@@ -1,12 +1,20 @@
 package Inputs;
 
+import Enemy.Enemy;
 import GUI.*;
 import GUI.Screens.InventoryScreen;
 import GUI.Screens.PauseScreen;
 import Inputs.Actions.*;
+import Physics2D.CircleCollider;
+import Rendering.Camera;
+import Rendering.Frame;
+import Rendering.ImageManager;
 import Scenes.SceneManager;
 import Scenes.GameScene;
+import Shader.LightEmitters.PointLight;
+import Shader.LightManager;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +39,10 @@ public class InputManager {
     private static List<KeyAction> GameKeys = new ArrayList<>();
 
     public static void init() {
-        for (int i = 0; i < 512; i++) {
+        for (int i = 0; i < 512; i++) { //Out of Bounds verhindern, Listengröße erstellen
             GameKeys.add(null);
         }
+        //Startdart Einstellung, wird später aus dem Speicher gelesen
         GameKeys.set(32, DashAction);
         GameKeys.set(65, LeftAction);
         GameKeys.set(68, RightAction);
@@ -56,12 +65,12 @@ public class InputManager {
                     GameKeys.get(key).onRelease();
                 }
             }
-                /*
+
                 switch (key) {
                     case GLFW_KEY_C:
                         if(GameScene.GameRunning) {
                             System.out.println("C Pressed");
-                            Enemy.Enemy.Spawn((float)Mouse.PosX - Camera.PosX, (float)Mouse.PosY - Camera.PosY, 50, 50, ImageManager.ENEMY, 0, Direction, new CircleCollider(Enemy.ENEMY_HITBOX_RADIUS, 0, 0), 5); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
+                            Enemy.Spawn((float)Mouse.PosX - Camera.PosX, (float)Mouse.PosY - Camera.PosY, 50, 50, ImageManager.ENEMY, 0, Direction, new CircleCollider(Enemy.ENEMY_HITBOX_RADIUS, 0, 0), 5); //Spawnt einen Gegner bei 40, 40 Global mit der Größe 50, 50
                         }
                         break;
                     case GLFW_KEY_P:
@@ -84,7 +93,7 @@ public class InputManager {
                             Frame.GameScene.showTextForSeconds(randomText, 2); //Packt das Text Element in den To Be Displayed Text
                         }
                         break;
-                } */
+                }
         });
         
         //Mouse Event, für Mouse related Dinge

@@ -1,7 +1,7 @@
 package Player;
 
+import Enemy.Enemy;
 import Inputs.Actions.WalkAction;
-import Inputs.InputManager;
 import Physics2D.LivingObject;
 import Physics2D.VelocityHandler;
 import Rendering.BarElement;
@@ -69,7 +69,20 @@ public class Player extends LivingObject implements Serializable { // Serializat
                 if (CurrentSpell != null) {
                     if (CurrentSpell.passedTime >= CurrentSpell.SpellCooldownInSeconds) {
                         CurrentSpell.passedTime = 0;
-                        CurrentSpell.onCast(0, 0);
+                        float TargetX = 0;
+                        float TargetY = 0;
+                        for (Enemy CurrentEnemy : Enemy.Enemies) {
+                            double totalDistEnemy = Math.sqrt((CurrentEnemy.PosX - Player.PosX) * (CurrentEnemy.PosX - Player.PosX) + (CurrentEnemy.PosY - Player.PosY) * (CurrentEnemy.PosY - Player.PosY));
+                            double totalDistTarget = Math.sqrt((TargetX - Player.PosX) * (TargetX - Player.PosX) + (TargetY - Player.PosY) * (TargetY - Player.PosY));
+
+                            if (totalDistEnemy < totalDistTarget)  {
+                                TargetX = CurrentEnemy.PosX;
+                                TargetY = CurrentEnemy.PosY;
+                            }
+                        }
+                        if (TargetX != 0 && TargetY != 0) {
+                            CurrentSpell.onCast(TargetX, TargetY);
+                        }
                     }
                     CurrentSpell.onSpellTick(deltaTime, renderer);
                 }

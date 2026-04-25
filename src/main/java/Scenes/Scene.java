@@ -1,6 +1,5 @@
 package Scenes;
 
-
 import GUI.GUIText;
 
 public abstract class Scene {

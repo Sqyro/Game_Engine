@@ -72,7 +72,14 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
         float TargetPosX = Player.Player.PosX;
         float TargetPosY = Player.Player.PosY + Player.PLAYER_HITBOX_OFFSET_Y;
 
-        for (Enemy currentEnemy : Enemies) {
+        for (int i = 0; i < Enemies.size(); i++) {
+            Enemy currentEnemy = Enemies.get(i);
+            if (currentEnemy.HP <= 0) {
+                currentEnemy.die();
+                i--;
+                continue;
+            }
+
             float DistanceX = TargetPosX - currentEnemy.PosX;
             float DistanceY = TargetPosY - currentEnemy.PosY;
 

@@ -37,7 +37,7 @@ public class Frame {
         //Startet die Update Methode, die für den Loop zuständig ist
         Update();
         
-        //Falls Update irgendwie unterbrochen wird, dann wird diese Methode ausgeführtm die einfach das Window mit allen Funktionen killt und Platz freimacht, hiernach kann nichts OpenGL mäßiges mehr aufgerufen werden
+        //Falls Update irgendwie unterbrochen wird, dann wird diese Methode ausgeführt die einfach das Window mit allen Funktionen killt und Platz freimacht, hiernach kann nichts OpenGL mäßiges mehr aufgerufen werden
         glfwTerminate();
     }
     
@@ -94,31 +94,31 @@ public class Frame {
     private void Update() {
         float targetDeltaTime = 1.0f / FramesPerSecond; // Gewünschte FPS (FPS Cap)
         lastTime = System.nanoTime(); //Bei startup die erste Vergangenheit setzen
-            
+
         while (!glfwWindowShouldClose(Window)) { //Solange das Window offen ist
-                long currentTime = System.nanoTime(); //liest die Frame unabhängige "System Zeit"
-                float deltaTime = (currentTime - lastTime) / 1_000_000_000f; //Differenz aus jetzige Zeit und vorherige Zeit ist die Zeit Pro Frame. Diese Zahl benutze ich, damit Geschwindigkeiten auf 30 FPS gleichstark wie auf 60 sind
-                lastTime = currentTime; //Das jetzt ist jetzt vorbeit und ist vergangenheit, weil delta Time gesetzt wurde
-                
-                //Hört allen Events zu. KeyboardInput Event für den Input Handler
-                glfwPollEvents();
-                
-                //Cursor Position updaten
-                Mouse.UpdateMousePos(Window);
-                
-                //Szenen Updaten
-                SceneManager.ActiveScene.onUpdate(deltaTime);
-                
-                if (deltaTime < targetDeltaTime) { //capped FPS bei den oben gesetzten
-                    try {
-                        Thread.sleep((long)((targetDeltaTime - deltaTime) * 1000)); // Wir schlafen für die differenz aus der gewünschten und der wirklichen deltaTime (*1000, weil wir deltatime ja durch 1000000000 teilen und wieder auf millisekunden kommen wollen)
-                    } catch (InterruptedException e) { //schmeißt ne Exception und gibt Stacktrace für Fehlerbehebung aus, wenn das nicht klappt
-                        e.printStackTrace();
-                    }
+            long currentTime = System.nanoTime(); //liest die Frame unabhängige "System Zeit"
+            float deltaTime = (currentTime - lastTime) / 1_000_000_000f; //Differenz aus jetzige Zeit und vorherige Zeit ist die Zeit Pro Frame. Diese Zahl benutze ich, damit Geschwindigkeiten auf 30 FPS gleichstark wie auf 60 sind
+            lastTime = currentTime; //Das jetzt ist jetzt vorbeit und ist vergangenheit, weil delta Time gesetzt wurde
+
+            //Hört allen Events zu. KeyboardInput Event für den Input Handler
+            glfwPollEvents();
+
+            //Cursor Position updaten
+            Mouse.UpdateMousePos(Window);
+
+            //Szenen Updaten
+            SceneManager.ActiveScene.onUpdate(deltaTime);
+
+            if (deltaTime < targetDeltaTime) { //capped FPS bei den oben gesetzten
+                try {
+                    Thread.sleep((long)((targetDeltaTime - deltaTime) * 1000)); // Wir schlafen für die differenz aus der gewünschten und der wirklichen deltaTime (*1000, weil wir deltatime ja durch 1000000000 teilen und wieder auf millisekunden kommen wollen)
+                } catch (InterruptedException e) { //schmeißt ne Exception und gibt Stacktrace für Fehlerbehebung aus, wenn das nicht klappt
+                    e.printStackTrace();
                 }
-                
-                //OpenGL Buffering, switched einfach das was der User gerade sieht mit dem was er sehen soll, also alles was gerendert wurde
-                glfwSwapBuffers(Window);
+            }
+
+            //OpenGL Buffering, switched einfach das was der User gerade sieht mit dem was er sehen soll, also alles was gerendert wurde
+            glfwSwapBuffers(Window);
         }
     }
 }

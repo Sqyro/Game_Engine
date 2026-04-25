@@ -16,6 +16,8 @@ public class SpellAnimationManager {
 
 
     public void updateSpellAnimation(float deltaTime) {
-        currentAnimation.UpdateAnimation(deltaTime);
+        if (currentAnimation != null) {
+            currentAnimation.UpdateAnimation(deltaTime);
+        }
     }
 }

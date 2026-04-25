@@ -12,18 +12,10 @@ uniform vec2 onTextureScale; //Für Sprite Sheets, scale auf der Textur
 uniform vec2 Offset; //Offset von dem Objekt auf dem Bildschirm
 uniform vec2 Scale; //Größe von dem Objekt
 uniform vec2 ScreenSize; //Größe von dem Objekt auf dem Bildschirm
-uniform vec2 ShadowSkew;
 
 void main() {
     //Quadrat an die Richtige Stelle platzieren (Skalieren und offsetten)
-    vec2 UnskewedPos = Position;
-
-    if (Position.y == 0.0) {
-        UnskewedPos.x += ShadowSkew.x;
-        UnskewedPos.y += ShadowSkew.y;
-    }
-
-    vec2 Pos = UnskewedPos * Scale + Offset;
+    vec2 Pos = Position * Scale + Offset;
 
     //Von Bildschirm koordinaten (Pixel) in Normalisierte Device Koordinaten umwandeln
     vec2 NormalizedDeviceCoordinates;
