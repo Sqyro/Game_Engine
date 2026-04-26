@@ -6,7 +6,7 @@ public class CircleCollider {
     public float OffsetX;
     public float OffsetY;
     
-    public CircleCollider (float Radius, float OffsetX, float OffsetY) {
+    public CircleCollider (float Radius, float OffsetX, float OffsetY) {//constructor
         this.Radius = Radius;
         this.OffsetX = OffsetX;
         this.OffsetY = OffsetY;

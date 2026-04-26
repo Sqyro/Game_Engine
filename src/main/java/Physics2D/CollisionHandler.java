@@ -2,12 +2,12 @@ package Physics2D;
 
 
 public class CollisionHandler {
-    public static void Collide (LivingObject Object1, LivingObject Object2) {
+    public static void Collide (LivingObject Object1, PhysicsObject2D Object2) {
         float DefaultVelocity = Object1.Velocity;//Standard Velocity vom Object1 bekommen
         float m1x = Object1.PosX + Object1.ObjLength / 2 + Object1.Hitbox.OffsetX;//Position der Hitboxen einlesen
-        float m2x = Object2.PosX + Object2.ObjLength / 2 + Object2.Hitbox.OffsetX;
+        float m2x = Object2.getPosX() + Object2.ObjLength / 2 + Object2.Hitbox.OffsetX;
         float m1y = Object1.PosY + Object1.ObjHeight / 2 + Object1.Hitbox.OffsetY;
-        float m2y = Object2.PosY + Object2.ObjHeight / 2 + Object2.Hitbox.OffsetY;
+        float m2y = Object2.getPosY() + Object2.ObjHeight / 2 + Object2.Hitbox.OffsetY;
         
         float distanceX = m1x - m2x;//Distance zwischen beiden Objects rausbekommen erst DistanzX und DistanzY, dann mit Satz des Pythagoras komplette Distanz
         float distanceY = m1y - m2y;
