@@ -9,6 +9,7 @@ public class ImageManager {
     public static int PLAYER_SPECIAL;
 
     public static int ENEMY;
+    public static int ENEMIES;
     
     public static List<Integer> TileTextures = new ArrayList<>();
     public static int TileAmount = 3;
@@ -21,6 +22,7 @@ public class ImageManager {
     public static int SWORD;
 
     public static int BASIC_SPELL_ANIM;
+    public static int FIREBALL_SPELL_ANIM;
 
     //Texturen für mapObjects
     public static int GRAVESTONE_CROSS;
@@ -60,7 +62,9 @@ public class ImageManager {
             PLAYER_SPECIAL = ImageHandler.loadTexture("src/main/resources/assets/textures/player/player_special.png");
 
             ENEMY = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/enemy.png");
-        
+
+            ENEMIES = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/enemies.png");
+
             for(int i = 0; i < TileAmount; i++) {
                 int TempTileTextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/sheet" + i + ".png");
                 TileTextures.add(TempTileTextureID);
@@ -75,6 +79,7 @@ public class ImageManager {
             SWORD = ImageHandler.loadTexture("src/main/resources/assets/textures/item/sword.png");
 
             BASIC_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/basic.png");
+            FIREBALL_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/fire_ball.png");
 
             //Texturen für mapObjects
             GRAVESTONE_CROSS = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_cross.png");

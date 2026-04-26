@@ -24,11 +24,15 @@ public class Enemy extends LivingObject { //Enemy ist ein Living Object, also ei
     //Tote Enemies werden hier gespeichert, damit ich sie später wieder "recyclen" kann
     public static ArrayList<Enemy> EnemyPool = new ArrayList<>();
 
+    public EnemyAnimationManager enemyAnimationManager;
+
     private float lastDamageTime;
 
     public Enemy(float PosX, float PosY, float EnemyLength, float EnemyHeight, int TextureID, float Velocity, float[] Direction, CircleCollider Hitbox, float Max_HP) { //Constructor für einen neuen Enemy
         super(PosX, PosY, EnemyLength, EnemyHeight, TextureID, Velocity, Direction, Hitbox, Max_HP); //Passed einfach nur alle Values weiter an Living Object
         this.lastDamageTime = 0;
+        this.enemyAnimationManager = new EnemyAnimationManager();
+        this.enemyAnimationManager.createEnemyAnimations();
     }
     
     //Soll einen neuen Enemy Spawnen
