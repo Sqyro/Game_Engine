@@ -21,6 +21,7 @@ public class ImageManager {
     public static int SWORD;
 
     public static int BASIC_SPELL_ANIM;
+    public static int FIREBALL_SPELL_ANIM;
 
     public static int MAIN_MENU;
 
@@ -51,6 +52,7 @@ public class ImageManager {
             SWORD = ImageHandler.loadTexture("src/main/resources/assets/textures/item/sword.png");
 
             BASIC_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/basic.png");
+            FIREBALL_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/fire_ball.png");
 
             System.out.println("Game Textures loaded"); //Nachricht für den Debug
         } catch (Exception e) { //Falls es nicht geht

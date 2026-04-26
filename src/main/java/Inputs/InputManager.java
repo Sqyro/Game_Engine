@@ -92,6 +92,11 @@ public class InputManager {
                             GUIText randomText = new GUIText("Skibidi Tripple T Sigma :3", 80, 80, 80, 50, ImageManager.GAMEFONT, Color.RED); //Erstellt ein neues Text Element
                             Frame.GameScene.showTextForSeconds(randomText, 2); //Packt das Text Element in den To Be Displayed Text
                         }
+                    case GLFW_KEY_R:
+                        if(GameScene.GameRunning) {
+                            System.out.println("R Pressed");
+
+                        }
                         break;
                 }
         });
