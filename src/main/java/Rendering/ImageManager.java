@@ -9,6 +9,7 @@ public class ImageManager {
     public static int PLAYER_SPECIAL;
 
     public static int ENEMY;
+    public static int ENEMIES;
     
     public static List<Integer> TileTextures = new ArrayList<>();
     public static int TileAmount = 3;
@@ -60,7 +61,9 @@ public class ImageManager {
             PLAYER_SPECIAL = ImageHandler.loadTexture("src/main/resources/assets/textures/player/player_special.png");
 
             ENEMY = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/enemy.png");
-        
+
+            ENEMIES = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/enemies.png");
+
             for(int i = 0; i < TileAmount; i++) {
                 int TempTileTextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/sheet" + i + ".png");
                 TileTextures.add(TempTileTextureID);

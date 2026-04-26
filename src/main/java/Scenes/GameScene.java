@@ -144,6 +144,9 @@ public class GameScene extends Scene implements Serializable {
         //Animationen Updaten
         if(GameRunning) {
             playerAnimationManager.updatePlayerAnimation(deltaTime);
+            for (Enemy CurrentEnemy : Enemy.Enemies) {
+                CurrentEnemy.enemyAnimationManager.updateEnemyAnimation(deltaTime);
+            }
         }
         
         //Benutzt die drawMap Methode aus dem Map Handler, die die einzelnen Tiles zeichnet
@@ -165,9 +168,19 @@ public class GameScene extends Scene implements Serializable {
             if (EnemyDrawX < ScreenLeft - 100 || EnemyDrawX > ScreenRight + 100 || EnemyDrawY < ScreenTop - 100 || EnemyDrawY > ScreenBottom + 100) {
                 continue; // Skippt diesen Enemy und macht mit dem nächsten weiter
             }
-            
+
+            if (currentEnemy.getDirectionY() == 0) {
+                currentEnemy.enemyAnimationManager.currentAnimation = currentEnemy.enemyAnimationManager.swampWalkAnimation;
+            } else if (currentEnemy.getDirectionY() == 1) {
+                currentEnemy.enemyAnimationManager.currentAnimation = currentEnemy.enemyAnimationManager.swampWalkDownAnimation;
+            } else {
+                currentEnemy.enemyAnimationManager.currentAnimation = currentEnemy.enemyAnimationManager.swampWalkUpAnimation;
+            }
+
+            currentEnemy.enemyAnimationManager.currentAnimation.renderAnimation(EnemyDrawX, EnemyDrawY, currentEnemy.ObjLength, currentEnemy.ObjHeight, currentEnemy.isFLipped(), renderer);
+
             //Sonst fügt er den Enemy in den draw que hinzu
-            renderer.drawFull(currentEnemy.TextureID, EnemyDrawX, EnemyDrawY, currentEnemy.ObjLength, currentEnemy.ObjHeight, 1f, 1f, 1f, 1f);
+            //renderer.drawFull(currentEnemy.TextureID, EnemyDrawX, EnemyDrawY, currentEnemy.ObjLength, currentEnemy.ObjHeight, 1f, 1f, 1f, 1f);
         }
         /*
         //Render Walls
