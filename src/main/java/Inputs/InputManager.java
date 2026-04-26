@@ -94,12 +94,6 @@ public class InputManager {
                                 ((GameScene) SceneManager.ActiveScene).showTextForSeconds(randomText, 2); //Packt das Text Element in den To Be Displayed Text
                             }
                         }
-                    case GLFW_KEY_R:
-                        if(GameScene.GameRunning) {
-                            System.out.println("R Pressed");
-
-                        }
-                        break;
                 }
         });
         
