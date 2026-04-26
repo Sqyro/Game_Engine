@@ -23,7 +23,31 @@ public class ImageManager {
     public static int BASIC_SPELL_ANIM;
     public static int FIREBALL_SPELL_ANIM;
 
+    //Texturen für mapObjects
+    public static int GRAVESTONE_CROSS;
+    public static int GRAVESTONE_BIG;
+    public static int GRAVESTONE_SMALL;
+    public static int GRAVESTONE_1;
+    public static int GRAVESTONE_2;
+    public static int GRAVESTONE_3;
+    public static int GRAVESTONE_4;
+    public static int CHRISTMAS_TREE;
+    public static int DECIDUOUS_TREE;
+    public static int CHINESE_ARBORVITAE ;
+    public static int DEAD_TREE;
+    public static int SMALL_ROCK;
+    public static int BIG_ROCK;
+    public static int HUGE_ROCK;
+    public static int DEAD_LYING_TREE;
+    public static int LANTERN;
+
     public static int MAIN_MENU;
+
+    public static int FOREST_SAFEPOINT;
+    public static int GRAVEYARD_SAFEPOINT;
+    public static int SNOW_SAFEPOINT;
+    public static int SWAMP_SAFEPOINT;
+    public static int VULCAN_SAFEPOINT;
 
     public static int GUI_ELEMENTS;
     public static int GAMEFONT;
@@ -54,6 +78,24 @@ public class ImageManager {
             BASIC_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/basic.png");
             FIREBALL_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/fire_ball.png");
 
+            //Texturen für mapObjects
+            GRAVESTONE_CROSS = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_cross.png");
+            GRAVESTONE_SMALL = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_small.png");
+            GRAVESTONE_BIG = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_big.png");
+            GRAVESTONE_1 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_1.png");
+            GRAVESTONE_2 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_2.png");
+            GRAVESTONE_3 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_3.png");
+            GRAVESTONE_4 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_4.png");
+            CHRISTMAS_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/christmas_tree.png");
+            DECIDUOUS_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/deciduous_tree.png");
+            CHINESE_ARBORVITAE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/chinese_arborvitae.png");
+            DEAD_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/dead_tree.png");
+            SMALL_ROCK = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/small_rock.png");
+            BIG_ROCK = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/big_rock.png");
+            HUGE_ROCK = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/huge_rock.png");
+            DEAD_LYING_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/dead_lying_tree.png");
+            LANTERN = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/lantern.png");
+
             System.out.println("Game Textures loaded"); //Nachricht für den Debug
         } catch (Exception e) { //Falls es nicht geht
 
@@ -69,6 +111,12 @@ public class ImageManager {
             //Hier einfach alle Texturen mit .loadTextures reinschreiben die man will. Gibt den Integer für die Texture ID in OpenGL zurück
 
             MAIN_MENU = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/main_menu.png");
+
+            FOREST_SAFEPOINT = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/safepoints/forest.png");
+            GRAVEYARD_SAFEPOINT = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/safepoints/graveyard.png");
+            SNOW_SAFEPOINT = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/safepoints/snow.png");
+            SWAMP_SAFEPOINT = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/safepoints/swamp.png");
+            VULCAN_SAFEPOINT = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/safepoints/vulcan.png");
 
             GUI_ELEMENTS = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/gui_elements.png");
         

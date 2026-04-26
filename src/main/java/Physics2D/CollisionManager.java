@@ -4,7 +4,14 @@ import Enemy.Enemy;
 import Player.Player;
 import Map.Wall;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class CollisionManager {
+
+    public static List<BoxCollider> AllBoxColliders = new ArrayList<>();
+
     public static void Player_Enemy () {
         LivingObject currentEnemy;
         for (int i = 0; i <= Enemy.Enemies.size() - 1; i++) {

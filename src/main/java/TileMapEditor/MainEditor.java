@@ -22,17 +22,10 @@ public class MainEditor {
 
         //buttons
         JPanel buttonPanel = new JPanel();
-        JButton zoomIn = new JButton("+");
-        JButton zoomOut = new JButton("-");
-        JButton print = new JButton("Print Map");
         JButton importmap = new JButton("Import");
         JButton exportmap = new JButton("Export");
         JButton resizeMap = new JButton("Resize Map");
 
-        //panels für die buttons und labels
-        //buttonPanel.add(zoomIn);
-        //buttonPanel.add(zoomOut);
-        //buttonPanel.add(print);
         buttonPanel.add(importmap);
         buttonPanel.add(exportmap);
         buttonPanel.add(new JLabel("Map Size:"));
@@ -90,24 +83,6 @@ public class MainEditor {
         //ActionListener:
         //alles besitzen ein grid.requestFocusInWindow(); ,weil nachdem ich buttons drücke konnte man nicht mehr tiles platzieren
         //sonst an sich sind hier alle buttons was sie machen wenn man sie drückt
-        
-        // Zoom in
-        zoomIn.addActionListener((ActionEvent e) -> {
-            grid.visibleTiles(grid.visibleRows * grid.zoom, grid.visibleColumns * grid.zoom);
-            grid.requestFocusInWindow(); //fenster fokussieren
-        });
-
-        // Zoom out
-        zoomOut.addActionListener((ActionEvent e) -> {
-            grid.visibleTiles(grid.visibleRows / grid.zoom, grid.visibleColumns / grid.zoom);
-            grid.requestFocusInWindow(); //fenster fokussieren
-        });
-
-        //printed die map
-        print.addActionListener((ActionEvent e) -> {
-            grid.printMap();
-            grid.requestFocusInWindow(); //fenster fokussieren
-        });
 
         //imported map
         importmap.addActionListener((ActionEvent e) -> {

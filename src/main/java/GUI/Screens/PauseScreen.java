@@ -7,6 +7,7 @@ import GUI.GUIScreen;
 import Rendering.Frame;
 import Rendering.ImageHandler;
 import Scenes.GameScene;
+import Scenes.SceneManager;
 
 import java.awt.*;
 
@@ -37,8 +38,10 @@ public class PauseScreen extends GUIScreen {
     
     public PauseScreen() {
         GameScene.GameRunning = false;
-        Frame.GameScene.GameInteractableFields.add(new ResumeButton(Frame.ScreenWidth /2 - ResumeButtonWidth/2, Frame.ScreenHeight /2 - ResumeButtonHeight/2 - 67 * Frame.NormalizedPixelHeight * 2, ResumeButtonWidth, ResumeButtonHeight, ResumeButtonText, ResumeButtonTextSpacing, ResumeButtonTextSize, Color.WHITE));
-        Frame.GameScene.GameInteractableFields.add(new SettingsButton(Frame.ScreenWidth /2 - SettingsButtonWidth/2, Frame.ScreenHeight /2 - SettingsButtonHeight/2 - 67 * Frame.NormalizedPixelHeight, SettingsButtonWidth, SettingsButtonHeight, SettingsButtonText, SettingsButtonTextSpacing, SettingsButtonTextSize, Color.WHITE));
-        Frame.GameScene.GameInteractableFields.add(new QuitToMainMenuButton(Frame.ScreenWidth /2 - CloseButtonWidth/2, Frame.ScreenHeight /2 - CloseButtonHeight/2, CloseButtonWidth, CloseButtonHeight, CloseButtonText, CloseButtonTextSpacing, CloseButtonTextSize, Color.WHITE));
+        if (SceneManager.ActiveScene instanceof GameScene) {
+            ((GameScene) SceneManager.ActiveScene).GameInteractableFields.add(new ResumeButton(Frame.ScreenWidth / 2 - ResumeButtonWidth / 2, Frame.ScreenHeight / 2 - ResumeButtonHeight / 2 - 67 * Frame.NormalizedPixelHeight * 2, ResumeButtonWidth, ResumeButtonHeight, ResumeButtonText, ResumeButtonTextSpacing, ResumeButtonTextSize, Color.WHITE));
+            ((GameScene) SceneManager.ActiveScene).GameInteractableFields.add(new SettingsButton(Frame.ScreenWidth / 2 - SettingsButtonWidth / 2, Frame.ScreenHeight / 2 - SettingsButtonHeight / 2 - 67 * Frame.NormalizedPixelHeight, SettingsButtonWidth, SettingsButtonHeight, SettingsButtonText, SettingsButtonTextSpacing, SettingsButtonTextSize, Color.WHITE));
+            ((GameScene) SceneManager.ActiveScene).GameInteractableFields.add(new QuitToMainMenuButton(Frame.ScreenWidth / 2 - CloseButtonWidth / 2, Frame.ScreenHeight / 2 - CloseButtonHeight / 2, CloseButtonWidth, CloseButtonHeight, CloseButtonText, CloseButtonTextSpacing, CloseButtonTextSize, Color.WHITE));
+        }
     }
 }
