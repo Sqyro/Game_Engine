@@ -1,10 +1,10 @@
 package Registry;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DeferredRegister<T extends IRegistrable> {
-    private final Map<String, T> Registered = new HashMap<>();
+    public final Map<String, T> Registered = new LinkedHashMap<>();
 
     public void register(T Object) {
         Registered.put(Object.getRegistryName(), Object);

@@ -105,9 +105,6 @@ public class TileSelector extends JPanel {
 
             g.setColor(Color.BLACK); //farbe des rahmens ist schwarz
             g.drawRect(x, y, tileSize, tileSize); //rahmen um jedes tile
-
-            g.setColor(Color.BLACK); //farbe des rahmens ist schwarz
-            g.drawString("" + i, x + 8, y + 20); //Tile id links oben anzeigen
         }
     }
 }

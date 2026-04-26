@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import Map.MapObject;
+import Map.MapObjects;
+
 public class MapObjectsSelector extends JPanel {
     private Grid grid; //Referenz
     private int objectSize = 64; //größe eines tiles in der objectselection
@@ -34,10 +37,16 @@ public class MapObjectsSelector extends JPanel {
     }
 
     private void loadObjectsTextures() {
+        MapObjects.RegisterMapObjects();
 
-        for (int i = 0; i < objectCount; i++) {
-            String path = "src/main/resources/assets/textures/mapObjects/Object" + i + ".png"; //bildpfad
-            grid.ObjectTextures[i] = new ImageIcon(path).getImage();
+        objectCount = 0;
+        java.util.List<MapObject> objects = new java.util.ArrayList<>(MapObjects.MAP_OBJECTS.Registered.values());
+        for (int i = 0; i < objects.size(); i++) {
+            String name = objects.get(i).getRegistryName();
+            String path = "src/main/resources/assets/textures/mapObjects/" + name.toLowerCase() + ".png";
+            grid.ObjectTextures[objectCount] = new ImageIcon(path).getImage();
+            grid.objectNames[objectCount] = name;
+            objectCount++;
         }
     }
 
@@ -61,9 +70,6 @@ public class MapObjectsSelector extends JPanel {
             
             g.setColor(Color.BLACK); //farbe des rahmens ist schwarz
             g.drawRect(x, y, objectSize, objectSize); //rahmen um jedes object
-
-            g.setColor(Color.BLACK); //farbe des rahmens ist schwarz
-            g.drawString("Obj " + i, x + 10, y + 20);
         }
     }
 }
