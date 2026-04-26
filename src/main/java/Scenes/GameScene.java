@@ -23,12 +23,13 @@ import Sounds.SoundHandler;
 import Spell.Spells;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class GameScene extends Scene {
+public class GameScene extends Scene implements Serializable {
     private final Shader shader;
     private final Shader hudshader;
     private final ImageHandler renderer;
@@ -48,7 +49,9 @@ public class GameScene extends Scene {
 
     public static List<TimedTextEnque> TimedText = new ArrayList<>();
 
-    public GameScene() {
+    public int SceneSaveID;
+
+    public GameScene(int ID) {
         Map = new Map.MapHandler(); //Neues Map Objekt erstellen, gibt gerade nur eine Map, später aber vielleicht mehrere (Räume)
         
         //Erstellt das Shader Objekt für die Globalen Shader, also die, die alle Game Objekte rendern/beeinflussen
@@ -62,6 +65,8 @@ public class GameScene extends Scene {
         renderer = new ImageHandler(); //Ja, ich benutze gerade den Image Handler als Renderer. Ich sollte dafür ne eingene Renderer Klasse machen, hab aber das eben von meinem alten Code geported und war zu faul
     
         playerAnimationManager = new PlayerAnimationManager();
+
+        this.SceneSaveID = ID;
     }
     
     @Override

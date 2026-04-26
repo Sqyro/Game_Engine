@@ -28,10 +28,10 @@ public class Save { //Klasse um Daten zu speichern
         }
     }
 
-    public static void SavePlayerData(Player player, String PATH, int SaveID) {
-        PlayerSaveData PlayerData = createSaveData(player);
+    public static void SavePlayerData(Player player, int SaveID) {
+        PlayerSaveData PlayerData = createPlayerSaveData(player);
 
-        String FullPath = "gamesession/Save" + SaveID + PATH;
+        String FullPath = "gamesession/Save" + SaveID + "/Playerdata/Player.ser";
         File SaveFile = new File(FullPath);
         File ParentDirectory = SaveFile.getParentFile();
         if (!ParentDirectory.exists()) {
@@ -74,7 +74,7 @@ public class Save { //Klasse um Daten zu speichern
         }
     }
 
-    public static PlayerSaveData createSaveData(Player player) {
+    public static PlayerSaveData createPlayerSaveData(Player player) {
         PlayerSaveData PlayerData = new PlayerSaveData();
 
         PlayerData.PosX = player.PosX;

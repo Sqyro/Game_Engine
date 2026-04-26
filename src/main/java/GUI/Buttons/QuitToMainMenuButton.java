@@ -3,6 +3,7 @@ package GUI.Buttons;
 import GUI.GUIButton;
 import Player.Player;
 import Rendering.Frame;
+import Scenes.GameScene;
 import Scenes.SceneManager;
 
 import java.awt.*;
@@ -15,7 +16,9 @@ public class QuitToMainMenuButton extends GUIButton {
     @Override
     public void onButtonClick(long Window) {
         System.out.println("Quit Button Works");
+        if (SceneManager.ActiveScene instanceof GameScene) {
+            Save.Save.SavePlayerData(Player.Player, ((GameScene) SceneManager.ActiveScene).SceneSaveID); //Speichert Daten vom Spieler
+        }
         SceneManager.LoadScene(Frame.MainMenuScene, Window);
-        Save.Save.SavePlayerData(Player.Player, "/Playerdata/Player.ser", 1); //Speichert Daten vom Spieler
     }
 }

@@ -42,6 +42,12 @@ public class ImageManager {
 
     public static int MAIN_MENU;
 
+    public static int FOREST_SAFEPOINT;
+    public static int GRAVEYARD_SAFEPOINT;
+    public static int SNOW_SAFEPOINT;
+    public static int SWAMP_SAFEPOINT;
+    public static int VULCAN_SAFEPOINT;
+
     public static int GUI_ELEMENTS;
     public static int GAMEFONT;
     public static int CURSOR;
@@ -103,6 +109,12 @@ public class ImageManager {
             //Hier einfach alle Texturen mit .loadTextures reinschreiben die man will. Gibt den Integer für die Texture ID in OpenGL zurück
 
             MAIN_MENU = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/main_menu.png");
+
+            FOREST_SAFEPOINT = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/safepoints/forest.png");
+            GRAVEYARD_SAFEPOINT = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/safepoints/graveyard.png");
+            SNOW_SAFEPOINT = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/safepoints/snow.png");
+            SWAMP_SAFEPOINT = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/safepoints/swamp.png");
+            VULCAN_SAFEPOINT = ImageHandler.loadTexture("src/main/resources/assets/textures/backgrounds/safepoints/vulcan.png");
 
             GUI_ELEMENTS = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/gui_elements.png");
         

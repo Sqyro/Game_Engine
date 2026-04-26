@@ -7,6 +7,8 @@ import Player.Player;
 import Rendering.Frame;
 import Rendering.ImageHandler;
 import Rendering.ImageManager;
+import Scenes.GameScene;
+import Scenes.Scene;
 import Scenes.SceneManager;
 
 import java.awt.*;
@@ -16,12 +18,13 @@ public class LoadGameInteractableField extends GUIInteractableField {
     private int FieldID;
 
     private String LoadGameFieldText;
-    private final float LoadGameFieldTextSpacing = 15;
-    private final float LoadGameFieldTextSize = 30;
+    private final static float LoadGameFieldTextSpacing = 15;
+    private final static float LoadGameFieldTextSize = 30;
+    private final static float LoadGameFieldVerticalDistance = 50;
 
     public LoadGameInteractableField(float PosX, float PosY, int TextureID, int FieldID) {
-        super(PosX, PosY, Frame.NormalizedPixelWidth * 800, Frame.NormalizedPixelHeight * 200, TextureID);
-        this.LoadGameFieldText = "Save " + FieldID;
+        super(PosX, PosY + (Frame.NormalizedPixelHeight * 200 + LoadGameFieldVerticalDistance) * (FieldID), Frame.NormalizedPixelWidth * 800, Frame.NormalizedPixelHeight * 200, TextureID);
+        this.LoadGameFieldText = "Save " + (FieldID + 1);
         this.FieldID = FieldID;
     }
 
@@ -33,8 +36,9 @@ public class LoadGameInteractableField extends GUIInteractableField {
 
     @Override
     public void onFieldClick(long Window) {
-        SceneManager.LoadScene(Frame.GameScene, Window);
-        Player LoadedPlayerData = Save.Save.LoadPlayerData(FieldID); //Läd Spieldateinen aus dem Speicher
+        SceneManager.CreateNewScene(new GameScene(FieldID), Window);
+        SceneManager.LoadScene(SceneManager.AllGameScenes.get(FieldID), Window);
+        Player LoadedPlayerData = Save.Save.LoadPlayerData(FieldID); //Läd Spieldateien aus dem Speicher
         if (LoadedPlayerData != null) { //Darf nicht leer sein
             Player.Player = LoadedPlayerData;
         }

@@ -3,6 +3,7 @@ package Scenes;
 import GUI.GUIInteractableField;
 import GUI.GUIManager;
 import GUI.GUIText;
+import GUI.InteractableFields.CreateNewGameInteractableField;
 import GUI.InteractableFields.LoadGameInteractableField;
 import Inputs.InputManager;
 import Rendering.Camera;
@@ -11,6 +12,7 @@ import Rendering.ImageHandler;
 import Rendering.ImageManager;
 import Shader.Shader;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +43,14 @@ public class LoadGameScene extends Scene {
     public void onLoadup(long Window) {
         InputManager.ListenforLoadGameKeys(Window);
 
-        LoadGameInteractableFields.add(new LoadGameInteractableField(Frame.NormalizedPixelWidth * 50, Frame.NormalizedPixelHeight * 50, ImageManager.PLAYER, 1));
+        for (int i = 0; i < SceneManager.MAX_GAME_SCENES; i++) {
+            File SaveFolder = new File("gamesession/Save" + i);
+            if (SaveFolder.exists()) {
+                LoadGameInteractableFields.add(new LoadGameInteractableField(Frame.NormalizedPixelWidth * 50, Frame.NormalizedPixelHeight * 50, ImageManager.FOREST_SAFEPOINT, i));
+            } else {
+                LoadGameInteractableFields.add(new CreateNewGameInteractableField(Frame.NormalizedPixelWidth * 50, Frame.NormalizedPixelHeight * 50, i));
+            }
+        }
     }
 
     @Override

@@ -29,7 +29,6 @@ public class Frame {
     public static MainMenuScene MainMenuScene;
     public static LoadGameScene LoadGameScene;
     public static SettingsScene SettingsScene;
-    public static GameScene GameScene;
     
     public Frame(String Title) { //Constructor, wird in Main gecalled. Von hier aus wird alles andere gestatet
         Start(Title); // Ruft die Start Methode auf, leitet alles zu starten dahin weiter
@@ -79,14 +78,14 @@ public class Frame {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        SceneManager.init();
+
         MainMenuScene = new MainMenuScene();
         SceneManager.CreateNewScene(MainMenuScene, Window);
         LoadGameScene = new LoadGameScene();
         SceneManager.CreateNewScene(LoadGameScene, Window);
         SettingsScene = new SettingsScene();
         SceneManager.CreateNewScene(SettingsScene, Window);
-        GameScene = new GameScene();
-        SceneManager.CreateNewScene(GameScene, Window);
         
         SceneManager.LoadScene(MainMenuScene, Window);
     }
