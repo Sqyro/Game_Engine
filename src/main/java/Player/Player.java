@@ -75,7 +75,7 @@ public class Player extends LivingObject implements Serializable { // Serializat
                             double totalDistEnemy = Math.sqrt((CurrentEnemy.PosX - Player.PosX) * (CurrentEnemy.PosX - Player.PosX) + (CurrentEnemy.PosY - Player.PosY) * (CurrentEnemy.PosY - Player.PosY));
                             double totalDistTarget = Math.sqrt((TargetX - Player.PosX) * (TargetX - Player.PosX) + (TargetY - Player.PosY) * (TargetY - Player.PosY));
 
-                            if (totalDistEnemy < totalDistTarget)  {
+                            if (totalDistEnemy < totalDistTarget) {
                                 TargetX = CurrentEnemy.PosX;
                                 TargetY = CurrentEnemy.PosY;
                             }
@@ -90,12 +90,13 @@ public class Player extends LivingObject implements Serializable { // Serializat
         }
     }
 
-    public static void createPlayer() { // Methode um nen Spieler zu erstellen
+    public static void createPlayer() { // Methode um einen Spieler zu erstellen
         Player = new Player(0, 0, PlayerSizeX, PlayerSizeY, ImageManager.PLAYER, 0, DefaultDirection, new CircleCollider(PLAYER_HITBOX_RADIUS, PLAYER_HITBOX_OFFSET_X, PLAYER_HITBOX_OFFSET_Y), PLAYER_MAX_HP); //Setzt einfach die Spieler Variable oben auf nen neuen Spieler, damit der Spieler benutzt werden kann
         //Erstellt zwei test Items während der Spieler erstellung, damit man das Inventar schon mal ausprobieren kann
         Player.inventory.setItem(0, Items.ITEMS.getRegistry("sword"));
         Player.inventory.setItem(1, Items.ITEMS.getRegistry("sword"));
         Player.inventory.setSpell(0, Spells.SPELLS.getRegistry("basic"));
+        Player.inventory.setSpell(1, Spells.SPELLS.getRegistry("fireball"));
         System.out.println("New Player created");
     }
 
@@ -114,7 +115,7 @@ public class Player extends LivingObject implements Serializable { // Serializat
         }
     }
 
-    //Methode, um ein Item ins Spieler Inventar hinzu zu fügen, z.B von nem Drop
+    //Methode, um ein Item ins Spieler Inventar hinzu zu fügen, z.B von einem Drop
     public void addItem (Item addedItem) {
         for(int i = 0; i < inventory.getInventorySize(); i++) { //Das ganze Inventar durchgehen
             if(inventory.getItem(i) == null) { //Schauen oder der Slot, wo man gerade ist leer ist

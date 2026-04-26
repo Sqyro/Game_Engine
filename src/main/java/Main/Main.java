@@ -10,7 +10,7 @@ public class Main {
         HelloWorld("print");
         
         //Alle anderen Dinge die bei Start passieren sind in Frame
-        Frame frame = new Frame("Sigma Ligma Game"); // Erstellt nen Frame mit Titel. Der Name war Niklas Idee
+        Frame frame = new Frame("Keys To Hell"); // Erstellt einen Frame mit Titel. Der Name war Niklas Idee
     }
     
     public static void HelloWorld(String print) {

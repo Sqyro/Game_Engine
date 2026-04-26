@@ -94,7 +94,6 @@ public class InputManager {
                                 ((GameScene) SceneManager.ActiveScene).showTextForSeconds(randomText, 2); //Packt das Text Element in den To Be Displayed Text
                             }
                         }
-                        break;
                 }
         });
         

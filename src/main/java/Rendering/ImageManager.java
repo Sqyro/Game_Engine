@@ -22,6 +22,7 @@ public class ImageManager {
     public static int SWORD;
 
     public static int BASIC_SPELL_ANIM;
+    public static int FIREBALL_SPELL_ANIM;
 
     //Texturen für mapObjects
     public static int GRAVESTONE_CROSS;
@@ -78,6 +79,7 @@ public class ImageManager {
             SWORD = ImageHandler.loadTexture("src/main/resources/assets/textures/item/sword.png");
 
             BASIC_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/basic.png");
+            FIREBALL_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/fire_ball.png");
 
             //Texturen für mapObjects
             GRAVESTONE_CROSS = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_cross.png");
