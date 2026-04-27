@@ -8,10 +8,12 @@ public class SpellAnimationManager {
 
     public AnimationObject basicSpellAnimation;
     public AnimationObject fireballSpellAnimation;
+    public AnimationObject lightningballSpellAnimation;
 
     public void createSpellAnimations() {
         basicSpellAnimation = new AnimationObject(ImageManager.BASIC_SPELL_ANIM, 1, 1, 0, 1, 0.2f);
         fireballSpellAnimation = new AnimationObject(ImageManager.FIREBALL_SPELL_ANIM, 1, 4, 0, 4, 0.2f);
+        lightningballSpellAnimation = new AnimationObject(ImageManager.LIGHTNINGBALL_SPELL_ANIM, 1, 10, 0, 10,  0.2f);
         currentAnimation = basicSpellAnimation;
     }
 

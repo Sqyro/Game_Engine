@@ -11,15 +11,16 @@ import Spell.Spell;
 import Spell.Projectile;
 import Spell.SpellAnimationManager;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LightningballSpell extends Spell {
     public static float LIGHTNING_SPELL_DAMAGE = 100;
     public static float LIGHTNING_SPELL_SPLASH_DAMAGE = 50;
-    public static float LIGHTNING_SPELL_SPEED = 1200;
+    public static float LIGHTNING_SPELL_SPEED = 1100;
     public static float LIGHTNING_SPELL_MAX_TRAVEL_DISTANCE = 600;
-    public static float LIGHTNING_SPELL_SPLASHDAMAGE_RADIUS = 30;
+    public static float LIGHTNING_SPELL_SPLASHDAMAGE_RADIUS = 50;
 
     public transient List<Projectile> LivingProjectiles;
 
@@ -42,10 +43,10 @@ public class LightningballSpell extends Spell {
     @Override
     public void onCast(float TargetPosX, float TargetPosY) {
         spellAnimationManager.createSpellAnimations();
-        spellAnimationManager.currentAnimation = spellAnimationManager.fireballSpellAnimation;
+        spellAnimationManager.currentAnimation = spellAnimationManager.lightningballSpellAnimation;
         float[] ShootDirection = {TargetPosX - Player.Player.PosX, TargetPosY - Player.Player.PosY};
         LivingProjectiles.add(new Projectile(Player.Player.PosX, Player.Player.PosY, SpellCastWidth, SpellCastHeight, CastTextureID, LIGHTNING_SPELL_SPEED, ShootDirection, new CircleCollider(SpellCastWidth/2, 0, 0)));
-        System.out.println("Fireball Spell casted");
+        System.out.println("Lightningball Spell casted");
     }
 
     @Override
@@ -56,11 +57,13 @@ public class LightningballSpell extends Spell {
             Projectile ThisProjectile = LivingProjectiles.get(i);
             VelocityHandler.calculatePosition(ThisProjectile, deltaTime);
 
+            Color LightColor = Color.YELLOW;
+
             LIGHTNING_SPELL_POINTLIGHT.PosX = ThisProjectile.PosX;
             LIGHTNING_SPELL_POINTLIGHT.PosY = ThisProjectile.PosY;
-            LIGHTNING_SPELL_POINTLIGHT.Red = 1f;
-            LIGHTNING_SPELL_POINTLIGHT.Green = 0.5f;
-            LIGHTNING_SPELL_POINTLIGHT.Blue = 0.5f;
+            LIGHTNING_SPELL_POINTLIGHT.Red = LightColor.getRed();
+            LIGHTNING_SPELL_POINTLIGHT.Green = LightColor.getGreen();
+            LIGHTNING_SPELL_POINTLIGHT.Blue = LightColor.getBlue();
             LIGHTNING_SPELL_POINTLIGHT.Range = LIGHTNING_LIGHT_RANGE;
 
 

@@ -17,7 +17,7 @@ import java.util.List;
 public class FireballSpell extends Spell {
     public static float FIREBALL_SPELL_DAMAGE = 100;
     public static float FIREBALL_SPELL_SPLASH_DAMAGE = 50;
-    public static float FIREBALL_SPELL_SPEED = 1200;
+    public static float FIREBALL_SPELL_SPEED = 1300;
     public static float FIREBALL_SPELL_MAX_TRAVEL_DISTANCE = 600;
     public static float FIREBALL_SPELL_SPLASHDAMAGE_RADIUS = 30;
 

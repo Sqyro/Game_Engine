@@ -97,6 +97,7 @@ public class Player extends LivingObject implements Serializable { // Serializat
         Player.inventory.setItem(1, Items.ITEMS.getRegistry("sword"));
         Player.inventory.setSpell(0, Spells.SPELLS.getRegistry("basic"));
         Player.inventory.setSpell(1, Spells.SPELLS.getRegistry("fireball"));
+        Player.inventory.setSpell(2, Spells.SPELLS.getRegistry("lightningball"));
         System.out.println("New Player created");
     }
 
