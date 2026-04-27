@@ -119,6 +119,14 @@ public class GameScene extends Scene implements Serializable {
 
         //Macht eine Lokale Variable für den Spieler
         Player player = Player.Player;
+
+        //Der Background ist beeinflusst von dem Global light (Aber keinen Point Lights...)
+        float GlobalLight = LightManager.getGlobalLight();
+        glClearColor(GlobalLight, GlobalLight, GlobalLight, GlobalLight);
+        glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Weiß setzen
+
+        //Benutzt die drawMap Methode aus dem Map Handler, die die einzelnen Tiles zeichnet
+        Map.drawMap(shader, renderer, Frame.ScreenWidth, Frame.ScreenHeight);
                 
         //Rechen Updates
         if(GameRunning) {
@@ -135,12 +143,7 @@ public class GameScene extends Scene implements Serializable {
             //CollisionManager.Player_Wall();
             //CollisionManager.Enemy_Wall();
         }
-        
-        //Der Background ist beeinflusst von dem Global light (Aber keinen Point Lights...)
-        float GlobalLight = LightManager.getGlobalLight();
-        glClearColor(GlobalLight, GlobalLight, GlobalLight, GlobalLight);
-        glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Weiß setzen
-        
+
         //Animationen Updaten
         if(GameRunning) {
             playerAnimationManager.updatePlayerAnimation(deltaTime);
@@ -148,9 +151,6 @@ public class GameScene extends Scene implements Serializable {
                 CurrentEnemy.enemyAnimationManager.updateEnemyAnimation(deltaTime);
             }
         }
-        
-        //Benutzt die drawMap Methode aus dem Map Handler, die die einzelnen Tiles zeichnet
-        Map.drawMap(shader, renderer, Frame.ScreenWidth, Frame.ScreenHeight);
         
         //Findet die Randpunkte des Bildschirms
         int ScreenLeft   = (int) -Camera.PosX;
