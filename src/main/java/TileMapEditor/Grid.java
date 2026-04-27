@@ -443,7 +443,7 @@ public class Grid extends JPanel {
 
                 int tile = mapTiles[worldRow][worldCol]; //tile id an einer bestimmten position  
 
-                if (tile < tileTextures.length && tileTextures[tile] != null) { //prüft die tile id (muss ein tile sein, das tile muss im array liegen und es muss ein bild haben)
+                if (tile >= 0 && tile < tileTextures.length && tileTextures[tile] != null) { //prüft die tile id (muss ein tile sein, das tile muss im array liegen und es muss ein bild haben)
                     g.drawImage(tileTextures[tile], x, y, tileSizeGrid, tileSizeGrid, null); //tile bild zeichnen
                 } else {
                     g.setColor(Color.GRAY); // wenn kein Tile da ist, graues Feld
@@ -712,7 +712,6 @@ public class Grid extends JPanel {
             int worldRow = cameraRows + mrow; //hier berücksichtige ich die Kamera, weil sie nicht immer 0,0 ist und berechne die reihe auf der man geklickt hat
 
             if (worldCol >= 0 && worldCol < mapColumns && worldRow >= 0 && worldRow < mapRows) { //prüfung ob die position valide ist
-                if (!objectName.equals(mapObjects[worldRow][worldCol])) { //setzt das object an diese stelle
                     mapObjects[worldRow][worldCol] = objectName;
 
                     int paintX = mcol * tileSizeGridObject;
@@ -726,7 +725,7 @@ public class Grid extends JPanel {
                         updateMinimap();
                         repaint(getWidth() - 467, 67, 400, 400);
                         timerMiniMap = System.currentTimeMillis();
-                    }
+
                 }
             }
         }

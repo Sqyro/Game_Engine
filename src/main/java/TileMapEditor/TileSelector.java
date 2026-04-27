@@ -17,7 +17,7 @@ public class TileSelector extends JPanel {
 
     public TileSelector(Grid grid) {
         this.grid = grid; //speichert das grid
-        grid.tileTextures = new Image[1000];
+        Grid.tileTextures = new Image[1000];
         loadTiles();
         this.setPreferredSize(new Dimension(530, 4000));
 
@@ -67,7 +67,7 @@ public class TileSelector extends JPanel {
                                 int x = c * tileSizeloadTiles;
                                 int y = r * tileSizeloadTiles;
 
-                                grid.tileTextures[counter] = sheet.getSubimage(x, y, tileSizeloadTiles, tileSizeloadTiles);
+                                Grid.tileTextures[counter] = sheet.getSubimage(x, y, tileSizeloadTiles, tileSizeloadTiles);
                                 counter++;
                             }
                         }

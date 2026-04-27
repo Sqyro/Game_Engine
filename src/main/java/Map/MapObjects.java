@@ -25,6 +25,13 @@ public class MapObjects {
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.HUGE_ROCK, new CircleCollider(20, 0, 0), "Huge_Rock"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.DEAD_LYING_TREE, new CircleCollider(20, 0, 0), "Dead_Lying_Tree"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.LANTERN, new CircleCollider(20, 0, 0), "Lantern"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.FENCE_DOOR_OPEN, new CircleCollider(20, 0, 0), "Fence_Door_Open"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.FENCE_DOOR_CLOSED, new CircleCollider(20, 0, 0), "Fence_Door_Closed"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.TOP_LEFT_FENCE, new CircleCollider(20, 0, 0), "Top_Left_Fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.TOP_RIGHT_FENCE, new CircleCollider(20, 0, 0), "Top_Right_Fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.BOTTOM_RIGHT_FENCE, new CircleCollider(20, 0, 0), "Bottom_Right_Fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.BOTTOM_LEFT_FENCE, new CircleCollider(20, 0, 0), "Bottom_Left_Fence"));
+
         System.out.println("Map Objects registered");
     }
 }
