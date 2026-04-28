@@ -42,12 +42,17 @@ public class ImageManager {
     public static int HUGE_ROCK;
     public static int DEAD_LYING_TREE;
     public static int LANTERN;
-    public static int FENCE_DOOR_OPEN;
-    public static int FENCE_DOOR_CLOSED;
+    public static int OPEN_DOOR_FENCE;
+    public static int CLOSED_DOOR_FENCE;
     public static int TOP_LEFT_FENCE;
     public static int TOP_RIGHT_FENCE;
     public static int BOTTOM_RIGHT_FENCE;
     public static int BOTTOM_LEFT_FENCE;
+    public static int LEFT_SINGLE_FENCE;
+    public static int RIGHT_SINGLE_FENCE;
+    public static int LEFT_SIDE_FENCE;
+    public static int RIGHT_SIDE_FENCE;
+    public static int DOUBLE_FENCE;
 
     public static int MAIN_MENU;
 
@@ -106,22 +111,17 @@ public class ImageManager {
             HUGE_ROCK = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/huge_rock.png");
             DEAD_LYING_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/dead_lying_tree.png");
             LANTERN = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/lantern.png");
-            FENCE_DOOR_OPEN = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/fence_door_open.png");
-            FENCE_DOOR_CLOSED = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/fence_door_closed.png");
+            OPEN_DOOR_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/open_door_fence.png");
+            CLOSED_DOOR_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/closed_door_fence.png");
             TOP_LEFT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/top_left_fence.png");
             TOP_RIGHT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/top_right_fence.png");
             BOTTOM_RIGHT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/bottom_right_fence.png");
             BOTTOM_LEFT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/bottom_left_fence.png");
-            /*
-            MID_LEFT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/bottom_left_fence.png");
-
-            MID_RIGHT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/bottom_left_fence.png");
-            SIDE_LEFT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/bottom_left_fence.png");
-            SIDE_RIGHT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/bottom_left_fence.png");
-            MIDDLE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/bottom_left_fence.png");
-
-             */
-
+            LEFT_SINGLE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/left_single_fence.png");
+            RIGHT_SINGLE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/right_single_fence.png");
+            LEFT_SIDE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/left_side_fence.png");
+            RIGHT_SIDE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/right_side_fence.png");
+            DOUBLE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/double_fence.png");
 
             System.out.println("Game Textures loaded"); //Nachricht für den Debug
         } catch (Exception e) { //Falls es nicht geht

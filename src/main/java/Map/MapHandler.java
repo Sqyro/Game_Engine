@@ -8,7 +8,7 @@ import Rendering.ImageManager;
 public class MapHandler {
     
     //Variabel Deklaration
-    public static final float TileSize = 48;
+    public static final float TileSize = 56;
     
     //Leerer Contructor for the love of the Game
     public MapHandler() {

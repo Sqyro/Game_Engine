@@ -189,7 +189,6 @@ public class Grid extends JPanel {
                 }
                 if (c == KeyEvent.VK_R) {
                     randomization = !randomization;
-                    System.out.println(randomization);
                 }
                 repaint();
             }

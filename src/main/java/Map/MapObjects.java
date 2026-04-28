@@ -25,12 +25,17 @@ public class MapObjects {
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.HUGE_ROCK, new CircleCollider(20, 0, 0), "Huge_Rock"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.DEAD_LYING_TREE, new CircleCollider(20, 0, 0), "Dead_Lying_Tree"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.LANTERN, new CircleCollider(20, 0, 0), "Lantern"));
-        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.FENCE_DOOR_OPEN, new CircleCollider(20, 0, 0), "Fence_Door_Open"));
-        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.FENCE_DOOR_CLOSED, new CircleCollider(20, 0, 0), "Fence_Door_Closed"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.OPEN_DOOR_FENCE, new CircleCollider(20, 0, 0), "Open_Door_Fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.CLOSED_DOOR_FENCE, new CircleCollider(20, 0, 0), "Closed_Door_Fence"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.TOP_LEFT_FENCE, new CircleCollider(20, 0, 0), "Top_Left_Fence"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.TOP_RIGHT_FENCE, new CircleCollider(20, 0, 0), "Top_Right_Fence"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.BOTTOM_RIGHT_FENCE, new CircleCollider(20, 0, 0), "Bottom_Right_Fence"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.BOTTOM_LEFT_FENCE, new CircleCollider(20, 0, 0), "Bottom_Left_Fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.LEFT_SINGLE_FENCE, new CircleCollider(20, 0, 0), "Left_Single_Fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.RIGHT_SINGLE_FENCE, new CircleCollider(20, 0, 0), "Right_Single_Fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.LEFT_SIDE_FENCE, new CircleCollider(20, 0, 0), "Left_Side_Fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.RIGHT_SIDE_FENCE, new CircleCollider(20, 0, 0), "Right_Side_Fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.DOUBLE_FENCE, new CircleCollider(20, 0, 0), "Double_Fence"));
 
         System.out.println("Map Objects registered");
     }
