@@ -43,7 +43,7 @@ public class MapObjectsSelector extends JPanel {
         java.util.List<MapObject> objects = new java.util.ArrayList<>(MapObjects.MAP_OBJECTS.Registered.values());
         for (int i = 0; i < objects.size(); i++) {
             String name = objects.get(i).getRegistryName();
-            String path = "src/main/resources/assets/textures/mapObjects/" + name.toLowerCase() + ".png";
+            String path = "src/main/resources/assets/textures/mapObjects/" + name + ".png";
             grid.ObjectTextures[objectCount] = new ImageIcon(path).getImage();
             grid.objectNames[objectCount] = name;
             objectCount++;

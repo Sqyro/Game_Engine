@@ -1,9 +1,14 @@
 package Rendering;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.ArrayList;
+import java.io.File;
+
 
 public class ImageManager {
+
     //Variablen Deklarieren
     public static int PLAYER;
     public static int PLAYER_SPECIAL;
@@ -12,7 +17,8 @@ public class ImageManager {
     public static int ENEMIES;
     
     public static List<Integer> TileTextures = new ArrayList<>();
-    public static int TileAmount = 3;
+    public static List<float[]> TileData = new ArrayList<>();
+    public static int TileAmount;
     
     public static int BAR;
     public static int TESTBAR;
@@ -77,13 +83,8 @@ public class ImageManager {
 
             ENEMIES = ImageHandler.loadTexture("src/main/resources/assets/textures/enemy/enemies.png");
 
-            for(int i = 0; i < TileAmount; i++) {
-                int TempTileTextureID = ImageHandler.loadTexture("src/main/resources/assets/textures/tiles/sheet" + i + ".png");
-                TileTextures.add(TempTileTextureID);
-            }
-        
             BAR = ImageHandler.loadTexture("src/main/resources/assets/textures/hud/bar/bar.png");
-        
+
             TESTBAR = ImageHandler.loadTexture("src/main/resources/assets/textures/hud/bar/TestBar/TestBar.png");
         
             INVENTORY = ImageHandler.loadTexture("src/main/resources/assets/textures/gui/screens/inventory.png");
@@ -122,6 +123,61 @@ public class ImageManager {
             LEFT_SIDE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/left_side_fence.png");
             RIGHT_SIDE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/right_side_fence.png");
             DOUBLE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/double_fence.png");
+
+            //für alle tiles (nils kann meine eier lecken (ohne grund musste ich das machen obowhl ich es schon hatte))
+            int[][] tilesheet = {
+                    {9, 13, 17, 10, 1},
+                    {20, 21, 22, 14, 2},
+                    {16, 24, 23, 18, 3},
+                    {12, 19, 15, 11, 4},
+                    {5, 6, 7, 8, 0}
+            };
+
+            int counter = 0;
+            int i = 0;
+
+            while (true) {
+                String path = "src/main/resources/assets/textures/tiles/sheet" + i + ".png";
+                File file = new File(path);
+                if (!file.exists()) {
+                    break;
+                }
+                try {
+                    BufferedImage sheet = ImageIO.read(file);
+                    int textureID = ImageHandler.loadTexture(path);
+
+                    float tileSize = 16;
+                    float sheetWidth = sheet.getWidth();
+                    float sheetHeight = sheet.getHeight();
+
+                    for (int t = 1; t <= 24; t++) {
+                        for (int r = 0; r < 5; r++) {
+                            for (int c = 0; c < 5; c++) {
+
+                                if (tilesheet[r][c] == t) {
+
+                                    int x = c * 16;
+                                    int y = r * 16;
+
+                                    float textureX = x / sheetWidth;
+                                    float textureY = y / sheetHeight;
+                                    float textureWidth = tileSize / sheetWidth;
+                                    float textureHeight = tileSize / sheetHeight;
+
+                                    ImageManager.TileTextures.add(textureID);
+                                    ImageManager.TileData.add(new float[]{textureX, textureY, textureWidth, textureHeight});
+
+                                    counter++;
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    System.err.println("ich hasse mein leben: " + path);
+                }
+                i++;
+            }
+            ImageManager.TileAmount = counter;
 
             System.out.println("Game Textures loaded"); //Nachricht für den Debug
         } catch (Exception e) { //Falls es nicht geht
