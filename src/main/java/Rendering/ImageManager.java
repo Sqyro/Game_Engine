@@ -48,8 +48,10 @@ public class ImageManager {
     public static int HUGE_ROCK;
     public static int DEAD_LYING_TREE;
     public static int LANTERN;
-    public static int OPEN_DOOR_FENCE;
-    public static int CLOSED_DOOR_FENCE;
+    public static int LEFT_CLOSED_FENCE;
+    public static int LEFT_OPEN_FENCE;
+    public static int RIGHT_CLOSED_FENCE;
+    public static int RIGHT_OPEN_FENCE;
     public static int TOP_LEFT_FENCE;
     public static int TOP_RIGHT_FENCE;
     public static int BOTTOM_RIGHT_FENCE;
@@ -94,35 +96,6 @@ public class ImageManager {
             BASIC_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/basic.png");
             FIREBALL_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/fire_ball.png");
             LIGHTNINGBALL_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/lightning_ball.png");
-
-            //Texturen für mapObjects
-            GRAVESTONE_CROSS = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_cross.png");
-            GRAVESTONE_SMALL = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_small.png");
-            GRAVESTONE_BIG = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_big.png");
-            GRAVESTONE_1 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_1.png");
-            GRAVESTONE_2 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_2.png");
-            GRAVESTONE_3 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_3.png");
-            GRAVESTONE_4 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_4.png");
-            CHRISTMAS_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/christmas_tree.png");
-            DECIDUOUS_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/deciduous_tree.png");
-            CHINESE_ARBORVITAE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/chinese_arborvitae.png");
-            DEAD_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/dead_tree.png");
-            SMALL_ROCK = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/small_rock.png");
-            BIG_ROCK = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/big_rock.png");
-            HUGE_ROCK = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/huge_rock.png");
-            DEAD_LYING_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/dead_lying_tree.png");
-            LANTERN = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/lantern.png");
-            OPEN_DOOR_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/open_door_fence.png");
-            CLOSED_DOOR_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/closed_door_fence.png");
-            TOP_LEFT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/top_left_fence.png");
-            TOP_RIGHT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/top_right_fence.png");
-            BOTTOM_RIGHT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/bottom_right_fence.png");
-            BOTTOM_LEFT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/bottom_left_fence.png");
-            LEFT_SINGLE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/left_single_fence.png");
-            RIGHT_SINGLE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/right_single_fence.png");
-            LEFT_SIDE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/left_side_fence.png");
-            RIGHT_SIDE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/right_side_fence.png");
-            DOUBLE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/double_fence.png");
 
             //für alle tiles (nils kann meine eier lecken (ohne grund musste ich das machen obowhl ich es schon hatte))
             int[][] tilesheet = {
@@ -178,6 +151,39 @@ public class ImageManager {
                 i++;
             }
             ImageManager.TileAmount = counter;
+
+            //Texturen für mapObjects
+            GRAVESTONE_CROSS = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_cross.png");
+            GRAVESTONE_SMALL = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_small.png");
+            GRAVESTONE_BIG = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_big.png");
+            GRAVESTONE_1 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_1.png");
+            GRAVESTONE_2 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_2.png");
+            GRAVESTONE_3 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_3.png");
+            GRAVESTONE_4 = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/gravestone_4.png");
+            CHRISTMAS_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/christmas_tree.png");
+            DECIDUOUS_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/deciduous_tree.png");
+            CHINESE_ARBORVITAE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/chinese_arborvitae.png");
+            DEAD_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/dead_tree.png");
+            SMALL_ROCK = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/small_rock.png");
+            BIG_ROCK = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/big_rock.png");
+            HUGE_ROCK = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/huge_rock.png");
+            DEAD_LYING_TREE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/dead_lying_tree.png");
+            LANTERN = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/lantern.png");
+            LEFT_CLOSED_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/left_closed_fence.png");
+            LEFT_OPEN_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/left_open_fence.png");
+            RIGHT_CLOSED_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/right_closed_fence.png");
+            RIGHT_OPEN_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/right_open_fence.png");
+            TOP_LEFT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/top_left_fence.png");
+            TOP_RIGHT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/top_right_fence.png");
+            BOTTOM_RIGHT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/bottom_right_fence.png");
+            BOTTOM_LEFT_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/bottom_left_fence.png");
+            LEFT_SINGLE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/left_single_fence.png");
+            RIGHT_SINGLE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/right_single_fence.png");
+            LEFT_SIDE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/left_side_fence.png");
+            RIGHT_SIDE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/right_side_fence.png");
+            DOUBLE_FENCE = ImageHandler.loadTexture("src/main/resources/assets/textures/mapObjects/double_fence.png");
+
+
 
             System.out.println("Game Textures loaded"); //Nachricht für den Debug
         } catch (Exception e) { //Falls es nicht geht

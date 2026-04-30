@@ -126,7 +126,7 @@ public class GameScene extends Scene implements Serializable {
         glClear(GL_COLOR_BUFFER_BIT); //Hintergrund auf Weiß setzen
 
         //Benutzt die drawMap Methode aus dem Map Handler, die die einzelnen Tiles zeichnet
-        Map.drawMap(shader, renderer, Frame.ScreenWidth, Frame.ScreenHeight);
+        Map.drawTiles(shader, renderer, Frame.ScreenWidth, Frame.ScreenHeight);
                 
         //Rechen Updates
         if(GameRunning) {
@@ -241,6 +241,8 @@ public class GameScene extends Scene implements Serializable {
 
         //Flushed den Spieler später, damit er über allem drüber liegt. Er wird gashaded mit dem Global Shader und gezeichnet
         renderer.flush(shader, Frame.ScreenWidth, Frame.ScreenHeight);
+
+        Map.drawObjects(shader, renderer, Frame.ScreenWidth, Frame.ScreenHeight);
 
         //Render HUD
         

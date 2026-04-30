@@ -1,6 +1,7 @@
 package Registry;
 
 import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class DeferredRegister<T extends IRegistrable> {

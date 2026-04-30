@@ -25,8 +25,10 @@ public class MapObjects {
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.HUGE_ROCK, new CircleCollider(20, 0, 0), "huge_rock"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.DEAD_LYING_TREE, new CircleCollider(20, 0, 0), "dead_lying_tree"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.LANTERN, new CircleCollider(20, 0, 0), "lantern"));
-        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.OPEN_DOOR_FENCE, new CircleCollider(20, 0, 0), "open_door_fence"));
-        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.CLOSED_DOOR_FENCE, new CircleCollider(20, 0, 0), "closed_door_fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.LEFT_CLOSED_FENCE, new CircleCollider(20, 0, 0), "left_closed_fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.LEFT_OPEN_FENCE, new CircleCollider(20, 0, 0), "left_open_fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.RIGHT_CLOSED_FENCE, new CircleCollider(20, 0, 0), "right_closed_fence"));
+        MAP_OBJECTS.register(new Wall(32, 32, ImageManager.RIGHT_OPEN_FENCE, new CircleCollider(20, 0, 0), "right_open_fence"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.TOP_LEFT_FENCE, new CircleCollider(20, 0, 0), "top_left_fence"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.TOP_RIGHT_FENCE, new CircleCollider(20, 0, 0), "top_right_fence"));
         MAP_OBJECTS.register(new Wall(32, 32, ImageManager.BOTTOM_RIGHT_FENCE, new CircleCollider(20, 0, 0), "bottom_right_fence"));
