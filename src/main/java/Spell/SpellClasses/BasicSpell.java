@@ -25,6 +25,7 @@ public class BasicSpell extends Spell {
 
     public BasicSpell(int IconTextureID, float SpellIconWidth, float SpellIconHeight, int CastTextureID, float SpellCastWidth, float SpellCastHeight, String RegistryName, float SpellCooldownInSeconds) {
         super(IconTextureID, SpellIconWidth, SpellIconHeight, CastTextureID, SpellCastWidth, SpellCastHeight, RegistryName, SpellCooldownInSeconds);
+        this.MAX_TRAVEL_DIST = BASIC_SPELL_MAX_TRAVEL_DISTANCE;
         init();
     }
 

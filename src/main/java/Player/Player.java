@@ -80,7 +80,7 @@ public class Player extends LivingObject implements Serializable { // Serializat
                                 TargetY = CurrentEnemy.PosY;
                             }
                         }
-                        if (TargetX != 0 && TargetY != 0) {
+                        if (TargetX != 0 && TargetY != 0 && Math.sqrt((TargetX - Player.PosX) * (TargetX - Player.PosX) + (TargetY - Player.PosY) * (TargetY - Player.PosY)) <= CurrentSpell.MAX_TRAVEL_DIST) {
                             CurrentSpell.onCast(TargetX, TargetY);
                         }
                     }

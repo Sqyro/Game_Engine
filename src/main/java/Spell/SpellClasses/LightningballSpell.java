@@ -31,6 +31,7 @@ public class LightningballSpell extends Spell {
 
     public LightningballSpell(int IconTextureID, float SpellIconWidth, float SpellIconHeight, int CastTextureID, float SpellCastWidth, float SpellCastHeight, String RegistryName, float SpellCooldownInSeconds) {
         super(IconTextureID, SpellIconWidth, SpellIconHeight, CastTextureID, SpellCastWidth, SpellCastHeight, RegistryName, SpellCooldownInSeconds);
+        this.MAX_TRAVEL_DIST = LIGHTNINGBALL_SPELL_MAX_TRAVEL_DISTANCE;
         init();
     }
 

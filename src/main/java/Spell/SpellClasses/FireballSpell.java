@@ -30,6 +30,7 @@ public class FireballSpell extends Spell {
 
     public FireballSpell(int IconTextureID, float SpellIconWidth, float SpellIconHeight, int CastTextureID, float SpellCastWidth, float SpellCastHeight, String RegistryName, float SpellCooldownInSeconds) {
         super(IconTextureID, SpellIconWidth, SpellIconHeight, CastTextureID, SpellCastWidth, SpellCastHeight, RegistryName, SpellCooldownInSeconds);
+        this.MAX_TRAVEL_DIST = FIREBALL_SPELL_MAX_TRAVEL_DISTANCE;
         init();
     }
 

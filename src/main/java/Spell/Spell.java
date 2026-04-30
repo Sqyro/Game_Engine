@@ -21,6 +21,8 @@ public abstract class Spell implements IRegistrable, Serializable {
     public transient float passedTime;
     public float SpellCooldownInSeconds;
 
+    public float MAX_TRAVEL_DIST;
+
     public Spell(int IconTextureID, float SpellIconWidth, float SpellIconHeight, int CastTextureID, float SpellCastWidth, float SpellCastHeight, String RegistryName, float SpellCooldownInSeconds) {
         this.IconTextureID = IconTextureID;
         this.SpellIconWidth = SpellIconWidth;
