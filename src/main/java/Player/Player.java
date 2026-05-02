@@ -1,6 +1,7 @@
 package Player;
 
 import Enemy.Enemy;
+import GameLang.Float.Vector2F;
 import Inputs.Actions.WalkAction;
 import Physics2D.LivingObject;
 import Physics2D.VelocityHandler;
@@ -49,45 +50,53 @@ public class Player extends LivingObject implements Serializable { // Serializat
     }
 
     public void PlayerTick(float deltaTime, ImageHandler renderer) {
-        if (isAlive) {
-            WalkAction.updatePlayerDirection();
-            if (isDodging) {
-                doADodgeRoll(deltaTime);
+        if (!isAlive) {
+            return;
+        }
+        WalkAction.updatePlayerDirection();
+        if (isDodging) {
+            doADodgeRoll(deltaTime);
+        }
+        VelocityHandler.calculatePosition(Player, deltaTime);
+        //System.out.println(HP);
+        Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0);
+        BarElement bar = (BarElement) Hud;
+        if(bar.BarFilledPercentage * bar.HudLength > 0 + bar.BarOffsetX) {
+            bar.setBarFilledPercentage(HP/Max_HP);
+        }
+        if (HP <= 0) {
+            die();
+        }
+        for (int i = 0; i < inventory.getSpellSize(); i++) {
+            Spell CurrentSpell = inventory.getSpell(i);
+            if (CurrentSpell == null) {
+                continue;
             }
-            VelocityHandler.calculatePosition(Player, deltaTime);
-            //System.out.println(HP);
-            Rendering.HudElement Hud = Rendering.HudHandler.HudElements.get(0);
-            BarElement bar = (BarElement) Hud;
-            if(bar.BarFilledPercentage * bar.HudLength > 0 + bar.BarOffsetX) {
-                bar.setBarFilledPercentage(HP/Max_HP);
-            }
-            if (HP <= 0) {
-                die();
-            }
-            for (int i = 0; i < inventory.getSpellSize(); i++) {
-                Spell CurrentSpell = inventory.getSpell(i);
-                if (CurrentSpell != null) {
-                    if (CurrentSpell.passedTime >= CurrentSpell.SpellCooldownInSeconds) {
-                        CurrentSpell.passedTime = 0;
-                        float TargetX = 0;
-                        float TargetY = 0;
-                        for (Enemy CurrentEnemy : Enemy.Enemies) {
-                            double totalDistEnemy = Math.sqrt((CurrentEnemy.PosX - Player.PosX) * (CurrentEnemy.PosX - Player.PosX) + (CurrentEnemy.PosY - Player.PosY) * (CurrentEnemy.PosY - Player.PosY));
-                            double totalDistTarget = Math.sqrt((TargetX - Player.PosX) * (TargetX - Player.PosX) + (TargetY - Player.PosY) * (TargetY - Player.PosY));
-
-                            if (totalDistEnemy < totalDistTarget) {
-                                TargetX = CurrentEnemy.PosX;
-                                TargetY = CurrentEnemy.PosY;
-                            }
-                        }
-                        if (TargetX != 0 && TargetY != 0 && Math.sqrt((TargetX - Player.PosX) * (TargetX - Player.PosX) + (TargetY - Player.PosY) * (TargetY - Player.PosY)) <= CurrentSpell.MAX_TRAVEL_DIST) {
-                            CurrentSpell.onCast(TargetX, TargetY);
-                        }
-                    }
-                    CurrentSpell.onSpellTick(deltaTime, renderer);
+            if (CurrentSpell.passedTime >= CurrentSpell.SpellCooldownInSeconds) {
+                CurrentSpell.passedTime = 0;
+                Vector2F TargetPos = findEnemyTarget();
+                if (TargetPos.X != 0 && TargetPos.Y != 0) {
+                    CurrentSpell.onCast(TargetPos.X, TargetPos.Y);
                 }
             }
+            CurrentSpell.onSpellTick(deltaTime, renderer);
         }
+    }
+
+    private Vector2F findEnemyTarget() {
+        Vector2F TargetPositionVector = new Vector2F(0, 0);
+
+        for (Enemy CurrentEnemy : Enemy.Enemies) {
+            double totalDistEnemy = Math.sqrt((CurrentEnemy.PosX - Player.PosX) * (CurrentEnemy.PosX - Player.PosX) + (CurrentEnemy.PosY - Player.PosY) * (CurrentEnemy.PosY - Player.PosY));
+            double totalDistTarget = Math.sqrt((TargetPositionVector.X - Player.PosX) * (TargetPositionVector.X - Player.PosX) + (TargetPositionVector.Y - Player.PosY) * (TargetPositionVector.Y - Player.PosY));
+
+            if (totalDistEnemy < totalDistTarget) {
+                TargetPositionVector.X = CurrentEnemy.PosX;
+                TargetPositionVector.Y = CurrentEnemy.PosY;
+            }
+        }
+
+        return TargetPositionVector;
     }
 
     public static void createPlayer() { // Methode um einen Spieler zu erstellen
