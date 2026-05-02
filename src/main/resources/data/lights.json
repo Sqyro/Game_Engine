@@ -1,1 +1,74 @@
-[]
+[
+  {
+    "Range": 200.0,
+    "PosX": 26.5,
+    "PosY": 13.5,
+    "Red": 1.0,
+    "Green": 1.0,
+    "Blue": 1.0
+  },
+  {
+    "Range": 150.0,
+    "PosX": 40.5,
+    "PosY": 7.5,
+    "Red": 1.0,
+    "Green": 1.0,
+    "Blue": 1.0
+  },
+  {
+    "Range": 200.0,
+    "PosX": 33.5,
+    "PosY": 9.5,
+    "Red": 1.0,
+    "Green": 1.0,
+    "Blue": 0.0
+  },
+  {
+    "Range": 200.0,
+    "PosX": 35.5,
+    "PosY": 15.5,
+    "Red": 0.0,
+    "Green": 0.8,
+    "Blue": 1.0
+  },
+  {
+    "Range": 200.0,
+    "PosX": 29.5,
+    "PosY": 19.5,
+    "Red": 1.0,
+    "Green": 0.2,
+    "Blue": 0.0
+  },
+  {
+    "Range": 120.0,
+    "PosX": 21.5,
+    "PosY": 10.5,
+    "Red": 0.8,
+    "Green": 0.2,
+    "Blue": 1.0
+  },
+  {
+    "Range": 80.0,
+    "PosX": 21.5,
+    "PosY": 14.5,
+    "Red": 0.8,
+    "Green": 1.0,
+    "Blue": 0.8
+  },
+  {
+    "Range": 30.0,
+    "PosX": 22.5,
+    "PosY": 17.5,
+    "Red": 0.8,
+    "Green": 0.8,
+    "Blue": 1.0
+  },
+  {
+    "Range": -1.0,
+    "PosX": 95.5,
+    "PosY": 47.5,
+    "Red": 0.8,
+    "Green": 0.8,
+    "Blue": 1.0
+  }
+]

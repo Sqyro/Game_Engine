@@ -1,1 +1,98 @@
-[]
+[
+  {
+    "PosX": 39.0,
+    "PosY": 22.5,
+    "Height": 0.5,
+    "Length": 1.0
+  },
+  {
+    "PosX": 40.0,
+    "PosY": 22.5,
+    "Height": 0.5,
+    "Length": 1.0
+  },
+  {
+    "PosX": 41.0,
+    "PosY": 22.5,
+    "Height": 0.5,
+    "Length": 1.0
+  },
+  {
+    "PosX": 40.0,
+    "PosY": 26.0,
+    "Height": 0.5,
+    "Length": 1.0
+  },
+  {
+    "PosX": 41.0,
+    "PosY": 26.0,
+    "Height": 0.5,
+    "Length": 1.0
+  },
+  {
+    "PosX": 42.0,
+    "PosY": 26.0,
+    "Height": 0.5,
+    "Length": 0.5
+  },
+  {
+    "PosX": 39.5,
+    "PosY": 26.0,
+    "Height": 0.5,
+    "Length": 0.5
+  },
+  {
+    "PosX": 38.5,
+    "PosY": 22.5,
+    "Height": 0.5,
+    "Length": 0.5
+  },
+  {
+    "PosX": 42.0,
+    "PosY": 22.5,
+    "Height": 0.5,
+    "Length": 0.5
+  },
+  {
+    "PosX": 42.0,
+    "PosY": 23.0,
+    "Height": 1.0,
+    "Length": 0.5
+  },
+  {
+    "PosX": 42.0,
+    "PosY": 24.0,
+    "Height": 1.0,
+    "Length": 0.5
+  },
+  {
+    "PosX": 42.0,
+    "PosY": 25.0,
+    "Height": 1.0,
+    "Length": 0.5
+  },
+  {
+    "PosX": 38.5,
+    "PosY": 24.0,
+    "Height": 1.0,
+    "Length": 0.5
+  },
+  {
+    "PosX": 38.5,
+    "PosY": 23.0,
+    "Height": 1.0,
+    "Length": 0.5
+  },
+  {
+    "PosX": 38.5,
+    "PosY": 25.0,
+    "Height": 0.5,
+    "Length": 0.5
+  },
+  {
+    "PosX": 39.0,
+    "PosY": 25.0,
+    "Height": 1.0,
+    "Length": 1.0
+  }
+]

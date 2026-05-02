@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import Rendering.Camera;
 import java.io.File;
 import java.io.FileReader;
+import Shader.LightManager;
 
 public class MapHandler {
 
@@ -37,9 +38,24 @@ public class MapHandler {
 
             tiles = gson.fromJson(new FileReader(new File(folder, "tiles.json")), int[][].class);
             mapObjects = gson.fromJson(new FileReader(new File(folder, "objects.json")), String[][].class);
-            PointLight[] lights = gson.fromJson(new FileReader(new File(folder, "lights.json")), PointLight[].class); //gson erkennt keine liste deswegen speichern wir sie erstmal in ein normales array
             BoxCollider[] hitboxen = gson.fromJson(new FileReader(new File(folder, "hitboxen.json")), BoxCollider[].class);
 
+
+            PointLight[] lights = gson.fromJson(new FileReader(new File(folder, "lights.json")), PointLight[].class);
+
+            if (lights != null) {
+                // Erstmal alte Lichter löschen, falls man die Map neu lädt
+                LightManager.AllPointLights.clear();
+
+                for (int i = 0; i < lights.length; i++) {
+                    PointLight light = lights[i];
+
+                    light.PosX *= TileSize;
+                    light.PosY *= TileSize;
+
+                    LightManager.addLight(light);
+                }
+            }
 
             System.out.println("Map geladen");
 

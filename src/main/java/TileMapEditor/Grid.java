@@ -1,6 +1,5 @@
 package TileMapEditor;
-    
-import javax.management.ObjectName;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -33,7 +32,7 @@ public class Grid extends JPanel {
     public int zoom = 2; //Zoom Faktor
 
     private int bigMapOffsetPosX = 100; //X Position des rechten Grids
-    private int bigMapOffsetPosY = 100; //Y Position des rechten GRids
+    private int bigMapOffsetPosY = 100; //Y Position des rechten Grids
     
     private int cameraColumns = 0; //sagt welche Spalte gerade links angezeigt wird
     private int cameraRows = 0; //sagt welche Reihe gerade links angezeigt wird
@@ -887,6 +886,7 @@ public class Grid extends JPanel {
                 updateMinimap();
                 repaint();
             } catch (JsonIOException | IOException ignored) {}
+            repaint();
         }
     }
     
@@ -996,6 +996,7 @@ public class Grid extends JPanel {
             repaint();
         }
     }
+    
     private void bucketFill(int startRow, int startCol, int tileid, int replace) {
         if (tileid == replace) return; //wenn die neue farbe genau der alten entspricht returned es einfach
 
@@ -1113,8 +1114,8 @@ public class Grid extends JPanel {
         for (int r = 0; r < original.length; r++) {
             for (int c = 0; c < original[0].length; c++) {
                 if (original[r][c] != null) {
-                    BoxCollider b = original[r][c];
-                    copy[r][c] = new BoxCollider(b.PosX, b.PosY, b.Height, b.Length);
+                    BoxCollider boxCollider = original[r][c];
+                    copy[r][c] = new BoxCollider(boxCollider.PosX, boxCollider.PosY, boxCollider.Height, boxCollider.Length);
                 }
             }
         }
