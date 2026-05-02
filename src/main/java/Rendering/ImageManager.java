@@ -98,6 +98,7 @@ public class ImageManager {
             LIGHTNINGBALL_SPELL_ANIM = ImageHandler.loadTexture("src/main/resources/assets/textures/spell/lightning_ball.png");
 
             //für alle tiles (nils kann meine eier lecken (ohne grund musste ich das machen obowhl ich es schon hatte))
+            //Nein, ich kann nicht deine Eier lecken, wir packen die Tiles auf Sheets, damit weniger geladen werden muss und jetzt lädst du trotzdem alles einzeln
             int[][] tilesheet = {
                     {9, 13, 17, 10, 1},
                     {20, 21, 22, 14, 2},
