@@ -49,7 +49,7 @@ public class ImageHandler {
         //Binded den VBO an den GL_ARRAY_BUFFER, heißt alle VBO Operations Zählen jetzt für diesen Buffer
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         
-        //Läd die Vertext Data in den VBO für die GPU
+        //Läd die Vertex Data in den VBO für die GPU
         glBufferData(GL_ARRAY_BUFFER, QuadratVertexData, GL_STATIC_DRAW); // GL_STATIC_DRAW sagt, dass die data nicht oft geändert wird und die GPU entsprechend laufen soll
 
         //GL's Interpretation der Vertex Data (Position oben)
