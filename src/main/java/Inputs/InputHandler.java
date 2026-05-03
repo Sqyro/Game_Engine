@@ -12,7 +12,7 @@ public class InputHandler {
     public static void Move(Player Player) {
         Player.setVelocity(MovementSpeed); //Setzt die Geschwindigkeit vom Spieler auf die Bewegungsgeschwingigkeit
 
-        WalkSoundManager.PlaySoundsWithDelay("/normalerSound.wav", 7, -20, 7); //Spielt einen sehr normalenSound für 7 Sekunden ab, wenn sich der Spieler bewegt
+        WalkSoundManager.PlaySoundsWithDelay("/player_walk.wav", 5, -20, 5); //Spielt einen sehr normalenSound für 7 Sekunden ab, wenn sich der Spieler bewegt
     }
     
     //Methode um den Spieler anzuhalten
