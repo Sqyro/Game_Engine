@@ -62,9 +62,9 @@ public class LightningballSpell extends Spell {
 
             LIGHTNINGBALL_SPELL_POINTLIGHT.PosX = ThisProjectile.PosX;
             LIGHTNINGBALL_SPELL_POINTLIGHT.PosY = ThisProjectile.PosY;
-            LIGHTNINGBALL_SPELL_POINTLIGHT.Red = LightColor.getRed();
-            LIGHTNINGBALL_SPELL_POINTLIGHT.Green = LightColor.getGreen();
-            LIGHTNINGBALL_SPELL_POINTLIGHT.Blue = LightColor.getBlue();
+            LIGHTNINGBALL_SPELL_POINTLIGHT.Red = LightColor.getRed() / 255f;
+            LIGHTNINGBALL_SPELL_POINTLIGHT.Green = LightColor.getGreen() / 255f;
+            LIGHTNINGBALL_SPELL_POINTLIGHT.Blue = LightColor.getBlue() / 255f;
             LIGHTNINGBALL_SPELL_POINTLIGHT.Range = LIGHTNINGBALL_LIGHT_RANGE;
 
 

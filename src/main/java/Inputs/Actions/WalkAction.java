@@ -22,8 +22,8 @@ public class WalkAction extends KeyAction {
         if(GameScene.GameRunning && !Player.Player.isDodging && Player.Player.isAlive) {
             switch (WalkDirection) {
                 case UP:
-                    upPressed = true; //Wurde gerückt, also ja es wurde was gerückt hier rein schreiben für später//Schau nicht weiter (Wenn das nicht hier ist, dann wartet er bis ein Key gedrückt wurde und führt dann alles aus)
-                    break;
+                    upPressed = true; //Wurde gerückt, also ja es wurde was gerückt hier rein schreiben für später
+                    break; //Schau nicht weiter (Wenn das nicht hier ist, dann wartet er bis ein Key gedrückt wurde und führt dann alles aus)
                 case DOWN:
                     downPressed = true;
                     break;
@@ -37,12 +37,7 @@ public class WalkAction extends KeyAction {
         }
         
         if(GameScene.GameRunning) {
-            // Wir callen Move jedes mal wenn irgendeiner von den Movement Keys jetzt gerade gedrückt wird und wenn nicht, dann stoppen wir
-            if (upPressed || downPressed || leftPressed || rightPressed) {
-                InputHandler.Move(Player.Player);
-            } else {
-                InputHandler.Stop(Player.Player);
-            }
+            InputHandler.Move(Player.Player);
         }
     }
 
@@ -64,7 +59,6 @@ public class WalkAction extends KeyAction {
         }
         
         if(GameScene.GameRunning) {
-            // Wir callen Move jedes mal wenn irgendeiner von den Movement Keys jetzt gerade gedrückt wird und wenn nicht, dann stoppen wir
             if (upPressed || downPressed || leftPressed || rightPressed) {
                 InputHandler.Move(Player.Player);
             } else {

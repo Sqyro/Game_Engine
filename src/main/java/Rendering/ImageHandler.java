@@ -117,12 +117,12 @@ public class ImageHandler {
 
         //Liste an aktiven Lichtern updaten
         LightManager.updateVisibleLights(ScreenWidth, ScreenHeight);
-        
+
         //Gibt die Werte die der Shader zum Rechnen braucht an ihn weiter
         Shader.setUniform1f("globalLight", LightManager.getGlobalLight());
         Shader.setUniform1i("activeLights", LightManager.PointLights.size());
         glUniform2f(Shader.ScreenSizeLocation, ScreenWidth, ScreenHeight);
-        
+
         for (int i = 0; i < LightManager.PointLights.size(); i++) {
             PointLight pointlight = LightManager.PointLights.get(i);
             Shader.setUniform2f("lightPositions[" + i + "]", pointlight.PosX + Camera.PosX, pointlight.PosY + Camera.PosY);
@@ -137,7 +137,7 @@ public class ImageHandler {
             glBindTexture(GL_TEXTURE_2D, TextureID); // Textur in OpenGL binden
 
             for (RenderCommand renderCommand : renderQueue.get(TextureID)) { // Für jeden Render Command
-                
+
                 //Position der Textur mit Kamera Offset
                 float fixedX = Math.round(renderCommand.PosX + Camera.PosX);
                 float fixedY = Math.round(renderCommand.PosY + Camera.PosY);
@@ -150,7 +150,7 @@ public class ImageHandler {
                 glUniform2f(Shader.OffsetLocation, fixedX, fixedY);
                 glUniform2f(Shader.ScaleLocation, renderCommand.TextureWidth, renderCommand.TextureHeight);
                 glUniform4f(Shader.ColorLocation, renderCommand.Red, renderCommand.Green, renderCommand.Blue, renderCommand.Alpha);
-                
+
                 glDrawArrays(GL_TRIANGLE_FAN, 0, 4); // Quadrat mit der momentanen Textur zeichnen
             }
         }

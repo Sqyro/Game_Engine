@@ -38,18 +38,26 @@ public class InputManager {
 
     private static List<KeyAction> GameKeys = new ArrayList<>();
 
+    private static final int SPACE_ASCII = 32;
+    private static final int A_ASCII = 65;
+    private static final int D_ASCII = 68;
+    private static final int E_ASCII = 69;
+    private static final int S_ASCII = 83;
+    private static final int W_ASCII = 87;
+    private static final int ESC_ASCII = 256;
+
     public static void init() {
         for (int i = 0; i < 512; i++) { //Out of Bounds verhindern, Listengröße erstellen
             GameKeys.add(null);
         }
-        //Startdart Einstellung, wird später aus dem Speicher gelesen
-        GameKeys.set(32, DashAction);
-        GameKeys.set(65, LeftAction);
-        GameKeys.set(68, RightAction);
-        GameKeys.set(69, InventoryAction);
-        GameKeys.set(83, DownAction);
-        GameKeys.set(87, UpAction);
-        GameKeys.set(256, EscapeAction);
+        //Standard Einstellung, wird später aus dem Speicher von Settings gelesen
+        GameKeys.set(SPACE_ASCII, DashAction);
+        GameKeys.set(A_ASCII, LeftAction);
+        GameKeys.set(D_ASCII, RightAction);
+        GameKeys.set(E_ASCII, InventoryAction);
+        GameKeys.set(S_ASCII, DownAction);
+        GameKeys.set(W_ASCII, UpAction);
+        GameKeys.set(ESC_ASCII, EscapeAction);
     }
 
     //Eine Methode die ein Event Benutzt um zu hören ob vom Keyboard Inputs gemacht wurden
